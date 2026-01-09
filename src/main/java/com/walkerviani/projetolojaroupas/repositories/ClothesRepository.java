@@ -12,6 +12,5 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
 
     List<Clothes> findByNameContainingIgnoreCase(String name);
 
-    @Enumerated(EnumType.STRING)
     List<Clothes> findByColor(Color color);
 }
