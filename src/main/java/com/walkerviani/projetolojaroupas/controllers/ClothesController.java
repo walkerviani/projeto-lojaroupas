@@ -1,7 +1,9 @@
 package com.walkerviani.projetolojaroupas.controllers;
 
 import com.walkerviani.projetolojaroupas.entities.Clothes;
+import com.walkerviani.projetolojaroupas.entities.enums.Category;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
+import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.services.ClothesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,18 @@ public class ClothesController {
         List<Clothes> list = (name == null || name.isBlank())
                 ? clothesService.findAll()
                 : clothesService.findByName(name);
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/size")
+    public ResponseEntity<List<Clothes>> findBySize(@RequestParam(value = "size", required = false) Size size) {
+        List<Clothes> list = clothesService.findBySize(size);
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<Clothes>> findByCategory(@RequestParam(value = "category", required = false) Category category) {
+        List<Clothes> list = clothesService.findByCategory(category);
         return ResponseEntity.ok().body(list);
     }
 
