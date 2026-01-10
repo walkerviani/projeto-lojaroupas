@@ -20,6 +20,7 @@ public class Clothes {
     private String description;
     private String imageUrl;
     private Size size;
+    private Category category;
     private Color color;
 
 
@@ -27,13 +28,14 @@ public class Clothes {
 
     }
 
-    public Clothes(Long id, String name, double price, String description, String imageUrl, Size size, Color color) {
+    public Clothes(Long id, String name, double price, String description, String imageUrl, Size size,Category category, Color color) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
         this.size = size;
+        this.category = category;
         this.color = color;
     }
 
@@ -83,6 +85,14 @@ public class Clothes {
 
     public void setSize(Size size) {
         this.size = size;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Color getColor() {
