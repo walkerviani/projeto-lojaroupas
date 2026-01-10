@@ -1,7 +1,9 @@
 package com.walkerviani.projetolojaroupas.services;
 
 import com.walkerviani.projetolojaroupas.entities.Clothes;
+import com.walkerviani.projetolojaroupas.entities.enums.Category;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
+import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
@@ -31,6 +33,14 @@ public class ClothesService {
 
     public List<Clothes> findByName(String name) {
         return clothesRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Clothes> findBySize(Size size){
+        return clothesRepository.findBySize(size);
+    }
+
+    public List<Clothes> findByCategory(Category category){
+        return clothesRepository.findByCategory(category);
     }
 
     public List<Clothes> findByColor(Color color){
