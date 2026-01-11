@@ -1,7 +1,7 @@
 package com.walkerviani.projetolojaroupas.services;
 
+import com.walkerviani.projetolojaroupas.entities.Category;
 import com.walkerviani.projetolojaroupas.entities.Clothes;
-import com.walkerviani.projetolojaroupas.entities.enums.Category;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
@@ -36,19 +36,19 @@ public class ClothesService {
         return clothesRepository.findByNameContainingIgnoreCase(name);
     }
 
-    public List<Clothes> findBySize(Size size){
+    public List<Clothes> findBySize(Size size) {
         return clothesRepository.findBySize(size);
     }
 
-    public List<Clothes> findByCategory(Category category){
-        return clothesRepository.findByCategory(category);
+    public List<Clothes> findByCategoryName(String name) {
+        return clothesRepository.findByCategoryNameIgnoreCase(name);
     }
 
-    public List<Clothes> findByColor(Color color){
+    public List<Clothes> findByColor(Color color) {
         return clothesRepository.findByColor(color);
     }
 
-    public boolean isStockAvailable(Long id, int  quantity) {
+    public boolean isStockAvailable(Long id, int quantity) {
         Clothes obj = clothesRepository.findById(id).orElseThrow(() -> new StockNotAvailableException("Stock Not Available"));
         return obj.getQuantity() >= quantity;
     }

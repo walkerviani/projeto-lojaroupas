@@ -1,7 +1,6 @@
 package com.walkerviani.projetolojaroupas.repositories;
 
 import com.walkerviani.projetolojaroupas.entities.Clothes;
-import com.walkerviani.projetolojaroupas.entities.enums.Category;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +13,7 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
 
     List<Clothes> findBySize(Size size);
 
-    List<Clothes> findByCategory(Category category);
+    List<Clothes> findByCategoryNameIgnoreCase(String name);
 
     List<Clothes> findByColor(Color color);
 }
