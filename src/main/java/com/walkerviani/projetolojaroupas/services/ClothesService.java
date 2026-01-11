@@ -7,6 +7,7 @@ import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
+import com.walkerviani.projetolojaroupas.services.exceptions.StockNotAvailableException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -45,6 +46,11 @@ public class ClothesService {
 
     public List<Clothes> findByColor(Color color){
         return clothesRepository.findByColor(color);
+    }
+
+    public boolean isStockAvailable(Long id, int  quantity) {
+        Clothes obj = clothesRepository.findById(id).orElseThrow(() -> new StockNotAvailableException("Stock Not Available"));
+        return obj.getQuantity() >= quantity;
     }
 
     public Clothes insert(Clothes obj) {

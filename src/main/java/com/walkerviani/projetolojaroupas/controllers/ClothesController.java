@@ -57,6 +57,12 @@ public class ClothesController {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping("/{id}/stock")
+    public ResponseEntity<Boolean> isStockAvailable(@PathVariable Long id,@RequestParam int  quantity) {
+        boolean available = clothesService.isStockAvailable(id, quantity);
+        return ResponseEntity.ok(available);
+    }
+
     @PostMapping
     public ResponseEntity<Clothes> insert(@RequestBody Clothes obj) {
         obj = clothesService.insert(obj);

@@ -5,6 +5,7 @@ import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -16,19 +17,23 @@ public class Clothes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private double price;
+    private BigDecimal price;
     private String description;
     private String imageUrl;
+    @Enumerated(EnumType.STRING)
     private Size size;
+    @Enumerated(EnumType.STRING)
     private Category category;
+    @Enumerated(EnumType.STRING)
     private Color color;
+    private int quantity;
 
 
-    public Clothes(){
+    public Clothes() {
 
     }
 
-    public Clothes(Long id, String name, double price, String description, String imageUrl, Size size,Category category, Color color) {
+    public Clothes(Long id, String name, BigDecimal price, String description, String imageUrl, Size size, Category category, Color color, int quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -37,6 +42,7 @@ public class Clothes {
         this.size = size;
         this.category = category;
         this.color = color;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -55,11 +61,11 @@ public class Clothes {
         this.name = name;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -101,6 +107,14 @@ public class Clothes {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @Override
