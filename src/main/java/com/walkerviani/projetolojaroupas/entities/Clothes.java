@@ -1,6 +1,5 @@
 package com.walkerviani.projetolojaroupas.entities;
 
-import com.walkerviani.projetolojaroupas.entities.enums.Category;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import jakarta.persistence.*;
@@ -22,7 +21,8 @@ public class Clothes {
     private String imageUrl;
     @Enumerated(EnumType.STRING)
     private Size size;
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
     @Enumerated(EnumType.STRING)
     private Color color;
@@ -47,10 +47,6 @@ public class Clothes {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -113,19 +109,32 @@ public class Clothes {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void addStock(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        this.quantity += amount;
+    }
+
+    public void removeStock(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        if (this.quantity < amount) {
+            throw new IllegalArgumentException("Insufficient stock to perform the operation");
+        }
+        this.quantity -= amount;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Clothes clothes = (Clothes) o;
-        return Objects.equals(id, clothes.id) && Objects.equals(name, clothes.name);
+        return Objects.equals(id, clothes.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hashCode(id);
     }
 }
