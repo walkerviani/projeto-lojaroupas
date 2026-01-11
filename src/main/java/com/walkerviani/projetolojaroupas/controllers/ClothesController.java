@@ -1,7 +1,6 @@
 package com.walkerviani.projetolojaroupas.controllers;
 
 import com.walkerviani.projetolojaroupas.entities.Clothes;
-import com.walkerviani.projetolojaroupas.entities.enums.Category;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.services.ClothesService;
@@ -46,8 +45,8 @@ public class ClothesController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<List<Clothes>> findByCategory(@RequestParam(value = "category", required = false) Category category) {
-        List<Clothes> list = clothesService.findByCategory(category);
+    public ResponseEntity<List<Clothes>> findByCategory(@RequestParam String name) {
+        List<Clothes> list = clothesService.findByCategoryName(name);
         return ResponseEntity.ok().body(list);
     }
 
