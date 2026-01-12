@@ -33,8 +33,7 @@ public class Clothes {
 
     }
 
-    public Clothes(Long id, String name, BigDecimal price, String description, String imageUrl, Size size, Category category, Color color, int quantity) {
-        this.id = id;
+    public Clothes(String name, BigDecimal price, String description, String imageUrl, Size size, Category category, Color color, int quantity) {
         this.name = name;
         this.price = price;
         this.description = description;
