@@ -39,7 +39,7 @@ public class ClothesController {
     }
 
     @GetMapping("/size")
-    public ResponseEntity<List<Clothes>> findBySize(@RequestParam(value = "size", required = false) Size size) {
+    public ResponseEntity<List<Clothes>> findBySize(@RequestParam(value = "size") Size size) {
         List<Clothes> list = clothesService.findBySize(size);
         return ResponseEntity.ok().body(list);
     }
