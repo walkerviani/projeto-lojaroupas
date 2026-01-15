@@ -65,6 +65,6 @@ public class UserService {
     public User updatePassword(Long id, String newPassword) {
         User entity = userRepository.getReferenceById(id);
         entity.setPassword(newPassword);
-        userRepository.save(entity);
+        return userRepository.save(entity);
     }
 }
