@@ -56,24 +56,6 @@ public class ClothesController {
         return ResponseEntity.ok().body(list);
     }
 
-    @PatchMapping("/{id}/add-stock")
-    public ResponseEntity<Void> addStock(@PathVariable Long id, @RequestParam int amount){
-        clothesService.addStock(id, amount);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{id}/remove-stock")
-    public ResponseEntity<Void> removeStock(@PathVariable Long id, @RequestParam int amount){
-        clothesService.removeStock(id, amount);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}/stock")
-    public ResponseEntity<Boolean> isStockAvailable(@PathVariable Long id,@RequestParam int  quantity) {
-        boolean available = clothesService.isStockAvailable(id, quantity);
-        return ResponseEntity.ok(available);
-    }
-
     @PostMapping
     public ResponseEntity<Clothes> insert(@RequestBody Clothes obj) {
         obj = clothesService.insert(obj);
