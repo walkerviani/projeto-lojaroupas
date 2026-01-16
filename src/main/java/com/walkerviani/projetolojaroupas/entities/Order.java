@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -21,13 +24,25 @@ public class Order implements Serializable {
     private Instant moment;
     private OrderStatus orderStatus;
 
-    public Order(){
+    @ManyToOne
+    @JoinColumn(name = "id_client")
+    private User client;
+
+    @ManyToMany
+    @JoinColumn(name = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
+    public Order() {
 
     }
 
-    public Order(Instant moment, OrderStatus orderStatus) {
+    public Order(Instant moment, OrderStatus orderStatus, User client) {
         this.moment = moment;
         this.orderStatus = orderStatus;
+        this.client = client;
     }
 
     public Long getId() {
@@ -52,6 +67,22 @@ public class Order implements Serializable {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public BigDecimal getTotal() {
+        BigDecimal sum = new BigDecimal("0.0");
+        for (OrderItem x : items) {
+            sum = sum.add(x.getSubtotal());
+        }
+        return sum;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
     }
 
     @Override

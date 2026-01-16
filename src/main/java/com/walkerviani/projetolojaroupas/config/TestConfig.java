@@ -1,16 +1,10 @@
 package com.walkerviani.projetolojaroupas.config;
 
-import com.walkerviani.projetolojaroupas.entities.Category;
-import com.walkerviani.projetolojaroupas.entities.Clothes;
-import com.walkerviani.projetolojaroupas.entities.Order;
-import com.walkerviani.projetolojaroupas.entities.OrderItem;
+import com.walkerviani.projetolojaroupas.entities.*;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.OrderStatus;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
-import com.walkerviani.projetolojaroupas.repositories.CategoryRepository;
-import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
-import com.walkerviani.projetolojaroupas.repositories.OrderItemRepository;
-import com.walkerviani.projetolojaroupas.repositories.OrderRepository;
+import com.walkerviani.projetolojaroupas.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +30,9 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -47,15 +44,19 @@ public class TestConfig implements CommandLineRunner {
         Clothes clothes2 = new Clothes("Black Skirt", new BigDecimal("12.42"), "45% Cotton, 55% Polyester", "/images/image2.png", Size.SMALL, cat2, Color.BLACK);
         Clothes clothes3 = new Clothes("Blue Coat", new BigDecimal("45.43"), "90% Cotton, 10% wool", "/images/image3.png", Size.LARGE, cat3, Color.BLUE);
 
+        User u1 = new User("Carl", "carl@gmail.com","42kf34f32", "102443335");
+        User u2 = new User("Mariah", "mariah@gmail.com", "r2jdfsi3", "194542354");
 
-        Order ord1 = new Order(Instant.now(), OrderStatus.PAID);
-        Order ord2 = new Order(Instant.parse("2026-01-03T19:53:07Z"), OrderStatus.WAITING_PAYMENT);
+
+        Order ord1 = new Order(Instant.now(), OrderStatus.PAID, u1);
+        Order ord2 = new Order(Instant.parse("2026-01-03T19:53:07Z"), OrderStatus.WAITING_PAYMENT, u2);
 
 
         OrderItem orderItem1 = new OrderItem(ord1, clothes1, 10, clothes1.getPrice());
         OrderItem orderItem2 = new OrderItem(ord2, clothes2, 2, clothes2.getPrice());
         OrderItem orderItem3 = new OrderItem(ord2, clothes3, 1, clothes3.getPrice());
 
+        userRepository.saveAll(Arrays.asList(u1, u2));
         categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
         clothesRepository.saveAll(Arrays.asList(clothes1, clothes2, clothes3));
         orderRepository.saveAll(Arrays.asList(ord1, ord2));
