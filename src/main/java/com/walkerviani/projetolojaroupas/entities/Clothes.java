@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "clothes")
@@ -25,27 +27,29 @@ public class Clothes implements Serializable {
     private String imageUrl;
     @Enumerated(EnumType.STRING)
     private Size size;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
     @Enumerated(EnumType.STRING)
     private Color color;
-    private int quantity;
 
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category categories;
+
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Clothes() {
 
     }
 
-    public Clothes(String name, BigDecimal price, String description, String imageUrl, Size size, Category category, Color color, int quantity) {
+    public Clothes(String name, BigDecimal price, String description, String imageUrl, Size size, Category categories, Color color) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
         this.size = size;
-        this.category = category;
+        this.categories = categories;
         this.color = color;
-        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -92,12 +96,12 @@ public class Clothes implements Serializable {
         this.size = size;
     }
 
-    public Category getCategory() {
-        return category;
+    public Category getCategories() {
+        return categories;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategories(Category categories) {
+        this.categories = categories;
     }
 
     public Color getColor() {
@@ -108,25 +112,12 @@ public class Clothes implements Serializable {
         this.color = color;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void addStock(int amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0");
+    public Set<Order> getOrders() {
+        Set<Order> set = new HashSet<>();
+        for (OrderItem x : items) {
+            set.add(x.getOrder());
         }
-        this.quantity += amount;
-    }
-
-    public void removeStock(int amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0");
-        }
-        if (this.quantity < amount) {
-            throw new IllegalArgumentException("Insufficient stock to perform the operation");
-        }
-        this.quantity -= amount;
+        return set;
     }
 
     @Override

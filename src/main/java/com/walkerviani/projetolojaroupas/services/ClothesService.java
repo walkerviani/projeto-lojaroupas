@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,25 +46,6 @@ public class ClothesService {
         return clothesRepository.findByColor(color);
     }
 
-    @Transactional
-    public void addStock(Long id, int amount) {
-        Clothes obj = clothesRepository.findById(id).orElseThrow(() -> new ClothesNotFoundException(id));
-        obj.addStock(amount);
-        clothesRepository.save(obj);
-    }
-
-    @Transactional
-    public void removeStock(Long id, int amount) {
-        Clothes obj = clothesRepository.findById(id).orElseThrow(() -> new ClothesNotFoundException(id));
-        obj.removeStock(amount);
-        clothesRepository.save(obj);
-    }
-
-    public boolean isStockAvailable(Long id, int quantity) {
-        Clothes obj = clothesRepository.findById(id).orElseThrow(() -> new ClothesNotFoundException(id));
-        return obj.getQuantity() >= quantity;
-    }
-
     public Clothes insert(Clothes obj) {
         return clothesRepository.save(obj);
     }
@@ -97,7 +77,7 @@ public class ClothesService {
         entity.setDescription(obj.getDescription());
         entity.setColor(obj.getColor());
         entity.setSize(obj.getSize());
-        entity.setCategory(obj.getCategory());
+        entity.setCategories(obj.getCategories());
         entity.setImageUrl(obj.getImageUrl());
     }
 }
