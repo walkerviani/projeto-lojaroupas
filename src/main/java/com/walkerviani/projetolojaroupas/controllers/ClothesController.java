@@ -44,12 +44,6 @@ public class ClothesController {
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping("/category")
-    public ResponseEntity<List<Clothes>> findByCategory(@RequestParam(value = "category") String name) {
-        List<Clothes> list = clothesService.findByCategoryName(name);
-        return ResponseEntity.ok().body(list);
-    }
-
     @GetMapping("/color")
     public ResponseEntity<List<Clothes>> findByColor(@RequestParam(value = "color") Color color) {
         List<Clothes> list = clothesService.findByColor(color);

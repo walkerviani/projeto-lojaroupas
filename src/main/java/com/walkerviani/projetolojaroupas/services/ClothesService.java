@@ -38,10 +38,6 @@ public class ClothesService {
         return clothesRepository.findBySize(size);
     }
 
-    public List<Clothes> findByCategoryName(String name) {
-        return clothesRepository.findByCategoryNameIgnoreCase(name);
-    }
-
     public List<Clothes> findByColor(Color color) {
         return clothesRepository.findByColor(color);
     }
