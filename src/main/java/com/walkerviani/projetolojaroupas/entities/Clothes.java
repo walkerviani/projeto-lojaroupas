@@ -35,7 +35,7 @@ public class Clothes implements Serializable {
     @JoinColumn(name = "category_id")
     private Category categories;
 
-    @OneToMany(mappedBy = "id.product")
+    @OneToMany(mappedBy = "id.clothes")
     private Set<OrderItem> items = new HashSet<>();
 
     public Clothes() {
