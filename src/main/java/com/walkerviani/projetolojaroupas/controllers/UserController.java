@@ -57,7 +57,8 @@ public class UserController {
     @Transactional
     @PatchMapping(value = "/{id}")
     public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody String newPassword) {
-        User obj = userService.updatePassword(id, newPassword);
+        String s = newPassword.replaceAll("^\"|\"$", "").trim();
+        User obj = userService.updatePassword(id, s);
         return ResponseEntity.ok().body(obj);
     }
 
