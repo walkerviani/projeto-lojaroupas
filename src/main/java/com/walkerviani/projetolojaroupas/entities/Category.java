@@ -1,5 +1,6 @@
 package com.walkerviani.projetolojaroupas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -20,9 +21,9 @@ public class Category implements Serializable {
     private Long id;
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "clothes_id")
-    private Set<Clothes> items = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "categories")
+    private Set<Clothes> clothes = new HashSet<>();
 
     public Category() {
     }
@@ -43,8 +44,8 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public Set<Clothes> getItems() {
-        return items;
+    public Set<Clothes> getClothes() {
+        return clothes;
     }
 
     @Override
