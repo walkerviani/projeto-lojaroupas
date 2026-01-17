@@ -1,5 +1,6 @@
 package com.walkerviani.projetolojaroupas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.walkerviani.projetolojaroupas.entities.pk.OrderItemPK;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -34,6 +35,7 @@ public class OrderItem implements Serializable {
 
     }
 
+    @JsonIgnore
     public Order getOrder() {
         return id.getOrder();
     }
@@ -46,8 +48,8 @@ public class OrderItem implements Serializable {
         return id.getClothes();
     }
 
-    public void setClothes(Clothes product) {
-        id.setClothes(product);
+    public void setClothes(Clothes clothes) {
+        id.setClothes(clothes);
     }
 
     public int getQuantity() {
@@ -67,9 +69,7 @@ public class OrderItem implements Serializable {
     }
 
     public BigDecimal getSubtotal() {
-        BigDecimal x = price;
-        BigDecimal y = BigDecimal.valueOf(quantity);
-        return x.multiply(y);
+        return price.multiply(BigDecimal.valueOf(quantity));
     }
 
     @Override
