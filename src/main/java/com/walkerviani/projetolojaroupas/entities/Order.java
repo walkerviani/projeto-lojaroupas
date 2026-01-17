@@ -28,8 +28,7 @@ public class Order implements Serializable {
     @JoinColumn(name = "id_client")
     private User client;
 
-    @OneToMany
-    @JoinColumn(name = "id.order")
+    @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
@@ -66,7 +65,17 @@ public class Order implements Serializable {
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+        if (orderStatus != null) {
+            this.orderStatus = orderStatus;
+        }
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Set<OrderItem> getItems() {
@@ -74,11 +83,15 @@ public class Order implements Serializable {
     }
 
     public BigDecimal getTotal() {
-        BigDecimal sum = new BigDecimal("0.0");
+        BigDecimal sum = BigDecimal.ZERO;
         for (OrderItem x : items) {
             sum = sum.add(x.getSubtotal());
         }
         return sum;
+    }
+
+    public User getClient() {
+        return client;
     }
 
     public void setClient(User client) {
