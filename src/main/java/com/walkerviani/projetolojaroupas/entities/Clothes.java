@@ -1,5 +1,6 @@
 package com.walkerviani.projetolojaroupas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import jakarta.persistence.*;
@@ -54,6 +55,10 @@ public class Clothes implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -112,6 +117,7 @@ public class Clothes implements Serializable {
         this.color = color;
     }
 
+    @JsonIgnore
     public Set<Order> getOrders() {
         Set<Order> set = new HashSet<>();
         for (OrderItem x : items) {
