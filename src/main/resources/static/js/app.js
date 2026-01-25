@@ -1,3 +1,5 @@
+const BASE_URL = "http://localhost:8080";
+
 async function getProducts(url) {
     try {
         const response = await fetch(url);
@@ -12,11 +14,12 @@ async function getProducts(url) {
 }
 
 async function allProductsDisplay() {
-    const products = await getProducts('http://localhost:8080/clothes');
+    const url = BASE_URL + "/clothes";
+    const products = await getProducts(url);
     displayProducts(products);
 }
 
-function categoriesDisplay() {
+function categoryMenuDisplay() {
     const button = document.getElementById('categoriesButton');
     const menu = document.getElementById('categoriesMenu');
 
@@ -28,14 +31,21 @@ function categoriesDisplay() {
 }
 
 async function findClothesByName() {
-    document.getElementById('searchButton').addEventListener('click', async() => {
+    document.getElementById('searchButton').addEventListener('click', async(e) => {
+        e.preventDefault();
         const searchValue = document.getElementById('searchInput').value.trim();
         if(!searchValue) return; 
-        const url = `http://localhost:8080/clothes/name?name=${encodeURIComponent(searchValue)}`;
+        const url = BASE_URL + `/clothes/name?name=${encodeURIComponent(searchValue)}`;
         const products = await getProducts(url);
         displayProducts(products);
     })
 
+}
+
+function mainPage(){
+    document.getElementById('logo').addEventListener('click', () => {
+        window.location.href = BASE_URL;
+    });
 }
 
 function displayProducts(products){
@@ -64,6 +74,7 @@ function displayProducts(products){
 
 document.addEventListener("DOMContentLoaded", () => {
     allProductsDisplay();
-    categoriesDisplay();
+    categoryMenuDisplay();
     findClothesByName();
+    mainPage();
 });
