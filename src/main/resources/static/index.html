@@ -7,6 +7,7 @@
     <title>roupas.com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
 </head>
 
 <body>
@@ -15,10 +16,15 @@
         <img class="logo" src="images/logo.png">
 
         <nav class="navegation">
-            <ul>
-                <li><a href="/">Lançamentos</a></li>
-                <li><a href="/">Categorias</a></li>
+            <ul style="position: relative">
+                <li><a id="categoriesButton" href="/">Categories</a></li>
+                <ul id="categoriesMenu">
+                    <li><a href="/">Shirt</a></li>
+                    <li><a href="/">Skirt</a></li>
+                    <li><a href="/">Coat</a></li>
+                </ul>
                 <li><a href="/">Login</a></li>
+                <li><a href="/">About</a></li>
             </ul>
         </nav>
         <form class="searchbox" action="# " method="get">
@@ -26,6 +32,10 @@
             <button class="searchbutton" type="submit"><img class="search_icon" src="images/search_icon.svg"></button>
         </form>
     </header>
+    <main>
+        <div class="grid" id="productGrid"></div>
+    </main>
+
 </body>
 
 </html>
