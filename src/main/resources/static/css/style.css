@@ -125,6 +125,17 @@ li, a{
     padding: 20px;
 }
 
+.grid.detail-mode{
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.detail-mode img{
+    width: 100%;
+    height: 300px;
+    object-fit:contain;
+    border: 1px solid grey;
+}
+
 .card{
     background: white;
     padding: 16px;
