@@ -1,13 +1,19 @@
 package com.walkerviani.projetolojaroupas.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "category")
@@ -22,7 +28,7 @@ public class Category implements Serializable {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "category")
     private Set<Clothes> clothes = new HashSet<>();
 
     public Category() {

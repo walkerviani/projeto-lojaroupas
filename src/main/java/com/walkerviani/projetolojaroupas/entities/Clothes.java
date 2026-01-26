@@ -1,16 +1,26 @@
 package com.walkerviani.projetolojaroupas.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.walkerviani.projetolojaroupas.entities.enums.Color;
-import com.walkerviani.projetolojaroupas.entities.enums.Size;
-import jakarta.persistence.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.walkerviani.projetolojaroupas.entities.enums.Color;
+import com.walkerviani.projetolojaroupas.entities.enums.Size;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "clothes")
@@ -34,7 +44,7 @@ public class Clothes implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category categories;
+    private Category category;
 
     @OneToMany(mappedBy = "id.clothes")
     private Set<OrderItem> items = new HashSet<>();
@@ -43,13 +53,13 @@ public class Clothes implements Serializable {
 
     }
 
-    public Clothes(String name, BigDecimal price, String description, String imageUrl, Size size, Category categories, Color color) {
+    public Clothes(String name, BigDecimal price, String description, String imageUrl, Size size, Category category, Color color) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
         this.size = size;
-        this.categories = categories;
+        this.category = category;
         this.color = color;
     }
 
@@ -101,12 +111,12 @@ public class Clothes implements Serializable {
         this.size = size;
     }
 
-    public Category getCategories() {
-        return categories;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategories(Category categories) {
-        this.categories = categories;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Color getColor() {

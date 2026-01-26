@@ -1,19 +1,21 @@
 package com.walkerviani.projetolojaroupas.services;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
+
 import com.walkerviani.projetolojaroupas.entities.Clothes;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ClothesService {
@@ -40,6 +42,10 @@ public class ClothesService {
 
     public List<Clothes> findByColor(Color color) {
         return clothesRepository.findByColor(color);
+    }
+
+    public List<Clothes> findByCategory(String category){
+        return clothesRepository.findByCategoryNameIgnoreCase(category);
     }
 
     public Clothes insert(Clothes obj) {
@@ -73,7 +79,7 @@ public class ClothesService {
         entity.setDescription(obj.getDescription());
         entity.setColor(obj.getColor());
         entity.setSize(obj.getSize());
-        entity.setCategories(obj.getCategories());
+        entity.setCategory(obj.getCategory());
         entity.setImageUrl(obj.getImageUrl());
     }
 }
