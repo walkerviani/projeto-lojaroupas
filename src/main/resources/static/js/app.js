@@ -31,10 +31,10 @@ function categoryMenuDisplay() {
 }
 
 async function findClothesByName() {
-    document.getElementById('searchButton').addEventListener('click', async(e) => {
+    document.getElementById('searchButton').addEventListener('click', async (e) => {
         e.preventDefault();
         const searchValue = document.getElementById('searchInput').value.trim();
-        if(!searchValue) return; 
+        if (!searchValue) return;
         const url = BASE_URL + `/clothes/name?name=${encodeURIComponent(searchValue)}`;
         const products = await getProducts(url);
         displayProducts(products);
@@ -44,19 +44,19 @@ async function findClothesByName() {
 
 async function findByCategoryName() {
     const catURL = "/clothes/category?category=";
-    document.getElementById('shirt').addEventListener('click', async (e) =>{
+    document.getElementById('shirt').addEventListener('click', async (e) => {
         e.preventDefault();
         const url = BASE_URL + catURL + "shirt";
         const products = await getProducts(url);
         displayProducts(products);
     });
-    document.getElementById('skirt').addEventListener('click', async (e) =>{
+    document.getElementById('skirt').addEventListener('click', async (e) => {
         e.preventDefault();
         const url = BASE_URL + catURL + "skirt";
         const products = await getProducts(url);
         displayProducts(products);
     });
-    document.getElementById('coat').addEventListener('click', async (e) =>{
+    document.getElementById('coat').addEventListener('click', async (e) => {
         e.preventDefault();
         const url = BASE_URL + catURL + "coat";
         const products = await getProducts(url);
@@ -64,17 +64,17 @@ async function findByCategoryName() {
     });
 }
 
-function mainPage(){
+function mainPage() {
     document.getElementById('logo').addEventListener('click', () => {
         window.location.href = BASE_URL;
     });
 }
 
-function displayProducts(products){
+function displayProducts(products) {
     const grid = document.getElementById('productGrid');
     grid.innerHTML = "";
 
-    if(!products || products.length === 0){
+    if (!products || products.length === 0) {
         grid.innerHTML = "<p>No products found</p>";
         return;
     }
@@ -82,15 +82,62 @@ function displayProducts(products){
         const card = document.createElement('div');
         card.classList.add('card');
         card.innerHTML = `
-        <div class="card-image">
+        <div class="card-image" id="card">
             <img src="${product.imageUrl}">
             </div >
             <div>
                 <h3>${product.name}</h3>
-                <p>R$ ${product.price.toFixed(2)}</p>
+                <p>${currencyFormatter(product.price)}</p>
             </div>
             `;
+
+        card.addEventListener('click', () => {
+            showProductDetail(product);
+            history.pushState({ id: product.id }, "", `?id=${product.id}`);
+        });
+
         grid.appendChild(card);
+    });
+}
+
+function showProductDetail(product) {
+    const grid = document.getElementById('productGrid');
+    grid.classList.add('detail-mode');
+    grid.innerHTML = `<div>
+    <img src="${product.imageUrl}">
+    </div>
+    <div>
+    <p>${product.name}<p>
+    <p> ${currencyFormatter(product.price)}<p>
+    <p>Color: ${capitalizeFirst(product.color)}<p>
+    <p>Composition: ${product.description}<p>
+    <p>Size<p>
+    <form>
+    <input type="radio" id="small" name="sizeChoice" value="SMALL">
+    <label for="small">Small</label><br>
+    
+    <input type="radio" id="medium" name="sizeChoice" value="MEDIUM">
+    <label for="medium">Medium</label><br>
+    
+    <input type="radio" id="large" name="sizeChoice" value="LARGE">
+    <label for="large">Large</label><br>
+    
+    <input type="button" value="Buy">
+    </form>
+    </div>
+    `;
+}
+
+function capitalizeFirst(text) {
+    const str = text.toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function currencyFormatter(number) {
+    return number.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        maximumSignificantDigits: 4
     });
 }
 
