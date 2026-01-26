@@ -42,6 +42,28 @@ async function findClothesByName() {
 
 }
 
+async function findByCategoryName() {
+    const catURL = "/clothes/category?category=";
+    document.getElementById('shirt').addEventListener('click', async (e) =>{
+        e.preventDefault();
+        const url = BASE_URL + catURL + "shirt";
+        const products = await getProducts(url);
+        displayProducts(products);
+    });
+    document.getElementById('skirt').addEventListener('click', async (e) =>{
+        e.preventDefault();
+        const url = BASE_URL + catURL + "skirt";
+        const products = await getProducts(url);
+        displayProducts(products);
+    });
+    document.getElementById('coat').addEventListener('click', async (e) =>{
+        e.preventDefault();
+        const url = BASE_URL + catURL + "coat";
+        const products = await getProducts(url);
+        displayProducts(products);
+    });
+}
+
 function mainPage(){
     document.getElementById('logo').addEventListener('click', () => {
         window.location.href = BASE_URL;
@@ -76,5 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
     allProductsDisplay();
     categoryMenuDisplay();
     findClothesByName();
+    findByCategoryName();
     mainPage();
 });

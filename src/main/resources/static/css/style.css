@@ -57,6 +57,10 @@ header-inner{
     color: #000;
 }
 
+#categoriesMenu a:hover{
+    color: grey;
+}
+
 .search_icon{
     max-width: 20px;
     height: auto;
