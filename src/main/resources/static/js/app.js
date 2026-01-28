@@ -13,17 +13,16 @@ async function getProducts(url) {
     }
 }
 
-async function allProductsDisplay() {
+async function showAllProducts() {
     const url = BASE_URL + "/clothes";
     const products = await getProducts(url);
-    displayProducts(products);
+    showProducts(products);
 }
 
-function categoryMenuDisplay() {
-    const button = document.getElementById('categoriesButton');
+function showCategoryMenu() {
     const menu = document.getElementById('categoriesMenu');
 
-    button.addEventListener('click', (e) => {
+    document.getElementById('categoriesButton').addEventListener('click', (e) => {
         e.preventDefault();
         const isHidden = getComputedStyle(menu).display === "none";
         menu.style.display = isHidden ? "block" : "none";
@@ -34,44 +33,53 @@ async function findClothesByName() {
     document.getElementById('searchButton').addEventListener('click', async (e) => {
         e.preventDefault();
         const searchValue = document.getElementById('searchInput').value.trim();
+
         if (!searchValue) return;
-        const url = BASE_URL + `/clothes/name?name=${encodeURIComponent(searchValue)}`;
+
+        const url = BASE_URL + `/clothes/name?name=${searchValue}`;
         const products = await getProducts(url);
-        displayProducts(products);
+        showProducts(products);
+
+        history.pushState({ type: 'search', query: searchValue, products: products }, "", `search?q=${searchValue}`);
     })
 
 }
 
 async function findByCategoryName() {
-    const catURL = "/clothes/category?category=";
-    document.getElementById('shirt').addEventListener('click', async (e) => {
-        e.preventDefault();
-        const url = BASE_URL + catURL + "shirt";
-        const products = await getProducts(url);
-        displayProducts(products);
-    });
-    document.getElementById('skirt').addEventListener('click', async (e) => {
-        e.preventDefault();
-        const url = BASE_URL + catURL + "skirt";
-        const products = await getProducts(url);
-        displayProducts(products);
-    });
-    document.getElementById('coat').addEventListener('click', async (e) => {
-        e.preventDefault();
-        const url = BASE_URL + catURL + "coat";
-        const products = await getProducts(url);
-        displayProducts(products);
+
+    const categories = ['shirt', 'skirt', 'coat'];
+
+    categories.forEach(categ => {
+        const element = document.getElementById(categ);
+
+        if (element) {
+            element.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const url = `${BASE_URL}/clothes/category?category=${categ}`;
+                const products = await getProducts(url);
+                showProducts(products);
+                history.pushState(
+                    { type: 'category', category: category, products: products },
+                    "",
+                    `?category=${category}`
+                );
+            })
+        }
     });
 }
 
-function mainPage() {
+function mainPageShortcut() {
     document.getElementById('logo').addEventListener('click', () => {
         window.location.href = BASE_URL;
     });
 }
 
-function displayProducts(products) {
+function showProducts(products) {
     const grid = document.getElementById('productGrid');
+
+    //removes the detail class so the list can show correctly
+    grid.classList.remove('detail-mode');
+
     grid.innerHTML = "";
 
     if (!products || products.length === 0) {
@@ -87,13 +95,13 @@ function displayProducts(products) {
             </div >
             <div>
                 <h3>${product.name}</h3>
-                <p>${currencyFormatter(product.price)}</p>
+                <p>${currencyFormatterToBRL(product.price)}</p>
             </div>
             `;
 
         card.addEventListener('click', () => {
             showProductDetail(product);
-            history.pushState({ id: product.id }, "", `?id=${product.id}`);
+            history.pushState({ type: 'product', data: product }, "", `${product.name.toLowerCase().replace(" ", "-")}`);
         });
 
         grid.appendChild(card);
@@ -108,8 +116,8 @@ function showProductDetail(product) {
     </div>
     <div>
     <p>${product.name}<p>
-    <p> ${currencyFormatter(product.price)}<p>
-    <p>Color: ${capitalizeFirst(product.color)}<p>
+    <p> ${currencyFormatterToBRL(product.price)}<p>
+    <p>Color: ${capitalizeFirstLetter(product.color)}<p>
     <p>Composition: ${product.description}<p>
     <p>Size<p>
     <form>
@@ -128,12 +136,12 @@ function showProductDetail(product) {
     `;
 }
 
-function capitalizeFirst(text) {
+function capitalizeFirstLetter(text) {
     const str = text.toLowerCase();
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function currencyFormatter(number) {
+function currencyFormatterToBRL(number) {
     return number.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL",
@@ -142,9 +150,35 @@ function currencyFormatter(number) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    allProductsDisplay();
-    categoryMenuDisplay();
+
+    history.replaceState({ type: 'home' }, "", window.location.href);
+
+    showAllProducts();
+    showCategoryMenu();
     findClothesByName();
     findByCategoryName();
-    mainPage();
+    mainPageShortcut();
+
+    window.addEventListener("popstate", (event) => {
+        const state = event.state;
+
+        if (!state || state.type === 'home') {
+            showAllProducts();
+            return;
+        }
+
+        if (state.type === 'product' && state.data) {
+            showProductDetail(state.data);
+            return;
+        }
+
+        if (state.type === 'search' && state.products) {
+            showProducts(state.products);
+            return;
+        }
+        if (state.type === 'category' && state.products) {
+            showProducts(state.products);
+            return;
+        }
+    });
 });
