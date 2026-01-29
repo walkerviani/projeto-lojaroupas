@@ -75,15 +75,16 @@ function mainPageShortcut() {
 }
 
 function showProducts(products) {
-    const grid = document.getElementById('productGrid');
+    const container = document.getElementById('container');
 
     //removes the detail class so the list can show correctly
-    grid.classList.remove('detail-mode');
+    container.classList.remove('detail-mode');
+    container.classList.remove('about');
 
-    grid.innerHTML = "";
+    container.innerHTML = "";
 
     if (!products || products.length === 0) {
-        grid.innerHTML = "<p>No products found</p>";
+        container.innerHTML = "<p>No products found</p>";
         return;
     }
     products.forEach(product => {
@@ -104,14 +105,14 @@ function showProducts(products) {
             history.pushState({ type: 'product', data: product }, "", `?id=${product.id}`);
         });
 
-        grid.appendChild(card);
+        container.appendChild(card);
     });
 }
 
 function showProductDetail(product) {
-    const grid = document.getElementById('productGrid');
-    grid.classList.add('detail-mode');
-    grid.innerHTML = `<div>
+    const container = document.getElementById('container');
+    container.classList.add('detail-mode');
+    container.innerHTML = `<div>
     <img src="${product.imageUrl}">
     </div>
     <div class="detail-mode-info">
@@ -151,6 +152,35 @@ function currencyFormatterToBRL(number) {
     });
 }
 
+function aboutPage() {
+    const button = document.getElementById('about');
+    if (button) {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadAboutPage();
+            history.pushState({ type: 'about' }, "", "/about");
+        });
+    }
+}
+
+function loadAboutPage() {
+    const container = document.getElementById('container');
+
+        //removes the detail class so the list can show correctly
+        container.classList.remove('detail-mode');
+        container.classList.add('about');
+
+        container.innerHTML = `
+        <div>
+        <h1>About<h1>
+        <h2>Portuguese<h2>
+        <p>Esse site é desenvolvido por Walker Yslan Viani com o objetivo de desenvolver conhecimentos de CSS, HTML, JavaScript e Spring Boot.<p>
+        </br>
+        <h2>English<h2>
+        <p>This website is developed by Walker Yslan Viani with the objective of developing knowledge of CSS, HTML, JavaScript and Spring Boot.<p>
+        </div>
+        `;
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     history.replaceState({ type: 'home' }, "", window.location.href);
@@ -160,12 +190,18 @@ document.addEventListener("DOMContentLoaded", () => {
     findClothesByName();
     findByCategoryName();
     mainPageShortcut();
+    aboutPage();
 
     window.addEventListener("popstate", (event) => {
         const state = event.state;
 
         if (!state || state.type === 'home') {
             showAllProducts();
+            return;
+        }
+
+        if (state.type === 'about') {
+            loadAboutPage();
             return;
         }
 
