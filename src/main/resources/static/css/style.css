@@ -28,13 +28,14 @@ header-inner{
     max-width: 1200px;
 }
 
-/*Logo img */
+/*logo img */
 .logo{
     max-width: 40px;
     height: auto;
     cursor: pointer;
 }
 
+/*categories menu */
 #categoriesMenu{
     display: none;
     position: absolute;
@@ -73,7 +74,7 @@ li, a{
     text-decoration: none;
 }
 
-/* Navegation Bar links */
+/* navegation bar links */
 .navegation ul{
     list-style: none;
     margin: 0;
@@ -90,7 +91,7 @@ li, a{
     color: antiquewhite;
 }
 
-/* Search Bar */
+/* search bar */
 .searchbox{
     display: flex;
     align-items: center;
@@ -125,17 +126,55 @@ li, a{
     padding: 20px;
 }
 
+
+/*selected product*/
 .grid.detail-mode{
     grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    align-items: center;
+    padding: 30px;
 }
 
 .detail-mode img{
-    width: 100%;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     object-fit:contain;
-    border: 1px solid grey;
+    padding: 30px;
 }
 
+.detail-mode-info{
+    font-size: 20px;
+    padding: 50px;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 30px;
+}
+
+.detail-mode-title{
+    font-weight:600;
+}
+
+.detail-mode-price{
+    font-size: 30px;
+}
+
+.detail-mode-button{
+    display: block;
+    margin: auto;
+    background-color: #6495ed;
+    color: white;
+    width: 200px;
+    height: 30px;
+    border: none;
+    border-radius: 3px;
+}
+
+.detail-mode-button:hover{
+    background-color: rgb(40, 40, 212);
+    cursor: pointer;
+}
+
+/*product card */
 .card{
     background: white;
     padding: 16px;
