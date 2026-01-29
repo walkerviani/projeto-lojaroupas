@@ -119,16 +119,25 @@ li, a{
 }
 
 /*automatically add new columns with min 200px and max 1fr */
-.grid{
+.container{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
 }
 
+/* about page */
+.container.about{
+    display: flex;
+    font-size: 14px;
+}
+
+.container.about p{
+    font-weight: 100;
+}
 
 /*selected product*/
-.grid.detail-mode{
+.container.detail-mode{
     grid-template-columns: repeat(2, 1fr);
     justify-items: center;
     align-items: center;
