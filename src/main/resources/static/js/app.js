@@ -49,13 +49,13 @@ async function findByCategoryName() {
 
     const categories = ['shirt', 'skirt', 'coat'];
 
-    categories.forEach(categ => {
-        const element = document.getElementById(categ);
+    categories.forEach(category => {
+        const element = document.getElementById(category);
 
         if (element) {
             element.addEventListener('click', async (e) => {
                 e.preventDefault();
-                const url = `${BASE_URL}/clothes/category?category=${categ}`;
+                const url = `${BASE_URL}/clothes/category?category=${category}`;
                 const products = await getProducts(url);
                 showProducts(products);
                 history.pushState(
@@ -101,7 +101,7 @@ function showProducts(products) {
 
         card.addEventListener('click', () => {
             showProductDetail(product);
-            history.pushState({ type: 'product', data: product }, "", `${product.name.toLowerCase().replace(" ", "-")}`);
+            history.pushState({ type: 'product', data: product }, "", `?id=${product.id}`);
         });
 
         grid.appendChild(card);
@@ -114,23 +114,25 @@ function showProductDetail(product) {
     grid.innerHTML = `<div>
     <img src="${product.imageUrl}">
     </div>
-    <div>
-    <p>${product.name}<p>
-    <p> ${currencyFormatterToBRL(product.price)}<p>
-    <p>Color: ${capitalizeFirstLetter(product.color)}<p>
-    <p>Composition: ${product.description}<p>
-    <p>Size<p>
+    <div class="detail-mode-info">
+    <p class="detail-mode-title">${product.name}<p>
+    <p class="detail-mode-price"> ${currencyFormatterToBRL(product.price)}<p>
+    <p class="detail-mode-color"><b>Color:</b> ${capitalizeFirstLetter(product.color)}<p>
+    <p><b>Composition:</b> ${product.description}<p>
+    </br>
+    <p><b>Size</b><p>
     <form>
     <input type="radio" id="small" name="sizeChoice" value="SMALL">
-    <label for="small">Small</label><br>
-    
+    <label for="small">Small</label>
+    </br>
     <input type="radio" id="medium" name="sizeChoice" value="MEDIUM">
-    <label for="medium">Medium</label><br>
-    
+    <label for="medium">Medium</label>
+    </br>
     <input type="radio" id="large" name="sizeChoice" value="LARGE">
-    <label for="large">Large</label><br>
-    
-    <input type="button" value="Buy">
+    <label for="large">Large</label>
+    </br>
+    </br>
+    <input type="button" class="detail-mode-button" value="Buy">
     </form>
     </div>
     `;
