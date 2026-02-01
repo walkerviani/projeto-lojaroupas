@@ -21,7 +21,6 @@ async function showAllProducts() {
 
 function showCategoryMenu() {
     const menu = document.getElementById('categoriesMenu');
-
     document.getElementById('categoriesButton').addEventListener('click', (e) => {
         e.preventDefault();
         const isHidden = getComputedStyle(menu).display === "none";
@@ -33,25 +32,18 @@ async function findClothesByName() {
     document.getElementById('searchButton').addEventListener('click', async (e) => {
         e.preventDefault();
         const searchValue = document.getElementById('searchInput').value.trim();
-
         if (!searchValue) return;
-
         const url = BASE_URL + `/clothes/name?name=${searchValue}`;
         const products = await getProducts(url);
         showProducts(products);
-
         history.pushState({ type: 'search', query: searchValue, products: products }, "", `search?q=${searchValue}`);
     })
-
 }
 
 async function findByCategoryName() {
-
     const categories = ['shirt', 'skirt', 'coat'];
-
     categories.forEach(category => {
         const element = document.getElementById(category);
-
         if (element) {
             element.addEventListener('click', async (e) => {
                 e.preventDefault();
@@ -76,13 +68,8 @@ function mainPageShortcut() {
 
 function showProducts(products) {
     const container = document.getElementById('container');
-
-    //removes the detail class so the list can show correctly
-    container.classList.remove('detail-mode');
-    container.classList.remove('about');
-
+    container.className = 'container';
     container.innerHTML = "";
-
     if (!products || products.length === 0) {
         container.innerHTML = "<p>No products found</p>";
         return;
@@ -99,12 +86,10 @@ function showProducts(products) {
                 <p>${currencyFormatterToBRL(product.price)}</p>
             </div>
             `;
-
         card.addEventListener('click', () => {
             showProductDetail(product);
             history.pushState({ type: 'product', data: product }, "", `?id=${product.id}`);
         });
-
         container.appendChild(card);
     });
 }
@@ -119,20 +104,15 @@ function showProductDetail(product) {
     <p class="detail-mode-title">${product.name}<p>
     <p class="detail-mode-price"> ${currencyFormatterToBRL(product.price)}<p>
     <p class="detail-mode-color"><b>Color:</b> ${capitalizeFirstLetter(product.color)}<p>
-    <p><b>Composition:</b> ${product.description}<p>
-    </br>
+    <p><b>Composition:</b> ${product.description}<p><br>
     <p><b>Size</b><p>
     <form>
     <input type="radio" id="small" name="sizeChoice" value="SMALL">
-    <label for="small">Small</label>
-    </br>
+    <label for="small">Small</label><br>
     <input type="radio" id="medium" name="sizeChoice" value="MEDIUM">
-    <label for="medium">Medium</label>
-    </br>
+    <label for="medium">Medium</label><br>
     <input type="radio" id="large" name="sizeChoice" value="LARGE">
-    <label for="large">Large</label>
-    </br>
-    </br>
+    <label for="large">Large</label><br><br>
     <input type="button" class="detail-mode-button" value="Buy">
     </form>
     </div>
@@ -153,7 +133,7 @@ function currencyFormatterToBRL(number) {
 }
 
 function aboutPage() {
-    const button = document.getElementById('about');
+    const button = document.getElementById('aboutButton');
     if (button) {
         button.addEventListener('click', (e) => {
             e.preventDefault();
@@ -165,22 +145,50 @@ function aboutPage() {
 
 function loadAboutPage() {
     const container = document.getElementById('container');
-
-        //removes the detail class so the list can show correctly
-        container.classList.remove('detail-mode');
-        container.classList.add('about');
-
-        container.innerHTML = `
+    container.className = 'container about';
+    container.innerHTML = `
         <div>
         <h1>About<h1>
-        <h2>Portuguese<h2>
-        <p>Esse site é desenvolvido por Walker Yslan Viani com o objetivo de desenvolver conhecimentos de CSS, HTML, JavaScript e Spring Boot.<p>
-        </br>
         <h2>English<h2>
         <p>This website is developed by Walker Yslan Viani with the objective of developing knowledge of CSS, HTML, JavaScript and Spring Boot.<p>
+        </br>
+        <h2>Portuguese<h2>
+        <p>Esse site é desenvolvido por Walker Yslan Viani com o objetivo de desenvolver conhecimentos de CSS, HTML, JavaScript e Spring Boot.<p>
         </div>
         `;
 }
+
+function loginPage() {
+    const button = document.getElementById('loginButton');
+    if (button) {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadLoginPage();
+            history.pushState({ type: 'login' }, "", "/login");
+        });
+    }
+}
+
+function loadLoginPage() {
+    const container = document.getElementById('container');
+    container.className = "container login";
+            container.innerHTML = `
+            <div>
+             <h1 id="loginTitle">Login</h1>
+             <label id="alert" style="color:red"></label>
+             <form>
+             <label for="email">E-mail</label>
+             <input type="email" id="email">
+             <label for="password">Password</label>
+             <input type="password" id="password" required>
+             <input type="button" class="loginbutton" value="Login">
+             </form>
+             <input type="button" class="accountButton" value="Create new Account">
+            </div>
+            `;
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     history.replaceState({ type: 'home' }, "", window.location.href);
@@ -191,6 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
     findByCategoryName();
     mainPageShortcut();
     aboutPage();
+    loginPage();
 
     window.addEventListener("popstate", (event) => {
         const state = event.state;
@@ -199,17 +208,18 @@ document.addEventListener("DOMContentLoaded", () => {
             showAllProducts();
             return;
         }
-
         if (state.type === 'about') {
             loadAboutPage();
             return;
         }
-
+        if (state.type === 'login') {
+            loadLoginPage();
+            return;
+        }
         if (state.type === 'product' && state.data) {
             showProductDetail(state.data);
             return;
         }
-
         if (state.type === 'search' && state.products) {
             showProducts(state.products);
             return;
