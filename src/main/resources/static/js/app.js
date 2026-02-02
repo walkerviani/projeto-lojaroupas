@@ -171,23 +171,59 @@ function loginPage() {
 
 function loadLoginPage() {
     const container = document.getElementById('container');
-    container.className = "container login";
+    container.className = "container form";
             container.innerHTML = `
             <div>
-             <h1 id="loginTitle">Login</h1>
+             <h1 class="formTitle">Login</h1>
              <label id="alert" style="color:red"></label>
-             <form>
-             <label for="email">E-mail</label>
-             <input type="email" id="email">
-             <label for="password">Password</label>
-             <input type="password" id="password" required>
-             <input type="button" class="loginbutton" value="Login">
-             </form>
-             <input type="button" class="accountButton" value="Create new Account">
+              <form>
+                <label for="email">E-mail</label>
+                <input type="email" id="email">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+                <input type="submit" class="formbutton" value="Login">
+              </form>
+               <input type="button" id="createButton" class="greenButton" value="Create new Account">
             </div>
             `;
+            createAccount();
 }
 
+function createAccount(){
+    const button = document.getElementById('createButton');
+    if(button){
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadCreateAccount();
+            history.pushState({type: 'signup'}, "", "/signup");
+        });
+    }
+}
+
+function loadCreateAccount(){
+    const container = document.getElementById('container');
+    container.className = "container form";
+    container.innerHTML = `
+            <div>
+            <h1 class="formTitle">Create a new account</h1>
+            <label id="alert" style="color:red"></label>
+            <form>
+            <label for="name">Name</label>
+            <input type="text" id="name">
+            <label for="email">Email</label>
+            <input type="email" id="email">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+            <label for="confPassword">Confirm your password</label>
+            <input type="password" id="confPassword" required>
+            <input type="submit" class="greenButton" value="Sign up">
+            </form>
+            </div>
+            `;
+    
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -216,6 +252,11 @@ document.addEventListener("DOMContentLoaded", () => {
             loadLoginPage();
             return;
         }
+        if(state.type === 'signup'){
+            loadCreateAccount();
+            return;
+        }
+
         if (state.type === 'product' && state.data) {
             showProductDetail(state.data);
             return;
