@@ -184,68 +184,6 @@ main {
     cursor: pointer;
 }
 
-/* login page */
-.container.login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-}
-
-.container.login label {
-    display: block;
-    font-size: 17px;
-    font-weight: lighter;
-    margin-bottom: 4px;
-
-}
-
-.container.login input {
-    display: block;
-    padding: 5px;
-    margin-bottom: 10px;
-}
-
-.loginbutton {
-    background-color: #6495ed;
-    color: white;
-    width: 260px;
-    border: none;
-    border-radius: 3px;
-    padding: 5px;
-    margin-top: 18px;
-    margin-bottom: 0;
-}
-
-.loginbutton:hover {
-    background-color: rgb(40, 40, 212);
-    cursor: pointer;
-}
-
-/* create account button */
-.accountButton{
-    background-color: rgb(30, 204, 30);
-    color: white;
-    width: 260px;
-    border: none;
-    border-radius: 3px;
-    padding: 5px;
-    margin-top: 18px;
-}
-
-.accountButton:hover{
-    background-color: rgb(12, 157, 12);
-    cursor: pointer;
-}
-
-#loginTitle {
-    font-size: 35px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
 /*product card */
 .card {
     background: white;
@@ -262,5 +200,73 @@ main {
 
 .card:hover {
     color: #6495ed;
+    cursor: pointer;
+}
+
+/* login and create account page */
+.container.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container.form div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container.form label {
+    display: block;
+    font-size: 17px;
+    font-weight: lighter;
+    margin-bottom: 4px;
+}
+
+.container.form input {
+    display: block;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.formbutton {
+    background-color: #6495ed;
+    color: white;
+    width: 260px;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+    margin-top: 18px;
+    margin-bottom: 0;
+}
+
+.formbutton:hover {
+    background-color: rgb(40, 40, 212);
+    cursor: pointer;
+}
+
+.formTitle {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* create account button */
+.greenButton{
+    background-color: rgb(30, 204, 30);
+    color: white;
+    width: 260px;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+    margin-top: 18px;
+}
+
+.greenButton:hover{
+    background-color: rgb(12, 157, 12);
     cursor: pointer;
 }
