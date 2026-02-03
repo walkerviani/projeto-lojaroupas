@@ -41,9 +41,7 @@ public class ClothesController {
 
     @GetMapping("/name")
     public ResponseEntity<List<Clothes>> findByName(@RequestParam(value = "name", required = false) String name) {
-        List<Clothes> list = (name == null || name.isBlank())
-                ? clothesService.findAll()
-                : clothesService.findByName(name);
+        List<Clothes> list = clothesService.findByName(name);
         return ResponseEntity.ok().body(list);
     }
 
