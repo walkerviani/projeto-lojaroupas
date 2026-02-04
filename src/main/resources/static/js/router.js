@@ -28,7 +28,9 @@ export async function handleRoute() {
         UI.loadAboutPage();
     } else if (path === '/signup') {
         UI.loadCreateAccount();
-    } else if (path === '/login') {
+    } else if (path === '/admin') {
+        UI.loadAdminPage();
+    }else if (path === '/login') {
         UI.loadLoginPage();
     }else {
         //home page

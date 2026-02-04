@@ -270,3 +270,15 @@ main {
     background-color: rgb(12, 157, 12);
     cursor: pointer;
 }
+
+.adminButton{
+    background-color: white;
+    width: 300px;
+    height: 80px;
+    border-radius: 3px;
+}
+
+.adminButton:hover{
+    background-color: rgb(211, 211, 211);
+    cursor: pointer;
+}
