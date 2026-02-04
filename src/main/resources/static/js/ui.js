@@ -111,3 +111,23 @@ export function loadCreateAccount() {
             </div>
             `;
 }
+
+export function loadAdminPage(){
+    const container = document.getElementById('container');
+    container.className = "container form";
+    container.innerHTML = `
+    <div>
+    <h1 class="formTitle">Admin Menu</h1>
+    <input type="button" class="adminButton" id="clothes" value="Clothes">
+    <input type="button" class="adminButton" id="orders" value="Orders">
+    <input type="button" class="adminButton" id="users" value="Users">
+    </div>
+    `;
+    const categories = ['clothes', 'orders', 'users'];
+    categories.forEach(category => {
+        document.getElementById(category).addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo(`/admin/?config=${category}`);
+        });
+    });
+}
