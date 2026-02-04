@@ -1,13 +1,23 @@
 package com.walkerviani.projetolojaroupas.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.walkerviani.projetolojaroupas.entities.enums.Role;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -25,6 +35,8 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
     private String phone;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @JsonIgnore
     @OneToMany(mappedBy = "client")
@@ -34,11 +46,12 @@ public class User implements Serializable {
 
     }
 
-    public User(String name, String email, String password, String phone) {
+    public User(String name, String email, String password, String phone, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
+        this.role = role;
     }
 
     public Long getId() {
@@ -77,6 +90,14 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+    
     public List<Order> getOrders() {
         return orders;
     }
