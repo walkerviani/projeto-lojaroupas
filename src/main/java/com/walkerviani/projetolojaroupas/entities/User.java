@@ -34,6 +34,8 @@ public class User implements Serializable {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column (nullable= false, unique= true)
+    private String cpf;
     private String phone;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -98,6 +100,14 @@ public class User implements Serializable {
         this.role = role;
     }
     
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     public List<Order> getOrders() {
         return orders;
     }
