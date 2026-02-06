@@ -58,8 +58,8 @@ public class TestConfig implements CommandLineRunner {
         clothesRepository.saveAll(Arrays.asList(clothes1, clothes2, clothes3));
 
 
-        User u1 = new User("Carl", "carl@gmail.com","42kf34f32", "102443335", Role.USER);
-        User u2 = new User("Mariah", "mariah@gmail.com", "r2jdfsi3", "194542354", Role.ADMIN);
+        User u1 = new User("Carl", "carl@gmail.com","42kf34f32", "53857495334", "102443335", Role.USER);
+        User u2 = new User("Mariah", "mariah@gmail.com", "38492837434","r2jdfsi3", "194542354", Role.ADMIN);
         userRepository.saveAll(Arrays.asList(u1, u2));
 
         Order ord1 = new Order(Instant.now(), OrderStatus.PAID, u1);
