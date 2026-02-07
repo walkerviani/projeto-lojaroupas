@@ -39,3 +39,34 @@
 </body>
 
 </html>
+
+
+<!-- Form Create Account -->
+<template id="template-create-account">
+    <div>
+        <h1 class="formTitle">Create a new account</h1>
+        <label id="alert" class="alertButton"></label>
+
+        <form id="form-create-account" novalidate>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" minlength="3" maxlength="80" required>
+
+            <label for="cpf">CPF</label>
+            <input type="text" id="cpf" name="cpf" minlength="11" maxlength="11" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" maxlength="35" required>
+
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" minlength="11" maxlength="11" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="new-password" name="password" minlength="8" required>
+
+            <label for="confPassword">Confirm your password</label>
+            <input type="password" id="confPassword" name="confPassword" autocomplete="new-password" required>
+
+            <input type="submit" class="greenButton" value="Sign up">
+        </form>
+    </div>
+</template>
