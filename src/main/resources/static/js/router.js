@@ -1,4 +1,4 @@
-import { BASE_URL, getProducts } from './util.js';
+import { BASE_URL, getProducts } from './components/util.js';
 import * as UI from './ui.js';
 
 export async function handleRoute() {
