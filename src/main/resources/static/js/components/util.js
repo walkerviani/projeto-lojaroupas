@@ -1,8 +1,6 @@
-export {BASE_URL, getProducts, capitalizeFirstLetter, currencyFormatterToBRL};
+export const BASE_URL = "http://localhost:8080";
 
-const BASE_URL = "http://localhost:8080";
-
-async function getProducts(url) {
+export async function getProducts(url) {
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -15,12 +13,12 @@ async function getProducts(url) {
     }
 }
 
-function capitalizeFirstLetter(text) {
+export function capitalizeFirstLetter(text) {
     const str = text.toLowerCase();
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function currencyFormatterToBRL(number) {
+export function currencyFormatterToBRL(number) {
     return number.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL",
