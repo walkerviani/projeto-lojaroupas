@@ -1,5 +1,6 @@
 import { navigateTo } from "./router.js";
-import { capitalizeFirstLetter, currencyFormatterToBRL } from "./util.js";
+import { capitalizeFirstLetter, currencyFormatterToBRL } from "./components/util.js";
+import { validateCreateAccount } from "./components/form-validations.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');
@@ -90,26 +91,14 @@ export function loadLoginPage() {
 
 export function loadCreateAccount() {
     const container = document.getElementById('container');
+    const template = document.getElementById('template-create-account');
+    const clone = template.content.cloneNode(true);
+    
     container.className = "container form";
-    container.innerHTML = `
-            <div>
-            <h1 class="formTitle">Create a new account</h1>
-            <label id="alert" style="color:red"></label>
-            <form>
-            <label for="name">Name</label>
-            <input type="text" id="name">
-            <label for="email">Email</label>
-            <input type="email" id="email">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone">
-            <label for="password">Password</label>
-            <input type="password" id="password" required>
-            <label for="confPassword">Confirm your password</label>
-            <input type="password" id="confPassword" required>
-            <input type="submit" class="greenButton" value="Sign up">
-            </form>
-            </div>
-            `;
+    container.innerHTML = ""; //clean the page
+    container.appendChild(clone);
+
+    validateCreateAccount();
 }
 
 export function loadAdminPage(){
