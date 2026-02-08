@@ -1,6 +1,6 @@
-import { navigateTo } from "./router.js";
-import { capitalizeFirstLetter, currencyFormatterToBRL } from "./components/util.js";
-import { validateCreateAccount } from "./components/form-validations.js";
+import { navigateTo } from "../router.js";
+import { capitalizeFirstLetter, currencyFormatterToBRL } from "./util.js";
+import { validateCreateAccount } from "./form-validations.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');
