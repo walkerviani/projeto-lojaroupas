@@ -12,30 +12,31 @@ export async function handleRoute() {
         container.innerHTML = "";
     }
 
-    if (params.has('id')) {
+    if (params.has('id')) { // products by id
         const id = params.get('id');
         const product = await getProducts(`${BASE_URL}/clothes/${id}`);
         UI.showProductDetail(product);
-    } else if (params.has('category')) {
+    } else if (params.has('category')) { // products by category
         const category = params.get('category');
         const products = await getProducts(`${BASE_URL}/clothes/category?category=${category}`);
         UI.showProducts(products);
-    } else if (params.has('name')) {
+    } else if (params.has('name')) { // products by name (search)
         const queryName = params.get('name');
         const products = await getProducts(`${BASE_URL}/clothes/name?name=${queryName}`);
         UI.showProducts(products);
-    } else if (path === '/about') {
+    } else if (path === '/about') { // about page
         UI.loadAboutPage();
-    } else if (path === '/signup') {
+    } else if (path === '/signup') { // sign up page
         UI.loadCreateAccount();
-    } else if (path === '/admin') {
+    } else if (path === '/admin') { // admin page
         UI.loadAdminPage();
-    }else if (path === '/login') {
+    } else if (path === '/login') { // login page
         UI.loadLoginPage();
-    }else {
-        //home page
+    } else if (path === '/' || path === 'index.html') { // home page
         const products = await getProducts(`${BASE_URL}/clothes`);
         UI.showProducts(products);
+    } else {
+        UI.loadError404(); // 404 page not foun
     }
 }
 
