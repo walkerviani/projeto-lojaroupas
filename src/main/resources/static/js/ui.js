@@ -37,6 +37,7 @@ export function showProductDetail(product) {
     clone.querySelector(".detail-mode-price").textContent = currencyFormatterToBRL(product.price); // product price
     clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${capitalizeFirstLetter(product.color)}`; // product color
     clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`; // product description
+    
     container.classList.add('detail-mode');
     container.innerHTML = "";
     container.appendChild(clone);
@@ -95,4 +96,14 @@ export function loadAdminPage() {
             navigateTo(`/admin/?config=${category}`);
         });
     });
+}
+
+export function loadError404(){
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-error');
+    const clone = template.content.cloneNode(true);
+
+    container.className = 'container error-page';
+    container.innerHTML = "";
+    container.appendChild(clone);
 }
