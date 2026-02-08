@@ -41,7 +41,7 @@
 </html>
 
 
-<!-- Form Create Account -->
+<!-- Template create account page and form -->
 <template id="template-create-account">
     <div>
         <h1 class="formTitle">Create a new account</h1>
@@ -68,5 +68,24 @@
 
             <input type="submit" class="greenButton" value="Sign up">
         </form>
+    </div>
+</template>
+
+<!-- Template login page and form -->
+<template id="template-login">
+    <div>
+        <h1 class="formTitle">Login</h1>
+        <label id="alert" style="color:red"></label>
+
+        <form id="form-login">
+            <label for="email">E-mail</label>
+            <input type="email" id="email">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+            <input type="submit" class="formbutton" value="Login">
+        </form>
+
+        <input type="button" id="createButton" class="greenButton" value="Create new Account">
+
     </div>
 </template>

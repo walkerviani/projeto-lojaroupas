@@ -69,24 +69,16 @@ export function loadAboutPage() {
 
 export function loadLoginPage() {
     const container = document.getElementById('container');
+    const template = document.getElementById('template-login');
+    const clone = template.content.cloneNode(true);
+
     container.className = "container form";
-    container.innerHTML = `
-            <div>
-             <h1 class="formTitle">Login</h1>
-             <label id="alert" style="color:red"></label>
-              <form>
-                <label for="email">E-mail</label>
-                <input type="email" id="email">
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
-                <input type="submit" class="formbutton" value="Login">
-              </form>
-               <input type="button" id="createButton" class="greenButton" value="Create new Account">
-            </div>
-            `;
+    container.innerHTML = ""; //clean the page
+    container.appendChild(clone);
+    
     document.getElementById('createButton').addEventListener('click', () => {
         navigateTo('/signup');
-    })
+    });
 }
 
 export function loadCreateAccount() {
