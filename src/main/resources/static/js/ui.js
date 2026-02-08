@@ -29,42 +29,28 @@ export function showProducts(products) {
 
 export function showProductDetail(product) {
     const container = document.getElementById('container');
+    const template = document.getElementById('template-detail');
+    const clone = template.content.cloneNode(true);
+
+    clone.querySelector(".detail-mode-image").src = product.imageUrl; // product image
+    clone.querySelector(".detail-mode-title").textContent = product.name; // product title
+    clone.querySelector(".detail-mode-price").textContent = currencyFormatterToBRL(product.price); // product price
+    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${capitalizeFirstLetter(product.color)}`; // product color
+    clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`; // product description
     container.classList.add('detail-mode');
-    container.innerHTML = `<div>
-    <img src="${product.imageUrl}">
-    </div>
-    <div class="detail-mode-info">
-    <p class="detail-mode-title">${product.name}<p>
-    <p class="detail-mode-price"> ${currencyFormatterToBRL(product.price)}<p>
-    <p class="detail-mode-color"><b>Color:</b> ${capitalizeFirstLetter(product.color)}<p>
-    <p><b>Composition:</b> ${product.description}<p><br>
-    <p><b>Size</b><p>
-    <form>
-    <input type="radio" id="small" name="sizeChoice" value="SMALL">
-    <label for="small">Small</label><br>
-    <input type="radio" id="medium" name="sizeChoice" value="MEDIUM">
-    <label for="medium">Medium</label><br>
-    <input type="radio" id="large" name="sizeChoice" value="LARGE">
-    <label for="large">Large</label><br><br>
-    <input type="button" class="detail-mode-button" value="Buy">
-    </form>
-    </div>
-    `;
+    container.innerHTML = "";
+    container.appendChild(clone);
+
 }
 
 export function loadAboutPage() {
     const container = document.getElementById('container');
+    const template = document.getElementById('template-aboutpage');
+    const clone = template.content.cloneNode(true);
+
     container.className = 'container about';
-    container.innerHTML = `
-        <div>
-        <h1>About<h1>
-        <h2>English<h2>
-        <p>This website is developed by Walker Yslan Viani with the objective of developing knowledge of CSS, HTML, JavaScript and Spring Boot.<p>
-        </br>
-        <h2>Portuguese<h2>
-        <p>Esse site é desenvolvido por Walker Yslan Viani com o objetivo de desenvolver conhecimentos de CSS, HTML, JavaScript e Spring Boot.<p>
-        </div>
-        `;
+    container.innerHTML = "";
+    container.appendChild(clone);
 }
 
 export function loadLoginPage() {
@@ -73,9 +59,9 @@ export function loadLoginPage() {
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
-    container.innerHTML = ""; //clean the page
+    container.innerHTML = "";
     container.appendChild(clone);
-    
+
     document.getElementById('createButton').addEventListener('click', () => {
         navigateTo('/signup');
     });
@@ -85,25 +71,23 @@ export function loadCreateAccount() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-create-account');
     const clone = template.content.cloneNode(true);
-    
+
     container.className = "container form";
-    container.innerHTML = ""; //clean the page
+    container.innerHTML = "";
     container.appendChild(clone);
 
     validateCreateAccount();
 }
 
-export function loadAdminPage(){
+export function loadAdminPage() {
     const container = document.getElementById('container');
+    const template = document.getElementById('template-admin');
+    const clone = template.content.cloneNode(true);
+
     container.className = "container form";
-    container.innerHTML = `
-    <div>
-    <h1 class="formTitle">Admin Menu</h1>
-    <input type="button" class="adminButton" id="clothes" value="Clothes">
-    <input type="button" class="adminButton" id="orders" value="Orders">
-    <input type="button" class="adminButton" id="users" value="Users">
-    </div>
-    `;
+    container.innerHTML = "";
+    container.appendChild(clone);
+
     const categories = ['clothes', 'orders', 'users'];
     categories.forEach(category => {
         document.getElementById(category).addEventListener('click', (e) => {
