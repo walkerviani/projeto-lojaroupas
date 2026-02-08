@@ -1,4 +1,4 @@
-import { navigateTo } from "../router.js";
+import { navigateTo } from "./router.js";
 import { capitalizeFirstLetter, currencyFormatterToBRL } from "./util.js";
 import { validateCreateAccount } from "./form-validations.js";
 

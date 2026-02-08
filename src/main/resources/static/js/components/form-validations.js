@@ -1,4 +1,4 @@
-import { navigateTo } from "../router.js";
+import { navigateTo } from "./router.js";
 import { BASE_URL } from "./util.js";
 
 export function validateCreateAccount() {
