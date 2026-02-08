@@ -145,7 +145,7 @@ main {
     padding: 30px;
 }
 
-.detail-mode img {
+.detail-mode-image {
     width: 400px;
     height: 400px;
     object-fit: contain;
@@ -162,6 +162,14 @@ main {
 
 .detail-mode-title {
     font-weight: 600;
+}
+
+.detail-mode-color {
+    font-size: 20px;
+}
+
+.detail-mode-description {
+    font-size: 20px;
 }
 
 .detail-mode-price {
