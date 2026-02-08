@@ -1,4 +1,4 @@
-import { handleRoute, navigateTo } from './router.js';
+import { handleRoute, navigateTo } from './components/router.js';
 
 
 function setupNavigation() {
