@@ -35,6 +35,28 @@ main {
     padding-top: 60px;
 }
 
+table {
+    table-layout: fixed;
+    width: 90%;
+    margin: 10px auto;
+    border-collapse: collapse;
+    border-top: 1px solid #999999;  
+    border-bottom: 1px solid #999999;  
+}
+
+th, td {
+    padding: 3px;
+    text-align: center;
+}
+
+/* {tbody = table body, 
+   nth = number of th, 
+   child = child elements} = every odd number of child elements
+  */
+tbody tr:nth-child(odd) { 
+    background-color: #eeeeee;
+}
+
 /*logo img */
 .logo {
     max-width: 40px;
