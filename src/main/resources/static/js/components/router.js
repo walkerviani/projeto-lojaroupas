@@ -25,7 +25,9 @@ export async function handleRoute() {
         const products = await getProducts(`${BASE_URL}/clothes/name?name=${queryName}`);
         UI.showProducts(products);
     } else if (path === '/admin-products') {
-        UI.loadAdminProducts();
+        UI.loadAdminProductsPage();
+    }else if (path === '/admin-read-product') {
+        UI.readAdminProducts();
     } else if (path === '/about') { // about page
         UI.loadAboutPage();
     } else if (path === '/signup') { // sign up page
