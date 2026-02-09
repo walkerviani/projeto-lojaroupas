@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { capitalizeFirstLetter, currencyFormatterToBRL } from "./util.js";
+import { BASE_URL, capitalizeFirstLetter, currencyFormatterToBRL, showProductTable, getProducts } from "./util.js";
 import { validateCreateAccount } from "./form-validations.js";
 
 export function showProducts(products) {
@@ -32,11 +32,16 @@ export function showProductDetail(product) {
     const template = document.getElementById('template-detail');
     const clone = template.content.cloneNode(true);
 
-    clone.querySelector(".detail-mode-image").src = product.imageUrl; // product image
-    clone.querySelector(".detail-mode-title").textContent = product.name; // product title
-    clone.querySelector(".detail-mode-price").textContent = currencyFormatterToBRL(product.price); // product price
-    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${capitalizeFirstLetter(product.color)}`; // product color
-    clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`; // product description
+    // product image
+    clone.querySelector(".detail-mode-image").src = product.imageUrl; 
+    // product title
+    clone.querySelector(".detail-mode-title").textContent = product.name; 
+    // product price
+    clone.querySelector(".detail-mode-price").textContent = currencyFormatterToBRL(product.price); 
+    // product color
+    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${capitalizeFirstLetter(product.color)}`; 
+    // product description
+    clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`; 
     
     container.classList.add('detail-mode');
     container.innerHTML = "";
@@ -89,13 +94,24 @@ export function loadAdminPage() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const categories = ['clothes', 'orders', 'users'];
+    const categories = ['products', 'orders', 'users'];
     categories.forEach(category => {
         document.getElementById(category).addEventListener('click', (e) => {
             e.preventDefault();
-            navigateTo(`/admin/?config=${category}`);
+            navigateTo(`/admin-${category}`);
         });
     });
+}
+
+export async function loadAdminProducts(){
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-admin-prod');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+    showProductTable(await getProducts(`${BASE_URL}/clothes`));
 }
 
 export function loadError404(){
