@@ -24,7 +24,7 @@ export function showProductTable(products) {
         <td>Color</td>
     </tr>`;
 
-    for(let product of products){
+    for (let product of products) {
         table += `
         <tr>
           <td>${product.id}</td>
@@ -50,4 +50,27 @@ export function currencyFormatterToBRL(number) {
         currency: "BRL",
         maximumSignificantDigits: 4
     });
+}
+
+export async function getCategories() {
+    try {
+        const response = await fetch(`${BASE_URL}/category`);
+        if(!response.ok){
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
+
+export function createSelectCategories(categories) {
+    const select = document.getElementById('category-select');
+    for (let category of categories) {
+        const option = document.createElement('option');
+        option.value = category.name;
+        option.textContent = category.name;
+        select.appendChild(option);
+    };
 }
