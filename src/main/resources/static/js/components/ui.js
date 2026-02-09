@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, capitalizeFirstLetter, currencyFormatterToBRL, showProductTable, getProducts } from "./util.js";
+import { BASE_URL, capitalizeFirstLetter, currencyFormatterToBRL, showProductTable, getProducts, createSelectCategories, getCategories } from "./util.js";
 import { validateCreateAccount } from "./form-validations.js";
 
 export function showProducts(products) {
@@ -123,13 +123,24 @@ export function loadAdminProductsPage(){
 
 export async function readAdminProducts(){
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-prod');
+    const template = document.getElementById('template-admin-read');
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
     showProductTable(await getProducts(`${BASE_URL}/clothes`));
+}
+
+export async function createAdminProducts(){
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-admin-create');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+    createSelectCategories(await getCategories());
 }
 
 export function loadError404(){
