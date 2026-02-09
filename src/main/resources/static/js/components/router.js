@@ -28,6 +28,8 @@ export async function handleRoute() {
         UI.loadAdminProductsPage();
     }else if (path === '/admin-read-product') {
         UI.readAdminProducts();
+    }else if (path === '/admin-create-product') {
+        UI.createAdminProducts();
     } else if (path === '/about') { // about page
         UI.loadAboutPage();
     } else if (path === '/signup') { // sign up page
