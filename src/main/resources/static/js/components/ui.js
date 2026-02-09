@@ -103,7 +103,25 @@ export function loadAdminPage() {
     });
 }
 
-export async function loadAdminProducts(){
+export function loadAdminProductsPage(){
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-admin-prodpage');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const options = ['create-product', 'read-product', 'update-product', 'delete-product'];
+    options.forEach(option => {
+        document.getElementById(option).addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo(`/admin-${option}`);
+        });
+    });
+}
+
+export async function readAdminProducts(){
     const container = document.getElementById('container');
     const template = document.getElementById('template-admin-prod');
     const clone = template.content.cloneNode(true);
