@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, capitalizeFirstLetter, currencyFormatterToBRL, showProductTable, getProducts, createSelectCategories, getCategories } from "./util.js";
+import * as UTIL from "./util.js";
 import { validateCreateAccount, validateCreateProducts } from "./form-validations.js";
 
 export function showProducts(products) {
@@ -12,7 +12,7 @@ export function showProducts(products) {
     }
     products.forEach(product => {
         const imageUrl = product.imageData
-            ? `${BASE_URL}/image/${product.imageData.name}`
+            ? `${UTIL.BASE_URL}/image/${product.imageData.name}`
             : 'https://placehold.co/400x400?text=No+Image';
 
 
@@ -24,7 +24,7 @@ export function showProducts(products) {
             </div >
             <div>
                 <h3>${product.name}</h3>
-                <p>${currencyFormatterToBRL(product.price)}</p>
+                <p>${UTIL.currencyFormatterToBRL(product.price)}</p>
             </div>
             `;
         card.addEventListener('click', () => navigateTo(`?id=${product.id}`));
@@ -38,7 +38,7 @@ export function showProductDetail(product) {
     const clone = template.content.cloneNode(true);
 
     const imageUrl = product.imageData
-        ? `${BASE_URL}/image/${product.imageData.name}`
+        ? `${UTIL.BASE_URL}/image/${product.imageData.name}`
         : 'https://placehold.co/400x400?text=No+Image';
 
     // product image
@@ -46,9 +46,9 @@ export function showProductDetail(product) {
     // product title
     clone.querySelector(".detail-mode-title").textContent = product.name;
     // product price
-    clone.querySelector(".detail-mode-price").textContent = currencyFormatterToBRL(product.price);
+    clone.querySelector(".detail-mode-price").textContent = UTIL.currencyFormatterToBRL(product.price);
     // product color
-    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${capitalizeFirstLetter(product.color)}`;
+    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${UTIL.capitalizeFirstLetter(product.color)}`;
     // product description
     clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`;
 
@@ -133,13 +133,13 @@ export function loadAdminProductsPage() {
 
 export async function readAdminProducts() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-read');
+    const template = document.getElementById('template-admin-read-product');
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
-    showProductTable(await getProducts(`${BASE_URL}/clothes`));
+    UTIL.showProductTable(await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`));
 }
 
 export async function createAdminProducts() {
@@ -150,7 +150,7 @@ export async function createAdminProducts() {
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
-    createSelectCategories(await getCategories());
+    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
     validateCreateProducts();
 }
 
@@ -171,6 +171,17 @@ export function loadAdminCategoriesPage() {
             navigateTo(`/admin-${option}`);
         });
     });
+}
+
+export async function readAdminCategories() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-admin-read-category');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+    UTIL.showCategoryTable(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
 }
 
 export function loadError404() {

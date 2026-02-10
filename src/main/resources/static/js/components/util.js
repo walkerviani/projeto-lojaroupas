@@ -13,6 +13,19 @@ export async function getProducts(url) {
     }
 }
 
+export async function getCategories(url) {
+    try {
+        const response = await fetch(url);
+        if(!response.ok){
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
+
 export function showProductTable(products) {
     let table = `
     <tr>
@@ -52,19 +65,6 @@ export function currencyFormatterToBRL(number) {
     });
 }
 
-export async function getCategories() {
-    try {
-        const response = await fetch(`${BASE_URL}/category`);
-        if(!response.ok){
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Error: ", error);
-    }
-}
-
 export function createSelectCategories(categories) {
     const select = document.getElementById('category-select');
     for (let category of categories) {
@@ -73,4 +73,22 @@ export function createSelectCategories(categories) {
         option.textContent = category.name;
         select.appendChild(option);
     };
+}
+
+export function showCategoryTable(categories) {
+    let table = `
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+    </tr>`;
+
+    for (let category of categories) {
+        table += `
+        <tr>
+          <td>${category.id}</td>
+          <td>${category.name}</td>
+        </tr>
+        `;
+    }
+    document.getElementById('category-table').innerHTML = table;
 }
