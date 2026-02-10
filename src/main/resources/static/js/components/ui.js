@@ -1,6 +1,6 @@
 import { navigateTo } from "./router.js";
 import { BASE_URL, capitalizeFirstLetter, currencyFormatterToBRL, showProductTable, getProducts, createSelectCategories, getCategories } from "./util.js";
-import { validateCreateAccount } from "./form-validations.js";
+import { validateCreateAccount, validateCreateProducts } from "./form-validations.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');
@@ -11,11 +11,16 @@ export function showProducts(products) {
         return;
     }
     products.forEach(product => {
+        const imageUrl = product.imageData
+            ? `${BASE_URL}/image/${product.imageData.name}`
+            : 'https://placehold.co/400x400?text=No+Image';
+
+
         const card = document.createElement('div');
         card.classList.add('card');
         card.innerHTML = `
         <div class="card-image" id="card">
-            <img src="${product.imageUrl}">
+            <img src="${imageUrl}">
             </div >
             <div>
                 <h3>${product.name}</h3>
@@ -32,17 +37,21 @@ export function showProductDetail(product) {
     const template = document.getElementById('template-detail');
     const clone = template.content.cloneNode(true);
 
+    const imageUrl = product.imageData
+        ? `${BASE_URL}/image/${product.imageData.name}`
+        : 'https://placehold.co/400x400?text=No+Image';
+
     // product image
-    clone.querySelector(".detail-mode-image").src = product.imageUrl; 
+    clone.querySelector(".detail-mode-image").src = imageUrl;
     // product title
-    clone.querySelector(".detail-mode-title").textContent = product.name; 
+    clone.querySelector(".detail-mode-title").textContent = product.name;
     // product price
-    clone.querySelector(".detail-mode-price").textContent = currencyFormatterToBRL(product.price); 
+    clone.querySelector(".detail-mode-price").textContent = currencyFormatterToBRL(product.price);
     // product color
-    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${capitalizeFirstLetter(product.color)}`; 
+    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${capitalizeFirstLetter(product.color)}`;
     // product description
-    clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`; 
-    
+    clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`;
+
     container.classList.add('detail-mode');
     container.innerHTML = "";
     container.appendChild(clone);
@@ -103,7 +112,7 @@ export function loadAdminPage() {
     });
 }
 
-export function loadAdminProductsPage(){
+export function loadAdminProductsPage() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-admin-prodpage');
     const clone = template.content.cloneNode(true);
@@ -121,7 +130,7 @@ export function loadAdminProductsPage(){
     });
 }
 
-export async function readAdminProducts(){
+export async function readAdminProducts() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-admin-read');
     const clone = template.content.cloneNode(true);
@@ -132,7 +141,7 @@ export async function readAdminProducts(){
     showProductTable(await getProducts(`${BASE_URL}/clothes`));
 }
 
-export async function createAdminProducts(){
+export async function createAdminProducts() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-admin-create');
     const clone = template.content.cloneNode(true);
@@ -141,9 +150,10 @@ export async function createAdminProducts(){
     container.innerHTML = "";
     container.appendChild(clone);
     createSelectCategories(await getCategories());
+    validateCreateProducts();
 }
 
-export function loadError404(){
+export function loadError404() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-error');
     const clone = template.content.cloneNode(true);
