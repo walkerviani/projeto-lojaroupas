@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,7 +21,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "clothes")
@@ -35,12 +38,16 @@ public class Clothes implements Serializable {
     private String name;
     private BigDecimal price;
     private String description;
-    private String imageUrl;
     @Enumerated(EnumType.STRING)
     private Size size;
     @Enumerated(EnumType.STRING)
     private Color color;
+    @Transient
+    private String imageName;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private ImageData imageData;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -53,11 +60,11 @@ public class Clothes implements Serializable {
 
     }
 
-    public Clothes(String name, BigDecimal price, String description, String imageUrl, Size size, Category category, Color color) {
+    public Clothes(String name, BigDecimal price, String description, ImageData imageData, Size size, Category category, Color color) {
         this.name = name;
         this.price = price;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.imageData = imageData;
         this.size = size;
         this.category = category;
         this.color = color;
@@ -95,12 +102,12 @@ public class Clothes implements Serializable {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public ImageData getImageData() {
+        return imageData;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageData(ImageData imageData) {
+        this.imageData = imageData;
     }
 
     public Size getSize() {
@@ -127,6 +134,14 @@ public class Clothes implements Serializable {
         this.color = color;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
     @JsonIgnore
     public Set<Order> getOrders() {
         Set<Order> set = new HashSet<>();
@@ -138,7 +153,8 @@ public class Clothes implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Clothes clothes = (Clothes) o;
         return Objects.equals(id, clothes.id);
     }
