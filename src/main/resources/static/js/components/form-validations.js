@@ -4,14 +4,14 @@ import { BASE_URL } from "./util.js";
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');
     const { name, cpf, email, phone, password, confPassword } = form.elements;
-    const alert = document.getElementById('alert');
+    const alert = document.getElementById('alert-create-account');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
         const phoneRegex = /^\d{11}$/; //numeric number with 11 digits long
 
-        //1. Reset the label and error
+        // Reset the label and error
         alert.textContent = "";
         let error = "";
 
@@ -86,5 +86,104 @@ async function sendAccountData(userData, alert, form) {
         alert.style.color = "red";
         alert.textContent = e.message;
         alert.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+}
+
+export function validateCreateProducts(){
+    const form = document.getElementById('form-create-product');
+    const { name, price, description, size, color, category, image } = form.elements;
+    const alert = document.getElementById('alert-create-prod');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
+        const formattedPrice = price.value.replace(/,/g, ".");
+        const file = image.files[0];
+
+        // Reset the label and error
+        alert.textContent = "";
+        let error = "";
+
+        if (name.validity.valueMissing) {
+            error = "Name is required!";
+        } else if (name.validity.tooShort) {
+            error = "Name is too short!";
+        } else if (!nameRegex.test(name.value)) {
+            error = "Name must not have numbers";
+        } else if (price.validity.valueMissing){
+            error = "Price is required!";
+        } else if(isNaN(price)) {
+            error = "Enter a valid price!";
+        } else if (description.validity.valueMissing) {
+            error = "Description is required!";
+        } else if (size.value === ""){
+            error = "You must select a valid size!";
+        } else if (color.value === ""){
+            error = "You must select a valid color!";
+        } else if (category.value === ""){
+            error = "You must select a valid category!";
+        } else if (image.validity.valueMissing) {
+            error = "You must select an image";
+        } else if(file && file.type !== "image/png"){
+            error = "Only PNG images are allowed!";
+        }
+
+        if (error != "") {
+            alert.textContent = error;
+            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+            const productData = {
+                name: name.value,
+                price: formattedPrice,
+                description: description.value,
+                size: size.value,
+                color: color.value,
+                category: { 
+                    id: category.value 
+                },
+                imageName: ""
+            };
+            await sendProductData(productData, file, alert, form);
+        }
+    });
+}
+
+async function sendProductData(productData, file, alert, form){
+    try{
+        //image upload
+        const imageFormData = new FormData();
+        imageFormData.append('image', file);
+
+        const imageResponse = await fetch(`${BASE_URL}/image`, {
+            method: 'POST',
+            body: imageFormData
+        });
+
+        if(!imageResponse.ok) throw new Error("Failed to upload image");
+        const imageResultText = await imageResponse.text();
+        const fileName = imageResultText.split(": ")[1];
+
+        productData.imageName = fileName;
+
+        const productResponse = await fetch(`${BASE_URL}/clothes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(productData)
+        });
+
+        if (productResponse.ok){
+            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+            alert.style.color = "green";
+            alert.textContent = "Product created successfully!";
+            form.reset();
+        } else {
+            throw new Error("Failed to create");
+        }
+    } catch (error){
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        alert.style.color = "red";
+        alert.textContent = error.message;
     }
 }
