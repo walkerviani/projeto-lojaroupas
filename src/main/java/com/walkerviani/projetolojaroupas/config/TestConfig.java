@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 
 import com.walkerviani.projetolojaroupas.entities.Category;
 import com.walkerviani.projetolojaroupas.entities.Clothes;
+import com.walkerviani.projetolojaroupas.entities.ImageData;
 import com.walkerviani.projetolojaroupas.entities.Order;
 import com.walkerviani.projetolojaroupas.entities.OrderItem;
 import com.walkerviani.projetolojaroupas.entities.Payment;
@@ -23,7 +25,9 @@ import com.walkerviani.projetolojaroupas.repositories.CategoryRepository;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.repositories.OrderItemRepository;
 import com.walkerviani.projetolojaroupas.repositories.OrderRepository;
+import com.walkerviani.projetolojaroupas.repositories.StorageRepository;
 import com.walkerviani.projetolojaroupas.repositories.UserRepository;
+import com.walkerviani.projetolojaroupas.util.ImageUtils;
 
 @Configuration
 @Profile("test")
@@ -44,6 +48,9 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private StorageRepository storageRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -52,14 +59,39 @@ public class TestConfig implements CommandLineRunner {
         Category cat3 = new Category("Coat");
         categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
 
-        Clothes clothes1 = new Clothes("Red Shirt", new BigDecimal("20.00"), "100% Cotton", "/images/image1.jpg", Size.MEDIUM, cat1, Color.RED);
-        Clothes clothes2 = new Clothes("Black Skirt", new BigDecimal("12.42"), "45% Cotton, 55% Polyester", "/images/image2.jpg", Size.SMALL, cat2, Color.BLACK);
-        Clothes clothes3 = new Clothes("Blue Coat", new BigDecimal("45.43"), "90% Cotton, 10% wool", "/images/image3.jpg", Size.LARGE, cat3, Color.BLUE);
+        ImageData img1 = ImageData.builder()
+                .name("image1.jpg")
+                .type("image/jpeg")
+                .imageData(ImageUtils.compressImage(
+                        new ClassPathResource("static/images/image1.jpg").getContentAsByteArray()))
+                .build();
+        
+        ImageData img2 = ImageData.builder()
+                .name("image2.jpg")
+                .type("image/jpeg")
+                .imageData(ImageUtils.compressImage(
+                        new ClassPathResource("static/images/image2.jpg").getContentAsByteArray()))
+                .build();
+        
+
+        ImageData img3 = ImageData.builder()
+                .name("image3.jpg")
+                .type("image/jpeg")
+                .imageData(ImageUtils.compressImage(
+                        new ClassPathResource("static/images/image3.jpg").getContentAsByteArray()))
+                .build();
+
+
+        Clothes clothes1 = new Clothes("Red Shirt", new BigDecimal("20.00"), "100% Cotton", img1,
+                Size.MEDIUM, cat1, Color.RED);
+        Clothes clothes2 = new Clothes("Black Skirt", new BigDecimal("12.42"), "45% Cotton, 55% Polyester",
+                img2, Size.SMALL, cat2, Color.BLACK);
+        Clothes clothes3 = new Clothes("Blue Coat", new BigDecimal("45.43"), "90% Cotton, 10% wool",
+                img3, Size.LARGE, cat3, Color.BLUE);
         clothesRepository.saveAll(Arrays.asList(clothes1, clothes2, clothes3));
 
-
-        User u1 = new User("Carl", "carl@gmail.com","42kf34f32", "53857495334", "102443335", Role.USER);
-        User u2 = new User("Mariah", "mariah@gmail.com", "38492837434","r2jdfsi3", "194542354", Role.ADMIN);
+        User u1 = new User("Carl", "carl@gmail.com", "42kf34f32", "53857495334", "102443335", Role.USER);
+        User u2 = new User("Mariah", "mariah@gmail.com", "38492837434", "r2jdfsi3", "194542354", Role.ADMIN);
         userRepository.saveAll(Arrays.asList(u1, u2));
 
         Order ord1 = new Order(Instant.now(), OrderStatus.PAID, u1);
