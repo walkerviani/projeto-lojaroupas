@@ -45,7 +45,7 @@
 <template id="template-create-account">
     <div>
         <h1 class="formTitle">Create a new account</h1>
-        <label id="alert" class="alertButton"></label>
+        <label id="alert-create-account" class="alertButton"></label>
 
         <form id="form-create-account" novalidate>
             <label for="name">Name</label>
@@ -75,7 +75,7 @@
 <template id="template-login">
     <div>
         <h1 class="formTitle">Login</h1>
-        <label id="alert" style="color:red"></label>
+        <label id="alert-login" style="color:red"></label>
 
         <form id="form-login">
             <label for="email">E-mail</label>
@@ -140,8 +140,8 @@
  <template id="template-admin-create">
     <div>
         <h1 class="formTitle">Create Product</h1>
-        <label id="alert" style="color:red"></label>
-        <form>
+        <label id="alert-create-prod" style="color:red"></label>
+        <form id="form-create-product">
             <label>Name</label>
             <input type="text" id="name" name="name" minlength="3" maxlength="80" required>
 
@@ -181,7 +181,7 @@
             </select>
 
             <label>Image</label>
-            <input type="file" class="inputfile" accept="image/*">
+            <input type="file" id="image" class="inputfile" accept="image/*">
 
             <input type="button" id="createProdButton" class="formbutton" value="Create a product">
         </form>
