@@ -103,7 +103,7 @@ export function loadAdminPage() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const categories = ['products', 'orders', 'users'];
+    const categories = ['products','categories', 'orders', 'users'];
     categories.forEach(category => {
         document.getElementById(category).addEventListener('click', (e) => {
             e.preventDefault();
@@ -112,6 +112,7 @@ export function loadAdminPage() {
     });
 }
 
+// Admin products functions
 export function loadAdminProductsPage() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-admin-prodpage');
@@ -151,6 +152,25 @@ export async function createAdminProducts() {
     container.appendChild(clone);
     createSelectCategories(await getCategories());
     validateCreateProducts();
+}
+
+// Admin categories functions
+export function loadAdminCategoriesPage() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-admin-categpage');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const options = ['create-category', 'read-category', 'update-category', 'delete-category'];
+    options.forEach(option => {
+        document.getElementById(option).addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo(`/admin-${option}`);
+        });
+    });
 }
 
 export function loadError404() {
