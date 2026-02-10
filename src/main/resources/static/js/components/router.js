@@ -26,6 +26,8 @@ export async function handleRoute() {
         UI.showProducts(products);
     } else if (path === '/admin-products') {
         UI.loadAdminProductsPage();
+    }else if (path === '/admin-categories') {
+        UI.loadAdminCategoriesPage();
     }else if (path === '/admin-read-product') {
         UI.readAdminProducts();
     }else if (path === '/admin-create-product') {
