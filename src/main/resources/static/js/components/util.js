@@ -69,7 +69,7 @@ export function createSelectCategories(categories) {
     const select = document.getElementById('category-select');
     for (let category of categories) {
         const option = document.createElement('option');
-        option.value = category.name;
+        option.value = category.id;
         option.textContent = category.name;
         select.appendChild(option);
     };
