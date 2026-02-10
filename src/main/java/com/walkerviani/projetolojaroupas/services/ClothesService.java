@@ -9,9 +9,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.walkerviani.projetolojaroupas.entities.Clothes;
+import com.walkerviani.projetolojaroupas.entities.ImageData;
 import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
+import com.walkerviani.projetolojaroupas.repositories.StorageRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 
@@ -22,6 +24,9 @@ public class ClothesService {
 
     @Autowired
     private ClothesRepository clothesRepository;
+
+    @Autowired
+    private StorageRepository storageRepository;
 
     public List<Clothes> findAll() {
         return clothesRepository.findAll();
@@ -44,11 +49,16 @@ public class ClothesService {
         return clothesRepository.findByColor(color);
     }
 
-    public List<Clothes> findByCategory(String category){
+    public List<Clothes> findByCategory(String category) {
         return clothesRepository.findByCategoryNameIgnoreCase(category);
     }
 
     public Clothes insert(Clothes obj) {
+        if (obj.getImageName() != null) {
+            ImageData image = storageRepository.findByName(obj.getImageName())
+                    .orElseThrow(() -> new RuntimeException("Image not found!"));
+            obj.setImageData(image);
+        }
         return clothesRepository.save(obj);
     }
 
@@ -80,6 +90,10 @@ public class ClothesService {
         entity.setColor(obj.getColor());
         entity.setSize(obj.getSize());
         entity.setCategory(obj.getCategory());
-        entity.setImageUrl(obj.getImageUrl());
+        if (obj.getImageName() != null) {
+            ImageData image = storageRepository.findByName(obj.getImageName())
+                    .orElseThrow(() -> new RuntimeException("Image not found!"));
+            entity.setImageData(image);
+        }
     }
 }
