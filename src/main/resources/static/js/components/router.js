@@ -26,11 +26,13 @@ export async function handleRoute() {
         UI.showProducts(products);
     } else if (path === '/admin-products') {
         UI.loadAdminProductsPage();
-    }else if (path === '/admin-categories') {
+    } else if (path === '/admin-categories') {
         UI.loadAdminCategoriesPage();
-    }else if (path === '/admin-read-product') {
+    } else if (path === '/admin-read-product') {
         UI.readAdminProducts();
-    }else if (path === '/admin-create-product') {
+    } else if (path === '/admin-read-category') {
+        UI.readAdminCategories();
+    } else if (path === '/admin-create-product') {
         UI.createAdminProducts();
     } else if (path === '/about') { // about page
         UI.loadAboutPage();
