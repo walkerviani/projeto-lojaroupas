@@ -1,6 +1,6 @@
 import { navigateTo } from "./router.js";
 import * as UTIL from "./util.js";
-import { validateCreateAccount, validateCreateProducts } from "./form-validations.js";
+import { validateCreateAccount, validateCreateProducts, validateCreateCategories } from "./form-validations.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');
@@ -115,7 +115,7 @@ export function loadAdminPage() {
 // Admin products functions
 export function loadAdminProductsPage() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-prodpage');
+    const template = document.getElementById('template-admin-product');
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
@@ -131,9 +131,9 @@ export function loadAdminProductsPage() {
     });
 }
 
-export async function readAdminProducts() {
+export async function readProducts() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-read-product');
+    const template = document.getElementById('template-read-product');
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
@@ -142,22 +142,22 @@ export async function readAdminProducts() {
     UTIL.showProductTable(await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`));
 }
 
-export async function createAdminProducts() {
+export async function createProducts() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-create');
+    const template = document.getElementById('template-create-product');
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
-    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
+    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');
     validateCreateProducts();
 }
 
 // Admin categories functions
 export function loadAdminCategoriesPage() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-categpage');
+    const template = document.getElementById('template-admin-category');
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
@@ -173,9 +173,20 @@ export function loadAdminCategoriesPage() {
     });
 }
 
-export async function readAdminCategories() {
+export async function createCategories() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-read-category');
+    const template = document.getElementById('template-create-category');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+    validateCreateCategories();
+}
+
+export async function readCategories() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-read-category');
     const clone = template.content.cloneNode(true);
 
     container.className = "container form";
