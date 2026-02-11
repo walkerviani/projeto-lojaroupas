@@ -65,8 +65,8 @@ export function currencyFormatterToBRL(number) {
     });
 }
 
-export function createSelectCategories(categories) {
-    const select = document.getElementById('category-select');
+export function createSelectCategories(categories, selectName) {
+    const select = document.getElementById(selectName);
     for (let category of categories) {
         const option = document.createElement('option');
         option.value = category.id;
