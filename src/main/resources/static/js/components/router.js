@@ -26,14 +26,16 @@ export async function handleRoute() {
         UI.showProducts(products);
     } else if (path === '/admin-products') {
         UI.loadAdminProductsPage();
+    } else if (path === '/admin-create-product') {
+        UI.createProducts();
+    } else if (path === '/admin-read-product') {
+        UI.readProducts();
     } else if (path === '/admin-categories') {
         UI.loadAdminCategoriesPage();
-    } else if (path === '/admin-read-product') {
-        UI.readAdminProducts();
+    } else if (path === '/admin-create-category') {
+        UI.createCategories();
     } else if (path === '/admin-read-category') {
-        UI.readAdminCategories();
-    } else if (path === '/admin-create-product') {
-        UI.createAdminProducts();
+        UI.readCategories();
     } else if (path === '/about') { // about page
         UI.loadAboutPage();
     } else if (path === '/signup') { // sign up page
