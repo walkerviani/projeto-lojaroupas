@@ -23,7 +23,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "clothes")
@@ -42,8 +41,7 @@ public class Clothes implements Serializable {
     private Size size;
     @Enumerated(EnumType.STRING)
     private Color color;
-    @Transient
-    private String imageName;
+    
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
@@ -134,13 +132,7 @@ public class Clothes implements Serializable {
         this.color = color;
     }
 
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
+    
 
     @JsonIgnore
     public Set<Order> getOrders() {
