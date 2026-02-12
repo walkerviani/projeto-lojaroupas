@@ -13,18 +13,18 @@ export async function getProducts(url) {
     }
 }
 
-export async function getCategories(url) {
-    try {
-        const response = await fetch(url);
-        if(!response.ok){
-            throw new Error(`HTTP error! Status: ${response.status}`);
+    export async function getCategories(url) {
+        try {
+            const response = await fetch(url);
+            if(!response.ok){
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error: ", error);
         }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Error: ", error);
     }
-}
 
 export function showProductTable(products) {
     let table = `
@@ -91,4 +91,13 @@ export function showCategoryTable(categories) {
         `;
     }
     document.getElementById('category-table').innerHTML = table;
+}
+
+export function getCategoriesMenu(categories){
+    let list = "";
+        for(let category of categories){
+            list += `<li><a href="/" id="${category.name}-menu">${category.name}</a></li>`;
+        }
+        document.getElementById('categoriesMenu').innerHTML = list;
+      return categories;
 }
