@@ -357,3 +357,8 @@ option {
 .alertButton {
     color: red;
 }
+
+.tableLink {
+    color: #000;
+    text-decoration:underline;
+}

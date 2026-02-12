@@ -85,7 +85,7 @@ export function showCategoryTable(categories) {
     for (let category of categories) {
         table += `
         <tr>
-          <td>${category.id}</td>
+          <td><a class="tableLink" href=${BASE_URL}/admin-read-update-category?id=${category.id}>${category.id}</td>
           <td>${category.name}</td>
         </tr>
         `;
