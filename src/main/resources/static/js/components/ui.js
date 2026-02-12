@@ -112,13 +112,13 @@ export function loadAdminPage() {
     categories.forEach(category => {
         document.getElementById(category).addEventListener('click', (e) => {
             e.preventDefault();
-            navigateTo(`/admin-${category}`);
+            navigateTo(`/admin/${category}`);
         });
     });
 }
 
 // Admin products functions
-export function loadAdminProductsPage() {
+export function loadProductsPage() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-admin-product');
     const clone = template.content.cloneNode(true);
@@ -131,7 +131,7 @@ export function loadAdminProductsPage() {
     options.forEach(option => {
         document.getElementById(option).addEventListener('click', (e) => {
             e.preventDefault();
-            navigateTo(`/admin-${option}`);
+            navigateTo(`/admin/products/${option}`);
         });
     });
 }
@@ -169,11 +169,11 @@ export function loadAdminCategoriesPage() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const options = ['create-category', 'read-update-category', 'delete-category'];
+    const options = ['create-category', 'read-and-update-category', 'delete-category'];
     options.forEach(option => {
         document.getElementById(option).addEventListener('click', (e) => {
             e.preventDefault();
-            navigateTo(`/admin-${option}`);
+            navigateTo(`/admin/categories/${option}`);
         });
     });
 }
