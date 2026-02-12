@@ -1,7 +1,8 @@
 import { handleRoute, navigateTo } from './components/router.js';
+import { BASE_URL, getCategories, getCategoriesMenu } from './components/util.js';
 
 
-function setupNavigation() {
+async function setupNavigation() {
 
     // Category menu 
     const menu = document.getElementById('categoriesMenu');
@@ -12,14 +13,20 @@ function setupNavigation() {
     });
 
     // Category options
-    const categories = ['shirt', 'skirt', 'coat'];
-    categories.forEach(category => {
-        document.getElementById(category).addEventListener('click', (e) => {
-            e.preventDefault();
-            menu.style.display = "none"; // close the menu after choosing
-            navigateTo(`/?category=${category}`);
-        });
-    });
+    const categoriesRequest = await getCategories(`${BASE_URL}/category`);
+    const categories = getCategoriesMenu(categoriesRequest);
+
+    for (let category of categories) {
+        const element = document.getElementById(`${category.name}-menu`);
+        if (element) {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                menu.style.display = "none"; // close the menu after choosing
+                navigateTo(`/?category=${category.name}`);
+            });
+        }
+    }
+
 
     //  Logo / home button shortcut
     document.getElementById('logo').addEventListener('click', (e) => {
