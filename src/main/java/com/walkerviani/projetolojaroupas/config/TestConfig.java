@@ -25,7 +25,6 @@ import com.walkerviani.projetolojaroupas.repositories.CategoryRepository;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.repositories.OrderItemRepository;
 import com.walkerviani.projetolojaroupas.repositories.OrderRepository;
-import com.walkerviani.projetolojaroupas.repositories.StorageRepository;
 import com.walkerviani.projetolojaroupas.repositories.UserRepository;
 import com.walkerviani.projetolojaroupas.util.ImageUtils;
 
@@ -48,8 +47,6 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private StorageRepository storageRepository;
 
     @Override
     public void run(String... args) throws Exception {
