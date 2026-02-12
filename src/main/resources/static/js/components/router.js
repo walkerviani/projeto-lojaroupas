@@ -54,7 +54,6 @@ export async function handleRoute() {
     
     //If the route is not fixed, check if it is a search with parameters
     const hasParams = await handleQueryParams(params);
-    console.log(hasParams);
     if (hasParams) return;
 
     const routeAction = routes[path];
