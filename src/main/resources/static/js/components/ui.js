@@ -32,6 +32,11 @@ export function showProducts(products) {
     });
 }
 
+export async function loadIndex() {
+    const products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`);
+    showProducts(products);
+}
+
 export function showProductDetail(product) {
     const container = document.getElementById('container');
     const template = document.getElementById('template-detail');
@@ -103,7 +108,7 @@ export function loadAdminPage() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const categories = ['products','categories', 'orders', 'users'];
+    const categories = ['products', 'categories', 'orders', 'users'];
     categories.forEach(category => {
         document.getElementById(category).addEventListener('click', (e) => {
             e.preventDefault();
@@ -164,7 +169,7 @@ export function loadAdminCategoriesPage() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const options = ['create-category', 'read-category', 'update-category', 'delete-category'];
+    const options = ['create-category', 'read-update-category', 'delete-category'];
     options.forEach(option => {
         document.getElementById(option).addEventListener('click', (e) => {
             e.preventDefault();
@@ -193,6 +198,17 @@ export async function readCategories() {
     container.innerHTML = "";
     container.appendChild(clone);
     UTIL.showCategoryTable(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
+}
+
+export async function updateCategories() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-update-category');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
 }
 
 export function loadError404() {
