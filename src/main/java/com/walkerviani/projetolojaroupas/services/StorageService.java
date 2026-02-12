@@ -2,6 +2,7 @@ package com.walkerviani.projetolojaroupas.services;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,14 @@ public class StorageService {
     private StorageRepository storageRepository;
 
     public String uploadFile(MultipartFile file) throws IOException {
+        String randomId = UUID.randomUUID().toString();
+        String fileName = randomId + "_" + file.getOriginalFilename();
         ImageData imageData = storageRepository.save(ImageData.builder()
-                .name(file.getOriginalFilename())
+                .name(fileName)
             .type(file.getContentType())
         .imageData(ImageUtils.compressImage(file.getBytes())).build());
         if(imageData != null){
-            return "file uploaded sucessfully : " + file.getOriginalFilename();
+            return fileName;
         }
         return null;
     }
