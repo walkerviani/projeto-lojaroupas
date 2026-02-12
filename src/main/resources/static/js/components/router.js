@@ -2,13 +2,13 @@ import { BASE_URL, getProducts } from './util.js';
 import * as UI from './ui.js';
 
 const routes = {
-    '/admin-products': UI.loadAdminProductsPage,
-    '/admin-create-product': UI.createProducts,
-    '/admin-read-product': UI.readProducts,
-    '/admin-categories': UI.loadAdminCategoriesPage,
-    '/admin-create-category': UI.createCategories,
-    '/admin-read-update-category': UI.readCategories,
-    '/admin-update-category': UI.updateCategories,
+    '/admin/products': UI.loadProductsPage,
+    '/admin/products/create-product': UI.createProducts,
+    '/admin/products/read-product': UI.readProducts,
+    '/admin/categories': UI.loadAdminCategoriesPage,
+    '/admin/categories/create-category': UI.createCategories,
+    '/admin/categories/read-and-update-category': UI.readCategories,
+    '/admin/categories/update-category': UI.updateCategories,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
     '/admin': UI.loadAdminPage,
