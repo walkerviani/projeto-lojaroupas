@@ -1,55 +1,70 @@
 import { BASE_URL, getProducts } from './util.js';
 import * as UI from './ui.js';
 
-export async function handleRoute() {
-    const path = window.location.pathname;
-    const params = new URLSearchParams(window.location.search);
-    const container = document.getElementById('container');
+const routes = {
+    '/admin-products': UI.loadAdminProductsPage,
+    '/admin-create-product': UI.createProducts,
+    '/admin-read-product': UI.readProducts,
+    '/admin-categories': UI.loadAdminCategoriesPage,
+    '/admin-create-category': UI.createCategories,
+    '/admin-read-update-category': UI.readCategories,
+    '/admin-update-category': UI.updateCategories,
+    '/about': UI.loadAboutPage,
+    '/signup': UI.loadCreateAccount,
+    '/admin': UI.loadAdminPage,
+    '/login': UI.loadLoginPage,
+    '/': UI.loadIndex,
+    '/index.html': UI.loadIndex
+}
 
-    //reset container classes
-    if (container) {
-        container.className = 'container';
-        container.innerHTML = "";
-    }
-
+async function handleQueryParams(params) {
     if (params.has('id')) { // products by id
         const id = params.get('id');
         const product = await getProducts(`${BASE_URL}/clothes/${id}`);
         UI.showProductDetail(product);
-    } else if (params.has('category')) { // products by category
+        return true;
+    }
+
+    if (params.has('category')) { // products by category
         const category = params.get('category');
         const products = await getProducts(`${BASE_URL}/clothes/category?category=${category}`);
         UI.showProducts(products);
-    } else if (params.has('name')) { // products by name (search)
+        return true;
+    }
+
+    if (params.has('name')) { // products by name (search)
         const queryName = params.get('name');
         const products = await getProducts(`${BASE_URL}/clothes/name?name=${queryName}`);
         UI.showProducts(products);
-    } else if (path === '/admin-products') {
-        UI.loadAdminProductsPage();
-    } else if (path === '/admin-create-product') {
-        UI.createProducts();
-    } else if (path === '/admin-read-product') {
-        UI.readProducts();
-    } else if (path === '/admin-categories') {
-        UI.loadAdminCategoriesPage();
-    } else if (path === '/admin-create-category') {
-        UI.createCategories();
-    } else if (path === '/admin-read-category') {
-        UI.readCategories();
-    } else if (path === '/about') { // about page
-        UI.loadAboutPage();
-    } else if (path === '/signup') { // sign up page
-        UI.loadCreateAccount();
-    } else if (path === '/admin') { // admin page
-        UI.loadAdminPage();
-    } else if (path === '/login') { // login page
-        UI.loadLoginPage();
-    } else if (path === '/' || path === 'index.html') { // home page
-        const products = await getProducts(`${BASE_URL}/clothes`);
-        UI.showProducts(products);
-    } else {
-        UI.loadError404(); // 404 page not foun
+        return true;
     }
+
+    return false; //No parameters found
+}
+
+export async function handleRoute() {
+    const path = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+
+    const container = document.getElementById('container');
+    if (container) {
+        container.className = 'container';
+        container.innerHTML = "";
+    }
+    
+    //If the route is not fixed, check if it is a search with parameters
+    const hasParams = await handleQueryParams(params);
+    console.log(hasParams);
+    if (hasParams) return;
+
+    const routeAction = routes[path];
+    if (routeAction) {
+        await routeAction();
+        return;
+    }
+    
+    //If the route is not fixed and does not have valid parameters -> error 404
+    UI.loadError404();
 }
 
 export function navigateTo(url) {
