@@ -141,8 +141,7 @@ export function validateCreateProducts() {
                 color: color.value,
                 category: {
                     id: category.value
-                },
-                imageName: ""
+                }
             };
             await sendProductData(productData, file, alert, form);
         }
@@ -161,10 +160,12 @@ async function sendProductData(productData, file, alert, form) {
         });
 
         if (!imageResponse.ok) throw new Error("Failed to upload image");
-        const imageResultText = await imageResponse.text();
-        const fileName = imageResultText.split(": ")[1];
-
-        productData.imageName = fileName;
+        
+        const fileName = await imageResponse.text();
+        
+        productData.imageData = {
+            name: fileName.trim()
+        }
 
         const productResponse = await fetch(`${BASE_URL}/clothes`, {
             method: 'POST',
@@ -211,6 +212,7 @@ export function validateCreateCategories() {
         }
 
         if (error != "") {
+            alert.style.color = "red";
             alert.textContent = error;
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
