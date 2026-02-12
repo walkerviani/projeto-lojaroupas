@@ -54,8 +54,8 @@ public class ClothesService {
     }
 
     public Clothes insert(Clothes obj) {
-        if (obj.getImageName() != null) {
-            ImageData image = storageRepository.findByName(obj.getImageName())
+        if (obj.getImageData().getName() != null) {
+            ImageData image = storageRepository.findByName(obj.getImageData().getName())
                     .orElseThrow(() -> new RuntimeException("Image not found!"));
             obj.setImageData(image);
         }
@@ -90,8 +90,8 @@ public class ClothesService {
         entity.setColor(obj.getColor());
         entity.setSize(obj.getSize());
         entity.setCategory(obj.getCategory());
-        if (obj.getImageName() != null) {
-            ImageData image = storageRepository.findByName(obj.getImageName())
+        if (obj.getImageData().getName() != null) {
+            ImageData image = storageRepository.findByName(obj.getImageData().getName())
                     .orElseThrow(() -> new RuntimeException("Image not found!"));
             entity.setImageData(image);
         }
