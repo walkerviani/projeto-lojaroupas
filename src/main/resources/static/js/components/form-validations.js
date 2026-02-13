@@ -190,10 +190,7 @@ async function sendProductData(productData, file, alert, form) {
     }
 }
 
-export function validateCreateCategories() {
-    const form = document.getElementById('form-create-category');
-    const name = document.getElementById('name-create-category');
-    const alert = document.getElementById('alert-create-categ');
+export function validateCategories(form, name, alert, action) {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -216,32 +213,59 @@ export function validateCreateCategories() {
             alert.textContent = error;
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
-            const categoryData = {
+            const obj = {
                 name: name.value,
                 
             };
-            await sendCategoryData(categoryData, alert, form);
+            if (typeof action === "function") {
+                await action(obj, alert, form);
+            }
         }
     });
 }
 
-async function sendCategoryData(categoryData, alert, form) {
+export async function postCategory(obj, alert, form) {
     try {
-        const categoryResponse = await fetch(`${BASE_URL}/category`, {
+        const response = await fetch(`${BASE_URL}/category`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(categoryData)
+            body: JSON.stringify(obj)
         });
 
-        if (categoryResponse.ok) {
+        if (response.ok) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
             alert.style.color = "green";
             alert.textContent = "Category created successfully!";
             form.reset();
         } else {
             throw new Error("Failed to create");
+        }
+    } catch (error) {
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        alert.style.color = "red";
+        alert.textContent = error.message;
+    }
+}
+
+export async function putCategories(obj, alert, form, id){
+    try{
+        const response = await fetch(`${BASE_URL}/category/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        })
+
+        if (response.ok) {
+            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+            alert.style.color = "green";
+            alert.textContent = "Category updated successfully!";
+            form.reset();
+        } else {
+            throw new Error("Failed to update");
         }
     } catch (error) {
         alert.scrollIntoView({ behavior: "smooth", block: "center" });
