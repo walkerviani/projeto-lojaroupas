@@ -1,6 +1,6 @@
 import { navigateTo } from "./router.js";
 import * as UTIL from "./util.js";
-import { validateCreateAccount, validateCreateProducts, validateCreateCategories } from "./form-validations.js";
+import * as FORMS from "./form-validations.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');
@@ -96,7 +96,7 @@ export function loadCreateAccount() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    validateCreateAccount();
+    FORMS.validateCreateAccount();
 }
 
 export function loadAdminPage() {
@@ -156,7 +156,7 @@ export async function createProducts() {
     container.innerHTML = "";
     container.appendChild(clone);
     UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');
-    validateCreateProducts();
+    FORMS.validateCreateProducts();
 }
 
 // Admin categories functions
@@ -186,7 +186,14 @@ export async function createCategories() {
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
-    validateCreateCategories();
+
+    const form = document.getElementById('form-create-category');
+    const alert= document.getElementById('alert-create-categ');
+    const input = document.getElementById('name-create-category');
+
+    FORMS.validateCategories(form, input, alert, async (obj) => {
+        await FORMS.postCategory(obj, alert, form);
+    });
 }
 
 export async function readCategories() {
@@ -200,7 +207,7 @@ export async function readCategories() {
     UTIL.showCategoryTable(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
 }
 
-export async function updateCategories() {
+export function updateCategory(category) {
     const container = document.getElementById('container');
     const template = document.getElementById('template-update-category');
     const clone = template.content.cloneNode(true);
@@ -209,6 +216,17 @@ export async function updateCategories() {
     container.innerHTML = "";
     container.appendChild(clone);
 
+    const currentName = document.getElementById('current-category-name');
+    currentName.textContent = category.name;
+
+    const form = document.getElementById('form-update-category');
+    const alert= document.getElementById('alert-update-category');
+    const input = document.getElementById('name-update-category');
+    const id = category.id;
+
+    FORMS.validateCategories(form, input, alert, async (obj) => {
+        await FORMS.putCategories(obj, alert, form, id);
+    });
 }
 
 export function loadError404() {
