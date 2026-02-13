@@ -1,4 +1,4 @@
-import { BASE_URL, getProducts } from './util.js';
+import * as UTIL from './util.js';
 import * as UI from './ui.js';
 
 const routes = {
@@ -20,22 +20,29 @@ const routes = {
 async function handleQueryParams(params) {
     if (params.has('id')) { // products by id
         const id = params.get('id');
-        const product = await getProducts(`${BASE_URL}/clothes/${id}`);
+        const product = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes/${id}`);
         UI.showProductDetail(product);
         return true;
     }
 
     if (params.has('category')) { // products by category
         const category = params.get('category');
-        const products = await getProducts(`${BASE_URL}/clothes/category?category=${category}`);
+        const products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes/category?category=${category}`);
         UI.showProducts(products);
         return true;
     }
 
     if (params.has('name')) { // products by name (search)
         const queryName = params.get('name');
-        const products = await getProducts(`${BASE_URL}/clothes/name?name=${queryName}`);
+        const products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes/name?name=${queryName}`);
         UI.showProducts(products);
+        return true;
+    }
+
+    if(params.has('item')) {
+        const item = params.get('item');
+        const category = await UTIL.getCategories(`${UTIL.BASE_URL}/category/${item}`);
+        UI.updateCategory(category);
         return true;
     }
 
