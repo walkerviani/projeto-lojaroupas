@@ -91,7 +91,7 @@ async function sendAccountData(userData, alert, form) {
     }
 }
 
-export function validateCreateProducts() {
+export function validateProduct() {
     const form = document.getElementById('form-create-product');
     const { name, price, description, size, color, category, image } = form.elements;
     const alert = document.getElementById('alert-create-product');
@@ -190,7 +190,7 @@ async function sendProductData(productData, file, alert, form) {
     }
 }
 
-export function validateCategories(form, name, alert, action) {
+export function validateCategory(form, name, alert, action) {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -249,7 +249,7 @@ export async function postCategory(obj, alert, form) {
     }
 }
 
-export async function putCategories(obj, alert, form, id){
+export async function putCategory(obj, alert, form, id){
     try{
         const response = await fetch(`${BASE_URL}/category/${id}`, {
             method: 'PUT',

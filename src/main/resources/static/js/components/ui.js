@@ -155,8 +155,8 @@ export async function createProducts() {
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
-    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');
-    FORMS.validateCreateProducts();
+    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');    
+    FORMS.validateProduct();
 }
 
 // Admin categories functions
@@ -178,7 +178,7 @@ export function loadAdminCategoriesPage() {
     });
 }
 
-export async function createCategories() {
+export async function createCategory() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-create-category');
     const clone = template.content.cloneNode(true);
@@ -191,7 +191,7 @@ export async function createCategories() {
     const alert= document.getElementById('alert-create-categ');
     const input = document.getElementById('name-create-category');
 
-    FORMS.validateCategories(form, input, alert, async (obj) => {
+    FORMS.validateCategory(form, input, alert, async (obj) => {
         await FORMS.postCategory(obj, alert, form);
     });
 }
@@ -224,8 +224,8 @@ export function updateCategory(category) {
     const input = document.getElementById('name-update-category');
     const id = category.id;
 
-    FORMS.validateCategories(form, input, alert, async (obj) => {
-        await FORMS.putCategories(obj, alert, form, id);
+    FORMS.validateCategory(form, input, alert, async (obj) => {
+        await FORMS.putCategory(obj, alert, form, id);
     });
 }
 
