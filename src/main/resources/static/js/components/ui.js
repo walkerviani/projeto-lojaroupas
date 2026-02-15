@@ -155,8 +155,36 @@ export async function createProducts() {
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
-    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');    
+    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');
     FORMS.validateProduct();
+}
+
+//categories functions
+export async function loadCategoriesPage() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-category-menu');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container table";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const table = document.getElementById('category-table');
+    table.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const click = e.target;
+        if (click.classList.contains('update-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/categories/?update-id=${id}`);
+        }
+        if (click.classList.contains('delete-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/categories/?delete-id=${id}`);
+        }
+    });
+
+    UTIL.showCategoryTable(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
 }
 
 export async function createCategory() {
@@ -169,42 +197,15 @@ export async function createCategory() {
     container.appendChild(clone);
 
     const form = document.getElementById('form-create-category');
-    const alert= document.getElementById('alert-create-categ');
+    const alert = document.getElementById('alert-create-categ');
     const input = document.getElementById('name-create-category');
 
     FORMS.validateCategory(form, input, alert, async (obj) => {
         await FORMS.postCategory(obj, alert, form);
     });
-}  
-
-export async function loadCategoriesPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-category-menu');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container table";
-    container.innerHTML = "";
-    container.appendChild(clone);
-
-    const table = document.getElementById('category-table');
-    table.addEventListener('click', function(e) {
-        e.preventDefault();
-
-        const click = e.target;
-        if(click.classList.contains('update-button')){
-            const id = click.dataset.id;
-            navigateTo(`/admin/categories/?update-id=${id}`);
-        }
-        if(click.classList.contains('delete-button')){
-            const id = click.dataset.id;
-            navigateTo(`/admin/categories/?delete-id=${id}`);
-        }
-    });
-
-    UTIL.showCategoryTable(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
 }
 
-    export function updateCategory(category) {
+export function updateCategory(category) {
     const container = document.getElementById('container');
     const template = document.getElementById('template-update-category');
     const clone = template.content.cloneNode(true);
@@ -213,19 +214,43 @@ export async function loadCategoriesPage() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const currentName = document.getElementById('current-category-name');
-    const currentTitle = document.getElementById('current-category-title');
+    const currentName = document.getElementById('current-update-name');
+    const currentTitle = document.getElementById('current-update-title');
     currentName.textContent = category.name;
 
     const form = document.getElementById('form-update-category');
-    const alert= document.getElementById('alert-update-category');
+    const alert = document.getElementById('alert-update-category');
     const input = document.getElementById('name-update-category');
     const id = category.id;
 
     FORMS.validateCategory(form, input, alert, async (obj) => {
         await FORMS.putCategory(obj, alert, form, id);
-        currentTitle.style.contentVisibility = "hidden"; 
-        currentName.style.contentVisibility = "hidden"; 
+        currentTitle.style.contentVisibility = "hidden";
+        currentName.style.contentVisibility = "hidden";
+    });
+}
+
+export function deleteCategory(category) {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-delete-category');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const currentName = document.getElementById('current-delete-name');
+    const currentTitle = document.getElementById('current-delete-title');
+    currentName.textContent = category.name;
+
+    const button = document.getElementById('delete-category');
+    const alert = document.getElementById('alert-delete-category');
+
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.deleteCategories(category.id, alert);
+        currentTitle.style.contentVisibility = "hidden";
+        currentName.style.contentVisibility = "hidden";
     });
 }
 
