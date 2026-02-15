@@ -13,18 +13,18 @@ export async function getProducts(url) {
     }
 }
 
-    export async function getCategories(url) {
-        try {
-            const response = await fetch(url);
-            if(!response.ok){
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error("Error: ", error);
+export async function getCategories(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
     }
+}
 
 export function showProductTable(products) {
     let table = `
@@ -89,19 +89,44 @@ export function showCategoryTable(categories) {
         <tr>
           <td>${category.id}</td>
           <td>${category.name}</td>
-          <td class="update-button"><button name="update" data-id="${category.id}" class="update-button">Update</button></td>
-          <td class="delete-button"><button name="delete" data-id="${category.id}" class="delete-button">Delete</button></td>
+          <td class="table-update-button"><button name="update" data-id="${category.id}" class="update-button">Update</button></td>
+          <td class="table-delete-button"><button name="delete" data-id="${category.id}" class="delete-button">Delete</button></td>
         </tr>
         `;
     }
     document.getElementById('category-table').innerHTML = table;
 }
 
-export function getCategoriesMenu(categories){
+export function getCategoriesMenu(categories) {
     let list = "";
-        for(let category of categories){
-            list += `<li><a href="/" id="${category.name}-menu">${category.name}</a></li>`;
+    for (let category of categories) {
+        list += `<li><a href="/" id="${category.name}-menu">${category.name}</a></li>`;
+    }
+    document.getElementById('categoriesMenu').innerHTML = list;
+    return categories;
+}
+
+export async function deleteCategories(id, alert) {
+    try {
+        const response = await fetch(`${BASE_URL}/category/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }); 
+
+        if(response.ok){
+            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+            alert.style.color = "green";
+            alert.textContent = "Category deleted successfully!";
+        }else {
+            const errorData = await response.json();
+            console.log(errorData);
+            throw new Error(errorData.error || "Failed to delete");
         }
-        document.getElementById('categoriesMenu').innerHTML = list;
-      return categories;
+    } catch (error) {
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        alert.style.color = "red";
+        alert.textContent = error.message;
+    }
 }
