@@ -159,8 +159,8 @@
         <div>
             <h1 class="formTitle">Update a category</h1>
             <label id="alert-update-category" style="color: red"></label>
-            <label id="current-category-title">Current name</label>
-            <label id="current-category-name" style="color: green"></label>
+            <label id="current-update-title">Current name</label>
+            <label id="current-update-name" style="color: green"></label>
             <form id="form-update-category" novalidate>
                 <label>Update name</label>
                 <input type="text" id="name-update-category" name="name" minlength="3" maxlength="80" required>
@@ -170,6 +170,18 @@
     </div>
 </template>
 
+<!-- Delete -->
+<template id="template-delete-category">
+    <div>
+        <div>
+            <h1 class="formTitle">Delete a category</h1>
+            <label id="alert-delete-category" style="color: red"></label>
+            <label id="current-delete-title">Do you really want to delete the category below?</label>
+            <label id="current-delete-name" style="color:green"></label>
+            <button class="delete-option-button" id="delete-category">Delete</button>
+        </div>
+    </div>
+</template>
 
 <!-- Template read product admin page -->
 <template id="template-read-product">
