@@ -80,13 +80,17 @@ export function showCategoryTable(categories) {
     <tr>
         <td>ID</td>
         <td>Name</td>
+        <td></td>
+        <td></td>
     </tr>`;
 
     for (let category of categories) {
         table += `
         <tr>
-          <td><a class="tableLink" href=${BASE_URL}/admin/categories/update-item?item=${category.id}>${category.id}</td>
+          <td>${category.id}</td>
           <td>${category.name}</td>
+          <td class="update-button"><button name="update" data-id="${category.id}" class="update-button">Update</button></td>
+          <td class="delete-button"><button name="delete" data-id="${category.id}" class="delete-button">Delete</button></td>
         </tr>
         `;
     }
