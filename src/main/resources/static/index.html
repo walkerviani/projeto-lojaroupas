@@ -126,34 +126,21 @@
     </div>
 </template>
 
-<!-- Template categories menu admin page -->
-<template id="template-admin-category">
-    <div>
-        <h1 class="formTitle">Categories Menu</h1>
-        <input type="button" class="adminButton" id="create-category" value="Create a Category">
-        <input type="button" class="adminButton" id="read-and-update-category" value="Show and Update Categories">
-        <input type="button" class="adminButton" id="delete-category" value="Delete a Category">
-    </div>
-</template>
+<!-- TEMPLATES CATEGORIES -->
 
-<!-- Template read product admin page -->
-<template id="template-read-product">
+<!-- Menu -->
+<template id="template-category-menu">
     <div>
-        <h1>Products</h1>
-        <table id="product-table">
-        </table>
+        <h1 class="formTitle">Categories</h1>
     </div>
-</template>
-
-<!-- Template read category admin page -->
-<template id="template-read-category">
     <div>
-        <h1>Categories</h1>
+        <a href="/admin/categories/create">Create new Category</a>
         <table id="category-table">
         </table>
     </div>
 </template>
 
+<!-- Create -->
 <template id="template-create-category">
     <div>
         <h1 class="formTitle">Create Category</h1>
@@ -166,25 +153,34 @@
     </div>
 </template>
 
+<!-- Update -->
 <template id="template-update-category">
     <div>
         <div>
             <h1 class="formTitle">Update a category</h1>
             <label id="alert-update-category" style="color: red"></label>
-            <label>Current name</label>
+            <label id="current-category-title">Current name</label>
             <label id="current-category-name" style="color: green"></label>
             <form id="form-update-category" novalidate>
                 <label>Update name</label>
-            <input type="text" id="name-update-category" name="name" minlength="3" maxlength="80" required>
-            <input type="submit" id="update-category-name" class="formbutton" value="Update category">
+                <input type="text" id="name-update-category" name="name" minlength="3" maxlength="80" required>
+                <input type="submit" id="update-category-name" class="formbutton" value="Update category">
             </form>
-        </div>
-        <div>
-
-            
         </div>
     </div>
 </template>
+
+
+<!-- Template read product admin page -->
+<template id="template-read-product">
+    <div>
+        <h1>Products</h1>
+        <table id="product-table">
+        </table>
+    </div>
+</template>
+
+
 
 <!-- Template create product admin page -->
 <template id="template-create-product">
