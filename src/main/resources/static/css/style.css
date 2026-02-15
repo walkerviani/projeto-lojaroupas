@@ -361,24 +361,6 @@ option {
     border-radius: 3px;
 }
 
-.update-button button {
-    background-color: rgb(12, 157, 12);
-}
-
-.update-button button:hover {
-    background-color: rgb(13, 124, 13);
-    cursor: pointer;
-}
-
-.delete-button button {
-    background-color: red;
-}
-
-.delete-button button:hover {
-    background-color: rgb(155, 24, 24);
-    cursor: pointer;
-}
-
 .container.table a {
     color: black;
     align-self: flex-start;
@@ -399,3 +381,34 @@ td {
     background-color: #eeeeee;
 }
 
+.table-update-button button {
+    background-color: rgb(12, 157, 12);
+}
+
+.table-update-button button:hover {
+    background-color: rgb(13, 124, 13);
+    cursor: pointer;
+}
+
+.table-delete-button button {
+    background-color: red;
+}
+
+.table-delete-button button:hover {
+    background-color: rgb(155, 24, 24);
+    cursor: pointer;
+}
+
+.delete-option-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+    width: 100px;
+}
+
+.delete-option-button:hover{
+    background-color: rgb(155, 24, 24);
+    cursor: pointer;
+}
