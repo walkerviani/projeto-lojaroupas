@@ -159,25 +159,6 @@ export async function createProducts() {
     FORMS.validateProduct();
 }
 
-// Admin categories functions
-export function loadAdminCategoriesPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-category');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
-
-    const options = ['create-category', 'read-and-update-category', 'delete-category'];
-    options.forEach(option => {
-        document.getElementById(option).addEventListener('click', (e) => {
-            e.preventDefault();
-            navigateTo(`/admin/categories/${option}`);
-        });
-    });
-}
-
 export async function createCategory() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-create-category');
@@ -194,20 +175,36 @@ export async function createCategory() {
     FORMS.validateCategory(form, input, alert, async (obj) => {
         await FORMS.postCategory(obj, alert, form);
     });
-}
+}  
 
-export async function readCategories() {
+export async function loadCategoriesPage() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-read-category');
+    const template = document.getElementById('template-category-menu');
     const clone = template.content.cloneNode(true);
 
-    container.className = "container form";
+    container.className = "container table";
     container.innerHTML = "";
     container.appendChild(clone);
+
+    const table = document.getElementById('category-table');
+    table.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const click = e.target;
+        if(click.classList.contains('update-button')){
+            const id = click.dataset.id;
+            navigateTo(`/admin/categories/?update-id=${id}`);
+        }
+        if(click.classList.contains('delete-button')){
+            const id = click.dataset.id;
+            navigateTo(`/admin/categories/?delete-id=${id}`);
+        }
+    });
+
     UTIL.showCategoryTable(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
 }
 
-export function updateCategory(category) {
+    export function updateCategory(category) {
     const container = document.getElementById('container');
     const template = document.getElementById('template-update-category');
     const clone = template.content.cloneNode(true);
@@ -217,6 +214,7 @@ export function updateCategory(category) {
     container.appendChild(clone);
 
     const currentName = document.getElementById('current-category-name');
+    const currentTitle = document.getElementById('current-category-title');
     currentName.textContent = category.name;
 
     const form = document.getElementById('form-update-category');
@@ -226,6 +224,8 @@ export function updateCategory(category) {
 
     FORMS.validateCategory(form, input, alert, async (obj) => {
         await FORMS.putCategory(obj, alert, form, id);
+        currentTitle.style.contentVisibility = "hidden"; 
+        currentName.style.contentVisibility = "hidden"; 
     });
 }
 
