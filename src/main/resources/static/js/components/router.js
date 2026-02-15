@@ -8,6 +8,7 @@ const routes = {
     '/admin/categories': UI.loadCategoriesPage,
     '/admin/categories/create': UI.createCategory,
     '/admin/categories/update': UI.updateCategory,
+    '/admin/categories/delete' : UI.deleteCategory,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
     '/admin': UI.loadAdminPage,
@@ -42,6 +43,13 @@ async function handleQueryParams(params) {
         const updateId = params.get('update-id');
         const category = await UTIL.getCategories(`${UTIL.BASE_URL}/category/${updateId}`);
         UI.updateCategory(category);
+        return true;
+    }
+
+    if(params.has('delete-id')) {
+        const deleteId = params.get('delete-id');
+        const category = await UTIL.getCategories(`${UTIL.BASE_URL}/category/${deleteId}`);
+        UI.deleteCategory(category);
         return true;
     }
 
