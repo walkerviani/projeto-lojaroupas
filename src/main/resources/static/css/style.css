@@ -35,29 +35,6 @@ main {
     padding-top: 60px;
 }
 
-table {
-    table-layout: fixed;
-    width: 90%;
-    margin: 10px auto;
-    border-collapse: collapse;
-    border-top: 1px solid #999999;
-    border-bottom: 1px solid #999999;
-}
-
-th,
-td {
-    padding: 3px;
-    text-align: center;
-}
-
-/* {tbody = table body, 
-   nth = number of th, 
-   child = child elements} = every odd number of child elements
-  */
-tbody tr:nth-child(odd) {
-    background-color: #eeeeee;
-}
-
 select {
     background-color: white;
     font-size: inherit;
@@ -185,7 +162,7 @@ option {
     margin-top: 20px;
 }
 
-.container.error-page a{
+.container.error-page a {
     color: black;
     text-decoration: underline;
 }
@@ -274,7 +251,6 @@ option {
     cursor: pointer;
 }
 
-/* login and create account page */
 .container.form {
     display: flex;
     flex-direction: column;
@@ -358,7 +334,68 @@ option {
     color: red;
 }
 
-.tableLink {
-    color: #000;
-    text-decoration:underline;
+.container.table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+
+.container.table table {
+    table-layout: fixed;
+    width: fit-content;
+    margin: 10px auto;
+    border-collapse: collapse;
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+}
+
+.container.table div {
+    width: 80%;
+}
+
+.container.table button {
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.update-button button {
+    background-color: rgb(12, 157, 12);
+}
+
+.update-button button:hover {
+    background-color: rgb(13, 124, 13);
+    cursor: pointer;
+}
+
+.delete-button button {
+    background-color: red;
+}
+
+.delete-button button:hover {
+    background-color: rgb(155, 24, 24);
+    cursor: pointer;
+}
+
+.container.table a {
+    color: black;
+    align-self: flex-start;
+    text-decoration: underline;
+}
+
+.container.table th,
+td {
+    padding: 3px;
+    text-align: center;
+}
+
+/* {tbody = table body, 
+   nth = number of th, 
+   child = child elements} = every odd number of child elements
+  */
+.container.table tbody tr:nth-child(odd) {
+    background-color: #eeeeee;
+}
+
