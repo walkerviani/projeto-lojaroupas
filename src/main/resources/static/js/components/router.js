@@ -5,10 +5,9 @@ const routes = {
     '/admin/products': UI.loadProductsPage,
     '/admin/products/create-product': UI.createProducts,
     '/admin/products/read-product': UI.readProducts,
-    '/admin/categories': UI.loadAdminCategoriesPage,
-    '/admin/categories/create-category': UI.createCategory,
-    '/admin/categories/read-and-update-category': UI.readCategories,
-    '/admin/categories/update-category': UI.updateCategory,
+    '/admin/categories': UI.loadCategoriesPage,
+    '/admin/categories/create': UI.createCategory,
+    '/admin/categories/update': UI.updateCategory,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
     '/admin': UI.loadAdminPage,
@@ -39,14 +38,14 @@ async function handleQueryParams(params) {
         return true;
     }
 
-    if(params.has('item')) {
-        const item = params.get('item');
-        const category = await UTIL.getCategories(`${UTIL.BASE_URL}/category/${item}`);
+    if(params.has('update-id')) {
+        const updateId = params.get('update-id');
+        const category = await UTIL.getCategories(`${UTIL.BASE_URL}/category/${updateId}`);
         UI.updateCategory(category);
         return true;
     }
 
-    return false; //No parameters found
+    return false; //No parameters found 
 }
 
 export async function handleRoute() {
