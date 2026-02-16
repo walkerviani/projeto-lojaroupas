@@ -137,3 +137,11 @@ export async function deleteCategories(id, alert) {
         alert.textContent = error.message;
     }
 }
+
+export async function getParams(params, paramName, url) {
+    if (params.has(paramName)) {
+        const param = params.get(paramName);
+        const result = await getCategories(`${url}/${param}`);
+        return result;
+    }
+}
