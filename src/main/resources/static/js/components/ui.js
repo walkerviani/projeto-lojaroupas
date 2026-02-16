@@ -65,7 +65,7 @@ export function showProductDetail(product) {
 
 export function loadAboutPage() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-aboutpage');
+    const template = document.getElementById('template-about-page');
     const clone = template.content.cloneNode(true);
 
     container.className = 'container about';
@@ -117,33 +117,31 @@ export function loadAdminPage() {
     });
 }
 
-// Admin products functions
-export function loadProductsPage() {
+// Products functions
+export async function loadProductsPage() {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-admin-product');
+    const template = document.getElementById('template-product-menu');
     const clone = template.content.cloneNode(true);
 
-    container.className = "container form";
+    container.className = "container table";
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const options = ['create-product', 'read-product', 'update-product', 'delete-product'];
-    options.forEach(option => {
-        document.getElementById(option).addEventListener('click', (e) => {
-            e.preventDefault();
-            navigateTo(`/admin/products/${option}`);
-        });
+    const table = document.getElementById('product-table');
+    table.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const click = e.target;
+        if (click.classList.contains('update-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/products/update?update-id=${id}`);
+        }
+        if (click.classList.contains('delete-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/products/delete?delete-id=${id}`);
+        }
     });
-}
 
-export async function readProducts() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-read-product');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
     UTIL.showProductTable(await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`));
 }
 
@@ -159,7 +157,7 @@ export async function createProducts() {
     FORMS.validateProduct();
 }
 
-//categories functions
+// Categories functions
 export async function loadCategoriesPage() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-category-menu');
@@ -176,11 +174,11 @@ export async function loadCategoriesPage() {
         const click = e.target;
         if (click.classList.contains('update-button')) {
             const id = click.dataset.id;
-            navigateTo(`/admin/categories/?update-id=${id}`);
+            navigateTo(`/admin/categories/update?update-id=${id}`);
         }
         if (click.classList.contains('delete-button')) {
             const id = click.dataset.id;
-            navigateTo(`/admin/categories/?delete-id=${id}`);
+            navigateTo(`/admin/categories/delete?delete-id=${id}`);
         }
     });
 
