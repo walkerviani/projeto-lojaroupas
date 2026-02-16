@@ -213,8 +213,8 @@ export async function updateCategory() {
     container.appendChild(clone);
 
     const params = new URLSearchParams(window.location.search);
-    const category = await UTIL.getParams(params, 'update-id', `${UTIL.BASE_URL}/category`);
-    
+    const category = await UTIL.getParams(params, 'update-id', `${UTIL.BASE_URL}/category`, 'category');
+
     const currentName = document.getElementById('current-update-name');
     const currentTitle = document.getElementById('current-update-title');
     currentName.textContent = category.name;
@@ -231,7 +231,7 @@ export async function updateCategory() {
     });
 }
 
-export function deleteCategory(category) {
+export async function deleteCategory() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-delete-category');
     const clone = template.content.cloneNode(true);
@@ -239,6 +239,9 @@ export function deleteCategory(category) {
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
+
+    const params = new URLSearchParams(window.location.search);
+    const category = await UTIL.getParams(params, 'delete-id', `${UTIL.BASE_URL}/category`, 'category');
 
     const currentName = document.getElementById('current-delete-name');
     const currentTitle = document.getElementById('current-delete-title');
