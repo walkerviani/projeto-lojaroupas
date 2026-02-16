@@ -26,32 +26,6 @@ export async function getCategories(url) {
     }
 }
 
-export function showProductTable(products) {
-    let table = `
-    <tr>
-        <td>ID</td>
-        <td>Name</td>
-        <td>Price</td>
-        <td>Description</td>
-        <td>Size</td>
-        <td>Color</td>
-    </tr>`;
-
-    for (let product of products) {
-        table += `
-        <tr>
-          <td>${product.id}</td>
-          <td>${product.name}</td>
-          <td>${product.price}</td>
-          <td>${product.description}</td>
-          <td>${product.size}</td>
-          <td>${product.color}</td>
-        </tr>
-        `;
-    }
-    document.getElementById('product-table').innerHTML = table;
-}
-
 export function capitalizeFirstLetter(text) {
     const str = text.toLowerCase();
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -65,6 +39,15 @@ export function currencyFormatterToBRL(number) {
     });
 }
 
+export function getCategoriesMenu(categories) {
+    let list = "";
+    for (let category of categories) {
+        list += `<li><a href="/" id="${category.name}-menu">${category.name}</a></li>`;
+    }
+    document.getElementById('categoriesMenu').innerHTML = list;
+    return categories;
+}
+
 export function createSelectCategories(categories, selectName) {
     const select = document.getElementById(selectName);
     for (let category of categories) {
@@ -73,6 +56,37 @@ export function createSelectCategories(categories, selectName) {
         option.textContent = category.name;
         select.appendChild(option);
     };
+}
+
+
+export function showProductTable(products) {
+    let table = `
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Description</td>
+        <td>Size</td>
+        <td>Color</td>
+        <td></td>
+        <td></td>
+    </tr>`;
+
+    for (let product of products) {
+        table += `
+        <tr>
+          <td>${product.id}</td>
+          <td>${product.name}</td>
+          <td>${product.price}</td>
+          <td>${product.description}</td>
+          <td>${product.size}</td>
+          <td>${product.color}</td>
+          <td class="table-update-button"><button name="update" data-id="${product.id}" class="update-button">Update</button></td>
+          <td class="table-delete-button"><button name="delete" data-id="${product.id}" class="delete-button">Delete</button></td>
+        </tr>
+        `;
+    }
+    document.getElementById('product-table').innerHTML = table;
 }
 
 export function showCategoryTable(categories) {
@@ -97,14 +111,7 @@ export function showCategoryTable(categories) {
     document.getElementById('category-table').innerHTML = table;
 }
 
-export function getCategoriesMenu(categories) {
-    let list = "";
-    for (let category of categories) {
-        list += `<li><a href="/" id="${category.name}-menu">${category.name}</a></li>`;
-    }
-    document.getElementById('categoriesMenu').innerHTML = list;
-    return categories;
-}
+
 
 export async function deleteCategories(id, alert) {
     try {
