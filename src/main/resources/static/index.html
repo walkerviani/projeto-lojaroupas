@@ -38,7 +38,7 @@
 </html>
 
 
-<!-- Template create account page and form -->
+<!-- Template Create Account Page -->
 <template id="template-create-account">
     <div>
         <h1 class="formTitle">Create a new account</h1>
@@ -69,7 +69,7 @@
     </div>
 </template>
 
-<!-- Template login page and form -->
+<!-- Template Login Page -->
 <template id="template-login">
     <div>
         <h1 class="formTitle">Login</h1>
@@ -88,8 +88,8 @@
     </div>
 </template>
 
-<!-- Template about page -->
-<template id="template-aboutpage">
+<!-- Template About Page -->
+<template id="template-about-page">
     <div>
         <h1>About<h1>
                 <h2>English<h2>
@@ -104,7 +104,7 @@
     </div>
 </template>
 
-<!-- Template admin page -->
+<!-- Template Admin Menu -->
 <template id="template-admin">
     <div>
         <h1 class="formTitle">Admin Menu</h1>
@@ -115,16 +115,20 @@
     </div>
 </template>
 
-<!-- Template product menu admin page -->
-<template id="template-admin-product">
+<!-- TEMPLATES PRODUCTS -->
+
+<!-- Menu -->
+<template id="template-product-menu">
     <div>
-        <h1 class="formTitle">Products Menu</h1>
-        <input type="button" class="adminButton" id="create-product" value="Create a Product">
-        <input type="button" class="adminButton" id="read-product" value="Show Products">
-        <input type="button" class="adminButton" id="update-product" value="Update a Product">
-        <input type="button" class="adminButton" id="delete-product" value="Delete a Product">
+        <h1 class="formTitle">Products</h1>
+    </div>
+    <div>
+        <a href="/admin/products/create">Create new Product</a>
+        <table id="product-table">
+        </table>
     </div>
 </template>
+
 
 <!-- TEMPLATES CATEGORIES -->
 
@@ -182,16 +186,6 @@
         </div>
     </div>
 </template>
-
-<!-- Template read product admin page -->
-<template id="template-read-product">
-    <div>
-        <h1>Products</h1>
-        <table id="product-table">
-        </table>
-    </div>
-</template>
-
 
 
 <!-- Template create product admin page -->
