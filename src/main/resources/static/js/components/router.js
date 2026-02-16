@@ -3,11 +3,12 @@ import * as UI from './ui.js';
 
 const routes = {
     '/admin/products': UI.loadProductsPage,
-    '/admin/products/create-product': UI.createProducts,
+    '/admin/products/create': UI.createProducts,
     '/admin/categories': UI.loadCategoriesPage,
     '/admin/categories/create': UI.createCategory,
     '/admin/categories/update': UI.updateCategory,
     '/admin/categories/delete' : UI.deleteCategory,
+    '/product' : UI.showProductDetail,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
     '/admin': UI.loadAdminPage,
@@ -16,33 +17,8 @@ const routes = {
     '/index.html': UI.loadIndex
 }
 
-async function handleQueryParams(params) {
-    if (params.has('id')) { // products by id
-        const id = params.get('id');
-        const product = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes/${id}`);
-        UI.showProductDetail(product);
-        return true;
-    }
-
-    if (params.has('category')) { // products by category
-        const category = params.get('category');
-        const products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes/category?category=${category}`);
-        UI.showProducts(products);
-        return true;
-    }
-
-    if (params.has('name')) { // products by name (search)
-        const queryName = params.get('name');
-        const products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes/name?name=${queryName}`);
-        UI.showProducts(products);
-        return true;
-    }
-    return false; //No parameters found 
-}
-
 export async function handleRoute() {
     const path = window.location.pathname;
-    const params = new URLSearchParams(window.location.search);
 
     const container = document.getElementById('container');
     if (container) {
@@ -50,10 +26,6 @@ export async function handleRoute() {
         container.innerHTML = "";
     }
     
-    //If the route is not fixed, check if it is a search with parameters
-    const hasParams = await handleQueryParams(params);
-    if (hasParams) return;
-
     const routeAction = routes[path];
     if (routeAction) {
         await routeAction();
