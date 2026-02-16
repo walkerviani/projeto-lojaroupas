@@ -203,7 +203,7 @@ export async function createCategory() {
     });
 }
 
-export function updateCategory(category) {
+export async function updateCategory() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-update-category');
     const clone = template.content.cloneNode(true);
@@ -212,6 +212,9 @@ export function updateCategory(category) {
     container.innerHTML = "";
     container.appendChild(clone);
 
+    const params = new URLSearchParams(window.location.search);
+    const category = await UTIL.getParams(params, 'update-id', `${UTIL.BASE_URL}/category`);
+    
     const currentName = document.getElementById('current-update-name');
     const currentTitle = document.getElementById('current-update-title');
     currentName.textContent = category.name;
