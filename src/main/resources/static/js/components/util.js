@@ -138,10 +138,16 @@ export async function deleteCategories(id, alert) {
     }
 }
 
-export async function getParams(params, paramName, url) {
+export async function getParams(params, paramName, url, query) {
     if (params.has(paramName)) {
         const param = params.get(paramName);
-        const result = await getCategories(`${url}/${param}`);
-        return result;
+        if(query === 'product'){
+            const result = await getProducts(`${url}/${param}`);
+            return result;
+        }
+        else if(query === 'category'){
+            const result = await getCategories(`${url}/${param}`);
+            return result;
+        }
     }
 }
