@@ -27,20 +27,38 @@ export function showProducts(products) {
                 <p>${UTIL.currencyFormatterToBRL(product.price)}</p>
             </div>
             `;
-        card.addEventListener('click', () => navigateTo(`?id=${product.id}`));
+        card.addEventListener('click', () => navigateTo(`/product?id=${product.id}`));
         container.appendChild(card);
     });
 }
 
 export async function loadIndex() {
-    const products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`);
+    const params = new URLSearchParams(window.location.search);
+
+    const name = params.get('name');
+    const category = params.get('category');
+
+    let products;
+
+    if (name) {
+        products = await UTIL.getParams('name', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/name?name=${param}`));
+    }
+    else if (category) {
+        products = await UTIL.getParams('category', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/category?category=${param}`));
+    }
+    else {
+        products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`);
+    }
     showProducts(products);
 }
 
-export function showProductDetail(product) {
+export async function showProductDetail() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-detail');
     const clone = template.content.cloneNode(true);
+
+    const product = await UTIL.getParams('id', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/${param}`));
+
 
     const imageUrl = product.imageData
         ? `${UTIL.BASE_URL}/image/${product.imageData.name}`
@@ -60,7 +78,6 @@ export function showProductDetail(product) {
     container.classList.add('detail-mode');
     container.innerHTML = "";
     container.appendChild(clone);
-
 }
 
 export function loadAboutPage() {
@@ -154,7 +171,10 @@ export async function createProducts() {
     container.innerHTML = "";
     container.appendChild(clone);
     UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');
-    FORMS.validateProduct();
+
+    const form = document.getElementById('form-create-product');
+    const alert = document.getElementById('alert-create-product');
+    FORMS.validateProduct(form, alert);
 }
 
 // Categories functions
@@ -212,8 +232,7 @@ export async function updateCategory() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const params = new URLSearchParams(window.location.search);
-    const category = await UTIL.getParams(params, 'update-id', `${UTIL.BASE_URL}/category`, 'category');
+    const category = await UTIL.getParams('update-id', (param) => UTIL.getCategories(`${UTIL.BASE_URL}/category/${param}`));
 
     const currentName = document.getElementById('current-update-name');
     const currentTitle = document.getElementById('current-update-title');
@@ -240,8 +259,8 @@ export async function deleteCategory() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const params = new URLSearchParams(window.location.search);
-    const category = await UTIL.getParams(params, 'delete-id', `${UTIL.BASE_URL}/category`, 'category');
+
+    const category = await UTIL.getParams('delete-id', (param) => UTIL.getCategories(`${UTIL.BASE_URL}/category/${param}`));
 
     const currentName = document.getElementById('current-delete-name');
     const currentTitle = document.getElementById('current-delete-title');
