@@ -37,14 +37,6 @@ async function handleQueryParams(params) {
         UI.showProducts(products);
         return true;
     }
-
-    if(params.has('delete-id')) {
-        const deleteId = params.get('delete-id');
-        const category = await UTIL.getCategories(`${UTIL.BASE_URL}/category/${deleteId}`);
-        UI.deleteCategory(category);
-        return true;
-    }
-
     return false; //No parameters found 
 }
 
