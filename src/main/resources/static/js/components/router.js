@@ -4,7 +4,6 @@ import * as UI from './ui.js';
 const routes = {
     '/admin/products': UI.loadProductsPage,
     '/admin/products/create-product': UI.createProducts,
-    '/admin/products/read-product': UI.readProducts,
     '/admin/categories': UI.loadCategoriesPage,
     '/admin/categories/create': UI.createCategory,
     '/admin/categories/update': UI.updateCategory,
@@ -36,13 +35,6 @@ async function handleQueryParams(params) {
         const queryName = params.get('name');
         const products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes/name?name=${queryName}`);
         UI.showProducts(products);
-        return true;
-    }
-
-    if(params.has('update-id')) {
-        const updateId = params.get('update-id');
-        const category = await UTIL.getCategories(`${UTIL.BASE_URL}/category/${updateId}`);
-        UI.updateCategory(category);
         return true;
     }
 
