@@ -120,13 +120,13 @@ export async function deleteCategories(id, alert) {
             headers: {
                 'Content-Type': 'application/json'
             },
-        }); 
+        });
 
-        if(response.ok){
+        if (response.ok) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
             alert.style.color = "green";
             alert.textContent = "Category deleted successfully!";
-        }else {
+        } else {
             const errorData = await response.json();
             console.log(errorData);
             throw new Error(errorData.error || "Failed to delete");
@@ -138,16 +138,10 @@ export async function deleteCategories(id, alert) {
     }
 }
 
-export async function getParams(params, paramName, url, query) {
-    if (params.has(paramName)) {
-        const param = params.get(paramName);
-        if(query === 'product'){
-            const result = await getProducts(`${url}/${param}`);
-            return result;
-        }
-        else if(query === 'category'){
-            const result = await getCategories(`${url}/${param}`);
-            return result;
-        }
-    }
+export async function getParams(paramName, callback) {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has(paramName)) return null;
+
+    const param = params.get(paramName);
+    return await callback(param);
 }
