@@ -42,8 +42,7 @@ public class Clothes implements Serializable {
     @Enumerated(EnumType.STRING)
     private Color color;
     
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval= true)
     @JoinColumn(name = "image_id")
     private ImageData imageData;
 
