@@ -48,7 +48,9 @@ export function getCategoriesMenu(categories) {
     return categories;
 }
 
-export function createSelectCategories(categories, selectName) {
+export async function createSelectCategories(selectName) {
+    const categories = await getCategories(`${BASE_URL}/category`);
+    
     const select = document.getElementById(selectName);
     for (let category of categories) {
         const option = document.createElement('option');
