@@ -50,7 +50,7 @@ export function getCategoriesMenu(categories) {
 
 export async function createSelectCategories(selectName) {
     const categories = await getCategories(`${BASE_URL}/category`);
-    
+
     const select = document.getElementById(selectName);
     for (let category of categories) {
         const option = document.createElement('option');
@@ -146,4 +146,15 @@ export async function getParams(paramName, callback) {
 
     const param = params.get(paramName);
     return await callback(param);
+}
+
+export async function updateProductForm(formInput, product, imagePreview) {
+    const { name, price, description, size, color, category} = formInput.elements;
+    name.value = product.name;
+    price.value = product.price;
+    description.value = product.description;
+    size.value = product.size;
+    color.value = product.color;
+    category.value = product.category.id;
+    imagePreview.src = `${BASE_URL}/image/${product.imageData.name}`;
 }
