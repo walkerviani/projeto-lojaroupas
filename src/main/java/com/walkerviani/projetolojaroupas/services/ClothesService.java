@@ -90,10 +90,15 @@ public class ClothesService {
         entity.setColor(obj.getColor());
         entity.setSize(obj.getSize());
         entity.setCategory(obj.getCategory());
-        if (obj.getImageData().getName() != null) {
-            ImageData image = storageRepository.findByName(obj.getImageData().getName())
+
+        if (obj.getImageData() != null && obj.getImageData().getName() != null) {
+
+            ImageData newImage = storageRepository.findByName(obj.getImageData().getName())
                     .orElseThrow(() -> new RuntimeException("Image not found!"));
-            entity.setImageData(image);
+
+            entity.setImageData(null);
+
+            entity.setImageData(newImage);
         }
     }
 }
