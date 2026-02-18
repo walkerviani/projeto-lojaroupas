@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL } from "./util.js";
+import { BASE_URL, getProducts, updateProductForm } from "./util.js";
 
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');
@@ -91,47 +91,65 @@ async function sendAccountData(userData, alert, form) {
     }
 }
 
-export function validateProduct() {
-    const form = document.getElementById('form-create-product');
-    const { name, price, description, size, color, category, image } = form.elements;
-    const alert = document.getElementById('alert-create-product');
+export async function validateProduct(formInput, alertInput, productId = null) {
+    const { name, price, description, size, color, category, image } = formInput.elements;
 
-    form.addEventListener('submit', async (e) => {
+    const isUpdateMode = productId ? true : false;
+
+    if (isUpdateMode) {
+        const imagePreview = document.getElementById('image-preview');
+        const product = await productData(productId);
+        updateProductForm(formInput, product, imagePreview);
+    }
+
+    formInput.addEventListener('submit', async (e) => {
         e.preventDefault();
+
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
         const formattedPrice = price.value.replace(/,/g, ".");
         const file = image.files[0];
 
         // Reset the label and error
-        alert.textContent = "";
+        alertInput.textContent = "";
         let error = "";
-        if (name.validity.valueMissing) {
+
+        if (name.value == "") {
             error = "Name is required!";
-        } else if (name.validity.tooShort) {
+        }
+        else if (name.value.length < 3) {
             error = "Name is too short!";
-        } else if (!nameRegex.test(name.value)) {
+        }
+        else if (!nameRegex.test(name.value)) {
             error = "Name must not have numbers";
-        } else if (price.validity.valueMissing) {
+        }
+        else if (price.value == "") {
             error = "Price is required!";
-        } else if (isNaN(price.value)) {
+        }
+        else if (isNaN(price.value)) {
             error = "Enter a valid price!";
-        } else if (description.validity.valueMissing) {
+        }
+        else if (description.value == "") {
             error = "Description is required!";
-        } else if (size.value === "") {
+        }
+        else if (size.value == "") {
             error = "You must select a valid size!";
-        } else if (color.value === "") {
+        }
+        else if (color.value == "") {
             error = "You must select a valid color!";
-        } else if (category.value === "") {
+        }
+        else if (category.value == "") {
             error = "You must select a valid category!";
-        } else if (image.validity.valueMissing) {
+        }
+        else if (isUpdateMode == false && image.files.length === 0) {
             error = "You must select an image";
-        } else if (file && file.type !== "image/png") {
+        }
+        else if (file && file.type !== "image/png") {
             error = "Only PNG images are allowed!";
         }
 
         if (error != "") {
-            alert.textContent = error;
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+            alertInput.textContent = error;
+            alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
             const productData = {
                 name: name.value,
@@ -143,45 +161,54 @@ export function validateProduct() {
                     id: category.value
                 }
             };
-            await sendProductData(productData, file, alert, form);
+            await sendProductData(isUpdateMode, productData, file, alertInput, formInput, productId);
         }
     });
 }
 
-async function sendProductData(productData, file, alert, form) {
+async function sendProductData(isUpdateMode, product, file, alert, form, productId) {
     try {
         //image upload
-        const imageFormData = new FormData();
-        imageFormData.append('image', file);
+        if (file) {
+            const imageFormData = new FormData();
+            imageFormData.append('image', file);
 
-        const imageResponse = await fetch(`${BASE_URL}/image`, {
-            method: 'POST',
-            body: imageFormData
-        });
+            const imageResponse = await fetch(`${BASE_URL}/image`, {
+                method: 'POST',
+                body: imageFormData
+            });
+            if (!imageResponse.ok) throw new Error("Failed to upload image");
 
-        if (!imageResponse.ok) throw new Error("Failed to upload image");
-        
-        const fileName = await imageResponse.text();
-        
-        productData.imageData = {
-            name: fileName.trim()
+            const fileName = await imageResponse.text();
+
+            product.imageData = {
+                name: fileName.trim()
+            }
         }
-
-        const productResponse = await fetch(`${BASE_URL}/clothes`, {
-            method: 'POST',
+        const method = isUpdateMode ? 'PUT' : 'POST';
+        const url = isUpdateMode ? `${BASE_URL}/clothes/${productId}` : `${BASE_URL}/clothes`;
+        const productResponse = await fetch(url, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(productData)
+            body: JSON.stringify(product)
         });
 
         if (productResponse.ok) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
             alert.style.color = "green";
-            alert.textContent = "Product created successfully!";
-            form.reset();
+            alert.textContent = isUpdateMode ? "Product updated successfully!" : "Product created successfully!";
+            if (isUpdateMode) {
+                const imagePreview = document.getElementById('image-preview');
+                const productInput = await productData(productId);
+                updateProductForm(form, productInput, imagePreview);
+            } else {
+                form.reset();
+            }
+
         } else {
-            throw new Error("Failed to create");
+            throw new Error(isUpdateMode ? "Failed to upload" : "Failed to create");
         }
     } catch (error) {
         alert.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -215,7 +242,7 @@ export function validateCategory(form, name, alert, action) {
         } else {
             const obj = {
                 name: name.value,
-                
+
             };
             if (typeof action === "function") {
                 await action(obj, alert, form);
@@ -249,8 +276,8 @@ export async function postCategory(obj, alert, form) {
     }
 }
 
-export async function putCategory(obj, alert, form, id){
-    try{
+export async function putCategory(obj, alert, form, id) {
+    try {
         const response = await fetch(`${BASE_URL}/category/${id}`, {
             method: 'PUT',
             headers: {
@@ -272,4 +299,9 @@ export async function putCategory(obj, alert, form, id){
         alert.style.color = "red";
         alert.textContent = error.message;
     }
+}
+
+async function productData(id) {
+    const product = await getProducts(`${BASE_URL}/clothes/${id}`);
+    return product;
 }
