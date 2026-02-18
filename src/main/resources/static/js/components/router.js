@@ -4,6 +4,7 @@ import * as UI from './ui.js';
 const routes = {
     '/admin/products': UI.loadProductsPage,
     '/admin/products/create': UI.createProducts,
+    '/admin/products/update' : UI.updateProduct,
     '/admin/categories': UI.loadCategoriesPage,
     '/admin/categories/create': UI.createCategory,
     '/admin/categories/update': UI.updateCategory,
