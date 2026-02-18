@@ -129,6 +129,111 @@
     </div>
 </template>
 
+<!-- Create -->
+<template id="template-create-product">
+    <div>
+        <h1 class="formTitle">Create Product</h1>
+        <label id="alert-create-product" style="color:red"></label>
+        <form id="form-create-product" novalidate>
+            <label>Name</label>
+            <input type="text" id="name-create-product" name="name" minlength="3" maxlength="80" required>
+
+            <label>Price</label>
+            <input type="number" id="price-create-product" name="price" min="0" step="0.01" required>
+
+            <label>Description</label>
+            <input type="text" id="description-create-product" name="description" maxlength="255" required>
+
+            <label for="size">Size</label>
+            <select name="size" id="size-select-create-product" required>
+                <option value="">Please choose an option</option>
+                <option value="SMALL">Small</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LARGE">Large</option>
+            </select>
+
+            <label for="color">Color</label>
+            <select name="color" id="color-select-create-product" required>
+                <option value="">Please choose an option</option>
+                <option value="RED">Red</option>
+                <option value="YELLOW">Yellow</option>
+                <option value="BLUE">Blue</option>
+                <option value="GREEN">Green</option>
+                <option value="ORANGE">Orange</option>
+                <option value="PURPLE">Purple</option>
+                <option value="WHITE">White</option>
+                <option value="BLACK">Black</option>
+                <option value="GREY">Grey</option>
+                <option value="BEIGE">Beige</option>
+                <option value="BROWN">Brown</option>
+            </select>
+
+            <label for="category">Category</label>
+            <select name="category" id="category-select-create-product" required>
+                <option value="">Please choose an option</option>
+            </select>
+
+            <label>Image</label>
+            <input type="file" id="image" class="inputfile" accept="image/png" required>
+
+            <input type="submit" id="create-product-button" class="formbutton" value="Create a product">
+        </form>
+    </div>
+</template>
+
+<!-- Update -->
+<template id="template-update-product">
+    <div>
+        <h1 class="formTitle">Update Product</h1>
+        <label id="alert-update-product" style="color:red"></label>
+        <form id="form-update-product" novalidate>
+            <label>Name</label>
+            <input type="text" id="name-update-product" name="name" minlength="3" maxlength="80" required>
+
+            <label>Price</label>
+            <input type="number" id="price-update-product" name="price" min="0" step="0.01" required>
+
+            <label>Description</label>
+            <input type="text" id="description-update-product" name="description" maxlength="255" required>
+
+            <label for="size">Size</label>
+            <select name="size" id="size-select-update-product" required>
+                <option value="">Please choose an option</option>
+                <option value="SMALL">Small</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LARGE">Large</option>
+            </select>
+
+            <label for="color">Color</label>
+            <select name="color" id="color-select-update-product" required>
+                <option value="">Please choose an option</option>
+                <option value="RED">Red</option>
+                <option value="YELLOW">Yellow</option>
+                <option value="BLUE">Blue</option>
+                <option value="GREEN">Green</option>
+                <option value="ORANGE">Orange</option>
+                <option value="PURPLE">Purple</option>
+                <option value="WHITE">White</option>
+                <option value="BLACK">Black</option>
+                <option value="GREY">Grey</option>
+                <option value="BEIGE">Beige</option>
+                <option value="BROWN">Brown</option>
+            </select>
+
+            <label for="category">Category</label>
+            <select name="category" id="category-select-update-product" required>
+                <option value="">Please choose an option</option>
+            </select>
+
+            <label>Image</label>
+            <input type="file" id="image" class="inputfile" accept="image/png" required>
+            <label>Current Image</label>
+            <img id="image-preview">
+            <input type="submit" id="update-product-button" class="formbutton" value="Update product">
+        </form>
+    </div>
+</template>
+
 
 <!-- TEMPLATES CATEGORIES -->
 
@@ -184,59 +289,6 @@
             <label id="current-delete-name" style="color:green"></label>
             <button class="delete-option-button" id="delete-category">Delete</button>
         </div>
-    </div>
-</template>
-
-
-<!-- Template create product admin page -->
-<template id="template-create-product">
-    <div>
-        <h1 class="formTitle">Create Product</h1>
-        <label id="alert-create-product" style="color:red"></label>
-        <form id="form-create-product" novalidate>
-            <label>Name</label>
-            <input type="text" id="name-create-product" name="name" minlength="3" maxlength="80" required>
-
-            <label>Price</label>
-            <input type="number" id="price-create-product" name="price" min="0" step="0.01" required>
-
-            <label>Description</label>
-            <input type="text" id="description-create-product" name="description" maxlength="255" required>
-
-            <label for="size">Size</label>
-            <select name="size" id="size-select-create-product" required>
-                <option value="">Please choose an option</option>
-                <option value="SMALL">Small</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="LARGE">Large</option>
-            </select>
-
-            <label for="color">Color</label>
-            <select name="color" id="color-select-create-product" required>
-                <option value="">Please choose an option</option>
-                <option value="RED">Red</option>
-                <option value="YELLOW">Yellow</option>
-                <option value="BLUE">Blue</option>
-                <option value="GREEN">Green</option>
-                <option value="ORANGE">Orange</option>
-                <option value="PURPLE">Purple</option>
-                <option value="WHITE">White</option>
-                <option value="BLACK">Black</option>
-                <option value="GREY">Grey</option>
-                <option value="BEIGE">Beige</option>
-                <option value="BROWN">Brown</option>
-            </select>
-
-            <label for="category">Category</label>
-            <select name="category" id="category-select-create-product" required>
-                <option value="">Please choose an option</option>
-            </select>
-
-            <label>Image</label>
-            <input type="file" id="image" class="inputfile" accept="image/png" required>
-
-            <input type="submit" id="create-product-button" class="formbutton" value="Create a product">
-        </form>
     </div>
 </template>
 
