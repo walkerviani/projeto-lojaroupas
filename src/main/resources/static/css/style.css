@@ -278,6 +278,14 @@ option {
     margin-bottom: 10px;
 }
 
+.container.form img {
+    display: block;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin: 20px auto 0 auto;
+}
+
 .formbutton {
     background-color: #6495ed;
     color: white;
