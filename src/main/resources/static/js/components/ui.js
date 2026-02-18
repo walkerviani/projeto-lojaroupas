@@ -170,11 +170,28 @@ export async function createProducts() {
     container.className = "container form";
     container.innerHTML = "";
     container.appendChild(clone);
-    UTIL.createSelectCategories(await UTIL.getCategories(`${UTIL.BASE_URL}/category`), 'category-select-create-product');
+    await UTIL.createSelectCategories('category-select-create-product');
 
     const form = document.getElementById('form-create-product');
     const alert = document.getElementById('alert-create-product');
-    FORMS.validateProduct(form, alert);
+    await FORMS.validateProduct(form, alert);
+}
+
+export async function updateProduct() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-update-product');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const product = await UTIL.getParams('update-id', (param) => UTIL.getCategories(`${UTIL.BASE_URL}/clothes/${param}`));
+    await UTIL.createSelectCategories('category-select-update-product');
+    const form = document.getElementById('form-update-product');
+    const alert = document.getElementById('alert-update-product');
+
+    await FORMS.validateProduct(form, alert, product.id);
 }
 
 // Categories functions
