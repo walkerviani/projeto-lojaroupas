@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, getProducts, updateProductForm } from "./util.js";
+import { BASE_URL, fetchData, updateProductForm } from "./util.js";
 
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');
@@ -217,8 +217,7 @@ async function sendProductData(isUpdateMode, product, file, alert, form, product
     }
 }
 
-export function validateCategory(form, name, alert, action) {
-
+export async function validateCategory(form, nameInput, alert, categoryId = null) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
@@ -227,11 +226,11 @@ export function validateCategory(form, name, alert, action) {
         alert.textContent = "";
         let error = "";
 
-        if (name.validity.valueMissing) {
+        if (nameInput.value == "") {
             error = "Name is required!";
-        } else if (name.validity.tooShort) {
+        } else if (nameInput.value.length < 3) {
             error = "Name is too short!";
-        } else if (!nameRegex.test(name.value)) {
+        } else if (!nameRegex.test(nameInput.value)) {
             error = "Name must not have numbers";
         }
 
@@ -241,45 +240,21 @@ export function validateCategory(form, name, alert, action) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
             const obj = {
-                name: name.value,
-
+                name: nameInput.value,
             };
-            if (typeof action === "function") {
-                await action(obj, alert, form);
-            }
+            await sendCategoryData(obj, alert, form, categoryId);
         }
     });
 }
 
-export async function postCategory(obj, alert, form) {
-    try {
-        const response = await fetch(`${BASE_URL}/category`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(obj)
-        });
+export async function sendCategoryData(obj, alert, form, id) {
+    const isUpdateMode = id ? true : false;
+    const method = isUpdateMode ? 'PUT' : 'POST';
+    const url = isUpdateMode ? `${BASE_URL}/category/${id}` : `${BASE_URL}/category`;
 
-        if (response.ok) {
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
-            alert.style.color = "green";
-            alert.textContent = "Category created successfully!";
-            form.reset();
-        } else {
-            throw new Error("Failed to create");
-        }
-    } catch (error) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        alert.style.color = "red";
-        alert.textContent = error.message;
-    }
-}
-
-export async function putCategory(obj, alert, form, id) {
     try {
-        const response = await fetch(`${BASE_URL}/category/${id}`, {
-            method: 'PUT',
+        const response = await fetch(url, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -289,10 +264,10 @@ export async function putCategory(obj, alert, form, id) {
         if (response.ok) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
             alert.style.color = "green";
-            alert.textContent = "Category updated successfully!";
+            alert.textContent = isUpdateMode ? "Category updated successfully!" : "Category created successfully!";
             form.reset();
         } else {
-            throw new Error("Failed to update");
+            throw new Error(isUpdateMode ? "Failed to update" : "Failed to create");
         }
     } catch (error) {
         alert.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -302,6 +277,129 @@ export async function putCategory(obj, alert, form, id) {
 }
 
 async function productData(id) {
-    const product = await getProducts(`${BASE_URL}/clothes/${id}`);
+    const product = await fetchData(`${BASE_URL}/clothes/${id}`);
     return product;
+}
+
+export async function validateUser(formInput, alertInput, userId = null) {
+    const { name, cpf, email, phone, password, confPassword, role } = formInput.elements;
+    formInput.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
+        const cpfRegex = /^[0-9]+$/; //alow only numbers
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
+        const phoneRegex = /^[0-9]+$/; //alow only numbers
+
+        // Reset the label and error
+        alertInput.textContent = "";
+        let error = "";
+
+        if (name.value == "") {
+            error = "Name is required!";
+        }
+        else if (name.value.length < 3) {
+            error = "Name is too short!";
+        }
+        else if (!nameRegex.test(name.value)) {
+            error = "Name must not have numbers";
+        }
+        else if (cpf.value == "") {
+            error = "Cpf is required!";
+        }
+        else if (cpf.value.length < 11) {
+            error = "Cpf must have 11 digits";
+        }
+        else if (!cpfRegex.test(cpf.value)) {
+            error = "Cpf must have only numbers";
+        }
+        else if (email.value == "") {
+            error = "Email is required!";
+        }
+        else if (!emailRegex.test(email.value)) {
+            error = "Email is not valid!";
+        }
+        else if (phone.value == "") {
+            error = "Phone is required!";
+        }
+        else if (phone.value.length < 11) {
+            error = "Phone is too short";
+        }
+        else if (!phoneRegex.test(phone.value)) {
+            error = "Phone must have only numbers";
+        }
+        else if (password.value == "") {
+            error = "Password is required";
+        }
+        else if (password.value.length < 8) {
+            error = "Password is too short (Minimum 8 digits)";
+        }
+        else if (confPassword.value == "") {
+            error = "The confirmation password is required!";
+        }
+        else if (confPassword.value != password.value) {
+            error = "The passwords don't match!";
+        }
+        else if (role.value == "") {
+            error = "You must select a valid role!";
+        }
+
+        if (error != "") {
+            alertInput.textContent = error;
+            alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+            const obj = {
+                name: name.value,
+                email: email.value,
+                cpf: cpf.value,
+                phone: phone.value,
+                role: role.value
+            };
+            await sendUserData(obj, password, alertInput, formInput, userId);
+        }
+    });
+}
+
+export async function sendUserData(obj, password, alert, form, id) {
+    const isUpdateMode = id ? true : false;
+    const method = isUpdateMode ? 'PUT' : 'POST';
+    const url = isUpdateMode ? `${BASE_URL}/users/${id}` : `${BASE_URL}/users`;
+
+    try {
+        if (isUpdateMode && password) {
+            const passwordResponse = await fetch(`${BASE_URL}/users/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(password)
+            });
+            if (!passwordResponse.ok) throw new Error("Failed to update password");
+        }
+
+        if(!isUpdateMode){
+            obj.password = password.value;
+        }
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        })
+
+        if (response.ok) {
+            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+            alert.style.color = "green";
+            alert.textContent = isUpdateMode ? "User updated successfully!" : "User created successfully!";
+            form.reset();
+        } else {
+            throw new Error(isUpdateMode ? "Failed to update" : "Failed to create");
+        }
+    } catch (error) {
+        console.log(error)
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        alert.style.color = "red";
+        alert.textContent = error.message;
+    }
 }
