@@ -162,7 +162,7 @@ export async function loadProductsPage() {
     UTIL.showProductTable(await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`));
 }
 
-export async function createProducts() {
+export async function createProduct() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-create-product');
     const clone = template.content.cloneNode(true);
@@ -192,6 +192,31 @@ export async function updateProduct() {
     const alert = document.getElementById('alert-update-product');
 
     await FORMS.validateProduct(form, alert, product.id);
+}
+
+export async function deleteProduct() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-delete-product');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const product = await UTIL.getParams('delete-id', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/${param}`));
+    const currentName = document.getElementById('current-product-name');
+    const currentTitle = document.getElementById('current-product-title');
+    currentName.textContent = product.name;
+
+    const button = document.getElementById('delete-product');
+    const alert = document.getElementById('alert-delete-product');
+
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.deleteEntity(`${UTIL.BASE_URL}/clothes/${product.id}`, alert);
+        currentTitle.style.contentVisibility = "hidden";
+        currentName.style.contentVisibility = "hidden";
+    });
 }
 
 // Categories functions
@@ -276,11 +301,10 @@ export async function deleteCategory() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-
     const category = await UTIL.getParams('delete-id', (param) => UTIL.getCategories(`${UTIL.BASE_URL}/category/${param}`));
 
-    const currentName = document.getElementById('current-delete-name');
-    const currentTitle = document.getElementById('current-delete-title');
+    const currentName = document.getElementById('current-category-name');
+    const currentTitle = document.getElementById('current-category-title');
     currentName.textContent = category.name;
 
     const button = document.getElementById('delete-category');
@@ -288,7 +312,7 @@ export async function deleteCategory() {
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await UTIL.deleteCategories(category.id, alert);
+        await UTIL.deleteEntity(`${UTIL.BASE_URL}/category/${category.id}`, alert);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
     });
