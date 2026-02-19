@@ -1,5 +1,5 @@
 import { handleRoute, navigateTo } from './components/router.js';
-import { BASE_URL, getCategories, getCategoriesMenu } from './components/util.js';
+import { BASE_URL, fetchData, getCategoriesMenu } from './components/util.js';
 
 
 async function setupNavigation() {
@@ -13,7 +13,7 @@ async function setupNavigation() {
     });
 
     // Category options
-    const categoriesRequest = await getCategories(`${BASE_URL}/category`);
+    const categoriesRequest = await fetchData(`${BASE_URL}/category`);
     const categories = getCategoriesMenu(categoriesRequest);
 
     for (let category of categories) {
