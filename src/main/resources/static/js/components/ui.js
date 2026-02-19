@@ -41,13 +41,13 @@ export async function loadIndex() {
     let products;
 
     if (name) {
-        products = await UTIL.getParams('name', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/name?name=${param}`));
+        products = await UTIL.getParams('name', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/name?name=${param}`));
     }
     else if (category) {
-        products = await UTIL.getParams('category', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/category?category=${param}`));
+        products = await UTIL.getParams('category', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/category?category=${param}`));
     }
     else {
-        products = await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`);
+        products = await UTIL.fetchData(`${UTIL.BASE_URL}/clothes`);
     }
     showProducts(products);
 }
@@ -57,7 +57,7 @@ export async function showProductDetail() {
     const template = document.getElementById('template-detail');
     const clone = template.content.cloneNode(true);
 
-    const product = await UTIL.getParams('id', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/${param}`));
+    const product = await UTIL.getParams('id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
 
 
     const imageUrl = product.imageData
@@ -159,7 +159,7 @@ export async function loadProductsPage() {
         }
     });
 
-    UTIL.showProductTable(await UTIL.getProducts(`${UTIL.BASE_URL}/clothes`));
+    UTIL.showProductTable(await UTIL.fetchData(`${UTIL.BASE_URL}/clothes`));
 }
 
 export async function createProduct() {
@@ -186,7 +186,7 @@ export async function updateProduct() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const product = await UTIL.getParams('update-id', (param) => UTIL.getCategories(`${UTIL.BASE_URL}/clothes/${param}`));
+    const product = await UTIL.getParams('update-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     await UTIL.createSelectCategories('category-select-update-product');
     const form = document.getElementById('form-update-product');
     const alert = document.getElementById('alert-update-product');
@@ -203,7 +203,7 @@ export async function deleteProduct() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const product = await UTIL.getParams('delete-id', (param) => UTIL.getProducts(`${UTIL.BASE_URL}/clothes/${param}`));
+    const product = await UTIL.getParams('delete-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     const currentName = document.getElementById('current-product-name');
     const currentTitle = document.getElementById('current-product-title');
     currentName.textContent = product.name;
@@ -244,7 +244,7 @@ export async function loadCategoriesPage() {
         }
     });
 
-    UTIL.showCategoryTable(await UTIL.getCategories(`${UTIL.BASE_URL}/category`));
+    UTIL.showCategoryTable(await UTIL.fetchData(`${UTIL.BASE_URL}/category`));
 }
 
 export async function createCategory() {
@@ -260,9 +260,7 @@ export async function createCategory() {
     const alert = document.getElementById('alert-create-categ');
     const input = document.getElementById('name-create-category');
 
-    FORMS.validateCategory(form, input, alert, async (obj) => {
-        await FORMS.postCategory(obj, alert, form);
-    });
+    await FORMS.validateCategory(form, input, alert);
 }
 
 export async function updateCategory() {
@@ -274,7 +272,7 @@ export async function updateCategory() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const category = await UTIL.getParams('update-id', (param) => UTIL.getCategories(`${UTIL.BASE_URL}/category/${param}`));
+    const category = await UTIL.getParams('update-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/category/${param}`));
 
     const currentName = document.getElementById('current-update-name');
     const currentTitle = document.getElementById('current-update-title');
@@ -282,13 +280,13 @@ export async function updateCategory() {
 
     const form = document.getElementById('form-update-category');
     const alert = document.getElementById('alert-update-category');
-    const input = document.getElementById('name-update-category');
+    const nameInput = document.getElementById('name-update-category');
     const id = category.id;
 
-    FORMS.validateCategory(form, input, alert, async (obj) => {
-        await FORMS.putCategory(obj, alert, form, id);
-        currentTitle.style.contentVisibility = "hidden";
-        currentName.style.contentVisibility = "hidden";
+    await FORMS.validateCategory(form, nameInput, alert, id);
+    document.addEventListener('submit', () => {
+        currentName.style.visibility = "hidden";
+        currentTitle.style.visibility = "hidden";
     });
 }
 
@@ -301,7 +299,7 @@ export async function deleteCategory() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const category = await UTIL.getParams('delete-id', (param) => UTIL.getCategories(`${UTIL.BASE_URL}/category/${param}`));
+    const category = await UTIL.getParams('delete-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/category/${param}`));
 
     const currentName = document.getElementById('current-category-name');
     const currentTitle = document.getElementById('current-category-title');
@@ -316,6 +314,48 @@ export async function deleteCategory() {
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
     });
+}
+
+//Users functions
+export async function loadUsersPage() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-users-menu');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container table";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const table = document.getElementById('user-table');
+    table.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const click = e.target;
+        if (click.classList.contains('update-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/users/update?update-id=${id}`);
+        }
+        if (click.classList.contains('delete-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/users/delete?delete-id=${id}`);
+        }
+    });
+
+    UTIL.showUserTable(await UTIL.fetchData(`${UTIL.BASE_URL}/users`));
+}
+
+export async function createUser() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-create-user');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const form = document.getElementById('form-create-user');
+    const alert = document.getElementById('alert-create-user');
+    await FORMS.validateUser(form, alert);
 }
 
 export function loadError404() {
