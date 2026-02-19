@@ -115,9 +115,9 @@ export function showCategoryTable(categories) {
 
 
 
-export async function deleteCategories(id, alert) {
+export async function deleteEntity(url, alert) {
     try {
-        const response = await fetch(`${BASE_URL}/category/${id}`, {
+        const response = await fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -127,7 +127,7 @@ export async function deleteCategories(id, alert) {
         if (response.ok) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
             alert.style.color = "green";
-            alert.textContent = "Category deleted successfully!";
+            alert.textContent = "Deleted successfully!";
         } else {
             const errorData = await response.json();
             console.log(errorData);
