@@ -10,6 +10,8 @@ const routes = {
     '/admin/categories/create': UI.createCategory,
     '/admin/categories/update': UI.updateCategory,
     '/admin/categories/delete' : UI.deleteCategory,
+    '/admin/users' : UI.loadUsersPage,
+    '/admin/users/create' : UI.createUser,
     '/product' : UI.showProductDetail,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
