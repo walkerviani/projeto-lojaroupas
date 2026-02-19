@@ -1,26 +1,12 @@
 export const BASE_URL = "http://localhost:8080";
 
-export async function getProducts(url) {
+export async function fetchData(url) {
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return await response.json();
-    } catch (error) {
-        console.error("Error: ", error);
-        return [];
-    }
-}
-
-export async function getCategories(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
     } catch (error) {
         console.error("Error: ", error);
     }
@@ -49,7 +35,7 @@ export function getCategoriesMenu(categories) {
 }
 
 export async function createSelectCategories(selectName) {
-    const categories = await getCategories(`${BASE_URL}/category`);
+    const categories = await fetchData(`${BASE_URL}/category`);
 
     const select = document.getElementById(selectName);
     for (let category of categories) {
@@ -113,7 +99,35 @@ export function showCategoryTable(categories) {
     document.getElementById('category-table').innerHTML = table;
 }
 
+export function showUserTable(users) {
+    let table = `
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Cpf</td>
+        <td>Phone</td>
+        <td>Role</td>
+        <td></td>
+        <td></td>
+    </tr>`;
 
+    for (let user of users) {
+        table += `
+        <tr>
+          <td>${user.id}</td>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.cpf}</td>
+          <td>${user.phone}</td>
+          <td>${user.role}</td>
+          <td class="table-update-button"><button name="update" data-id="${user.id}" class="update-button">Update</button></td>
+          <td class="table-delete-button"><button name="delete" data-id="${user.id}" class="delete-button">Delete</button></td>
+        </tr>
+        `;
+    }
+    document.getElementById('user-table').innerHTML = table;
+}
 
 export async function deleteEntity(url, alert) {
     try {
@@ -149,7 +163,7 @@ export async function getParams(paramName, callback) {
 }
 
 export async function updateProductForm(formInput, product, imagePreview) {
-    const { name, price, description, size, color, category} = formInput.elements;
+    const { name, price, description, size, color, category } = formInput.elements;
     name.value = product.name;
     price.value = product.price;
     description.value = product.description;
