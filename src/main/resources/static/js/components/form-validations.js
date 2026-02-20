@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, fetchData, updateProductForm } from "./util.js";
+import { BASE_URL, fetchData, updateProductForm, updateUserForm } from "./util.js";
 
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');
@@ -39,11 +39,11 @@ export function validateCreateAccount() {
             error = "Password minimum size is 8";
         } else if (confPassword.validity.valueMissing) { // ConfPassword validation
             error = "Confirmation password is required!";
-        } else if (confPassword.value != password.value) {
+        } else if (confPassword.value !== password.value) {
             error = "Passwords don't match";
         }
 
-        if (error != "") {
+        if (error !== "") {
             alert.textContent = error;
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
@@ -113,7 +113,7 @@ export async function validateProduct(formInput, alertInput, productId = null) {
         alertInput.textContent = "";
         let error = "";
 
-        if (name.value == "") {
+        if (name.value === "") {
             error = "Name is required!";
         }
         else if (name.value.length < 3) {
@@ -122,32 +122,32 @@ export async function validateProduct(formInput, alertInput, productId = null) {
         else if (!nameRegex.test(name.value)) {
             error = "Name must not have numbers";
         }
-        else if (price.value == "") {
+        else if (price.value === "") {
             error = "Price is required!";
         }
         else if (isNaN(price.value)) {
             error = "Enter a valid price!";
         }
-        else if (description.value == "") {
+        else if (description.value === "") {
             error = "Description is required!";
         }
-        else if (size.value == "") {
+        else if (size.value === "") {
             error = "You must select a valid size!";
         }
-        else if (color.value == "") {
+        else if (color.value === "") {
             error = "You must select a valid color!";
         }
-        else if (category.value == "") {
+        else if (category.value === "") {
             error = "You must select a valid category!";
         }
-        else if (isUpdateMode == false && image.files.length === 0) {
+        else if (isUpdateMode === false && image.files.length === 0) {
             error = "You must select an image";
         }
         else if (file && file.type !== "image/png") {
             error = "Only PNG images are allowed!";
         }
 
-        if (error != "") {
+        if (error !== "") {
             alertInput.textContent = error;
             alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
@@ -226,7 +226,7 @@ export async function validateCategory(form, nameInput, alert, categoryId = null
         alert.textContent = "";
         let error = "";
 
-        if (nameInput.value == "") {
+        if (nameInput.value === "") {
             error = "Name is required!";
         } else if (nameInput.value.length < 3) {
             error = "Name is too short!";
@@ -234,7 +234,7 @@ export async function validateCategory(form, nameInput, alert, categoryId = null
             error = "Name must not have numbers";
         }
 
-        if (error != "") {
+        if (error !== "") {
             alert.style.color = "red";
             alert.textContent = error;
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -283,6 +283,14 @@ async function productData(id) {
 
 export async function validateUser(formInput, alertInput, userId = null) {
     const { name, cpf, email, phone, password, confPassword, role } = formInput.elements;
+
+    const isUpdateMode = userId ? true : false;
+
+    if (isUpdateMode) {
+        const user = await fetchData(`${BASE_URL}/users/${userId}`);
+        updateUserForm(formInput, user);
+    }
+
     formInput.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -295,7 +303,7 @@ export async function validateUser(formInput, alertInput, userId = null) {
         alertInput.textContent = "";
         let error = "";
 
-        if (name.value == "") {
+        if (name.value === "") {
             error = "Name is required!";
         }
         else if (name.value.length < 3) {
@@ -304,7 +312,7 @@ export async function validateUser(formInput, alertInput, userId = null) {
         else if (!nameRegex.test(name.value)) {
             error = "Name must not have numbers";
         }
-        else if (cpf.value == "") {
+        else if (cpf.value === "") {
             error = "Cpf is required!";
         }
         else if (cpf.value.length < 11) {
@@ -313,13 +321,13 @@ export async function validateUser(formInput, alertInput, userId = null) {
         else if (!cpfRegex.test(cpf.value)) {
             error = "Cpf must have only numbers";
         }
-        else if (email.value == "") {
+        else if (email.value === "") {
             error = "Email is required!";
         }
         else if (!emailRegex.test(email.value)) {
             error = "Email is not valid!";
         }
-        else if (phone.value == "") {
+        else if (phone.value === "") {
             error = "Phone is required!";
         }
         else if (phone.value.length < 11) {
@@ -328,23 +336,23 @@ export async function validateUser(formInput, alertInput, userId = null) {
         else if (!phoneRegex.test(phone.value)) {
             error = "Phone must have only numbers";
         }
-        else if (password.value == "") {
+        else if (password.value === "") {
             error = "Password is required";
         }
         else if (password.value.length < 8) {
             error = "Password is too short (Minimum 8 digits)";
         }
-        else if (confPassword.value == "") {
+        else if (!isUpdateMode && confPassword.value === "") {
             error = "The confirmation password is required!";
         }
-        else if (confPassword.value != password.value) {
+        else if (!isUpdateMode && confPassword.value !== password.value) {
             error = "The passwords don't match!";
         }
-        else if (role.value == "") {
+        else if (role.value === "") {
             error = "You must select a valid role!";
         }
 
-        if (error != "") {
+        if (error !== "") {
             alertInput.textContent = error;
             alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
@@ -366,18 +374,18 @@ export async function sendUserData(obj, password, alert, form, id) {
     const url = isUpdateMode ? `${BASE_URL}/users/${id}` : `${BASE_URL}/users`;
 
     try {
-        if (isUpdateMode && password) {
+        if (isUpdateMode && password.value !== "") {
             const passwordResponse = await fetch(`${BASE_URL}/users/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(password)
+                body: JSON.stringify(password.value)
             });
             if (!passwordResponse.ok) throw new Error("Failed to update password");
         }
 
-        if(!isUpdateMode){
+        if (!isUpdateMode) {
             obj.password = password.value;
         }
         const response = await fetch(url, {
@@ -392,12 +400,18 @@ export async function sendUserData(obj, password, alert, form, id) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
             alert.style.color = "green";
             alert.textContent = isUpdateMode ? "User updated successfully!" : "User created successfully!";
-            form.reset();
+            
+            if (isUpdateMode) {
+                const user = await fetchData(`${BASE_URL}/users/${id}`);
+                updateUserForm(form, user);
+            } else {
+                form.reset();
+            }
+
         } else {
             throw new Error(isUpdateMode ? "Failed to update" : "Failed to create");
         }
     } catch (error) {
-        console.log(error)
         alert.scrollIntoView({ behavior: "smooth", block: "center" });
         alert.style.color = "red";
         alert.textContent = error.message;
