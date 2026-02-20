@@ -358,6 +358,23 @@ export async function createUser() {
     await FORMS.validateUser(form, alert);
 }
 
+export async function updateUser() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-update-user');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const user = await UTIL.getParams('update-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/users/${param}`));
+    const form = document.getElementById('form-update-user');
+    const alert = document.getElementById('alert-update-user');
+    const id = user.id;
+
+    await FORMS.validateUser(form, alert, id);
+}
+
 export function loadError404() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-error');
