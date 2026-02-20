@@ -98,7 +98,7 @@ export async function validateProduct(formInput, alertInput, productId = null) {
 
     if (isUpdateMode) {
         const imagePreview = document.getElementById('image-preview');
-        const product = await productData(productId);
+        const product = await fetchData(`${BASE_URL}/clothes/${productId}`)
         updateProductForm(formInput, product, imagePreview);
     }
 
@@ -201,7 +201,7 @@ async function sendProductData(isUpdateMode, product, file, alert, form, product
             alert.textContent = isUpdateMode ? "Product updated successfully!" : "Product created successfully!";
             if (isUpdateMode) {
                 const imagePreview = document.getElementById('image-preview');
-                const productInput = await productData(productId);
+                const productInput = await fetchData(`${BASE_URL}/clothes/${productId}`)
                 updateProductForm(form, productInput, imagePreview);
             } else {
                 form.reset();
@@ -274,11 +274,6 @@ export async function sendCategoryData(obj, alert, form, id) {
         alert.style.color = "red";
         alert.textContent = error.message;
     }
-}
-
-async function productData(id) {
-    const product = await fetchData(`${BASE_URL}/clothes/${id}`);
-    return product;
 }
 
 export async function validateUser(formInput, alertInput, userId = null) {
