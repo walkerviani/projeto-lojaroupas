@@ -172,3 +172,13 @@ export async function updateProductForm(formInput, product, imagePreview) {
     category.value = product.category.id;
     imagePreview.src = `${BASE_URL}/image/${product.imageData.name}`;
 }
+
+export function updateUserForm(form, user) {
+    const { name, cpf, email, phone, password, role } = form.elements;
+    name.value = user.name; 
+    cpf.value = user.cpf;
+    email.value = user.email;
+    phone.value = user.phone;
+    password.value = user.password;
+    role.value = user.role;
+}
