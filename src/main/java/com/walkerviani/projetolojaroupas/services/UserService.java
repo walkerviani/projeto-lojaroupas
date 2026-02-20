@@ -66,6 +66,8 @@ public class UserService {
         entity.setName(obj.getName());
         entity.setEmail(obj.getEmail());
         entity.setPhone(obj.getPhone());
+        entity.setCpf(obj.getCpf());
+        entity.setRole(obj.getRole());
     }
 
     public User updatePassword(Long id, String newPassword) {
