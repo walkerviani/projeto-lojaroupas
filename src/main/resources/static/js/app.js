@@ -55,6 +55,12 @@ async function setupNavigation() {
             navigateTo(`/?name=${query}`);
         }
     });
+
+    //Cart
+    document.getElementById('shopping-cart').addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateTo('/cart');
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
