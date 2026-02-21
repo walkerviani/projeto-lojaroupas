@@ -13,6 +13,7 @@ const routes = {
     '/admin/users' : UI.loadUsersPage,
     '/admin/users/create' : UI.createUser,
     '/admin/users/update' : UI.updateUser,
+    '/admin/users/delete' : UI.deleteUser,
     '/product' : UI.showProductDetail,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
