@@ -24,9 +24,12 @@
                 <li><a id="aboutButton" href="/">About</a></li>
             </ul>
         </nav>
+
+        <img class="cart-icon" id="shopping-cart" src="/images/shopping_cart_icon.svg">
+
         <form class="searchbox" action="#" method="get">
             <input type="search" id="searchInput" placeholder="Search...">
-            <button id="searchButton" type="submit"><img class="search_icon" src="/images/search_icon.svg"></button>
+            <button id="searchButton" type="submit"><img class="search-icon" src="/images/search_icon.svg"></button>
         </form>
     </header>
     <main>
@@ -287,7 +290,7 @@
                 <label>Update name</label>
                 <input type="text" id="name-update-category" name="name" minlength="3" maxlength="80" required>
                 <input type="submit" id="update-category-name" class="formbutton" value="Update category">
-            
+
             </form>
         </div>
     </div>
@@ -343,7 +346,8 @@
                 minlength="8" required>
 
             <label for="confPassword">Confirm your password</label>
-            <input type="password" id="confPassword-create-user" name="confPassword" autocomplete="new-password" required>
+            <input type="password" id="confPassword-create-user" name="confPassword" autocomplete="new-password"
+                required>
 
             <select name="role" id="role-select-create-user" required>
                 <option value="">Please choose an option</option>
@@ -405,28 +409,15 @@
 <!-- Template product detail -->
 <template id="template-detail">
     <div>
-        <img class="detail-mode-image">
+        <img id="product-img">
     </div>
     <div class="detail-mode-info">
-        <p class="detail-mode-title">
-        <p>
-        <p class="detail-mode-price">
-        <p>
-        <p class="detail-mode-color">
-        <p>
-        <p class="detail-mode-description">
-        <p><br>
-        <p><b>Size</b>
-        <p>
-        <form>
-            <input type="radio" id="small" name="sizeChoice" value="SMALL">
-            <label for="small">Small</label><br>
-            <input type="radio" id="medium" name="sizeChoice" value="MEDIUM">
-            <label for="medium">Medium</label><br>
-            <input type="radio" id="large" name="sizeChoice" value="LARGE">
-            <label for="large">Large</label><br><br>
-            <input type="button" class="detail-mode-button" value="Buy">
-        </form>
+        <label id="product-title" class="detail-mode-title"></label>
+        <label id="product-price" class="detail-mode-price"></label>
+        <label id="product-color"></label>
+        <label id="product-description" class="detail-mode-description"></label>
+        <label id="product-size"></label>
+        <input type="button" class="detail-mode-button" id="add-cart-button" value="Add to cart">
     </div>
 </template>
 
