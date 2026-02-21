@@ -160,6 +160,12 @@ option {
     padding: 20px;
 }
 
+.container.cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .container.error-page {
     display: flex;
     flex-direction: column;
