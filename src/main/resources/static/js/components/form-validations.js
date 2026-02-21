@@ -10,36 +10,53 @@ export function validateCreateAccount() {
         e.preventDefault();
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
         const phoneRegex = /^\d{11}$/; //numeric number with 11 digits long
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
+        const cpfRegex = /^[0-9]+$/; //alow only numbers
 
         // Reset the label and error
         alert.textContent = "";
         let error = "";
 
-        if (name.validity.valueMissing) { // Name validation
+        if (name.value === "") {
             error = "Name is required!";
-        } else if (name.validity.tooShort) {
+        } 
+        else if (name.value.length < 3) {
             error = "Name is too short!";
-        } else if (!nameRegex.test(name.value)) {
+        } 
+        else if (!nameRegex.test(name.value)) {
             error = "Name must not have numbers";
-        } else if (cpf.validity.valueMissing) { // Cpf validation
+        } 
+        else if (cpf.value === "") { 
             error = "CPF is required!";
-        } else if (cpf.value.trim().length < 11) {
+        } 
+        else if (cpf.value.length < 11) {
             error = "CPF must have 11 digits";
-        } else if (email.validity.valueMissing) { // Email validation
+        } 
+        else if (!cpfRegex.test(cpf.value)) {
+            error = "CPF cannot have letters!";
+        }
+        else if (email.value === "") {
             error = "Email is required!";
-        } else if (email.validity.typeMismatch) {
+        } 
+        else if (!emailRegex.test(email.value)) {
             error = "Please enter a valid email!";
-        } else if (phone.validity.valueMissing) { // Phone validation
+        } 
+        else if (phone.value === "") { 
             error = "Phone is required!";
-        } else if (!phoneRegex.test(phone.value)) {
+        } 
+        else if (!phoneRegex.test(phone.value)) {
             error = "Please enter a valid phone with DDD (11 digits)!";
-        } else if (password.validity.valueMissing) { // Password validation
+        } 
+        else if (password.value === "") { 
             error = "Password is required!";
-        } else if (password.validity.tooShort) {
+        } 
+        else if (password.value.length < 8) {
             error = "Password minimum size is 8";
-        } else if (confPassword.validity.valueMissing) { // ConfPassword validation
+        } 
+        else if (confPassword.value === "") { 
             error = "Confirmation password is required!";
-        } else if (confPassword.value !== password.value) {
+        } 
+        else if (confPassword.value !== password.value) {
             error = "Passwords don't match";
         }
 
