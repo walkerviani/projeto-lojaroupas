@@ -375,6 +375,31 @@ export async function updateUser() {
     await FORMS.validateUser(form, alert, id);
 }
 
+export async function deleteUser() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-delete-user');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container form";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    const user = await UTIL.getParams('delete-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/users/${param}`));
+    const currentName = document.getElementById('current-user-name');
+    const currentTitle = document.getElementById('current-user-title');
+    currentName.textContent = user.name;
+
+    const button = document.getElementById('delete-user');
+    const alert = document.getElementById('alert-delete-user');
+
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.deleteEntity(`${UTIL.BASE_URL}/users/${user.id}`, alert);
+        currentTitle.style.contentVisibility = "hidden";
+        currentName.style.contentVisibility = "hidden";
+    });
+}
+
 export function loadError404() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-error');
