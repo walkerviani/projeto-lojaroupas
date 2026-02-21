@@ -57,27 +57,40 @@ export async function showProductDetail() {
     const template = document.getElementById('template-detail');
     const clone = template.content.cloneNode(true);
 
-    const product = await UTIL.getParams('id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
-
-
-    const imageUrl = product.imageData
-        ? `${UTIL.BASE_URL}/image/${product.imageData.name}`
-        : 'https://placehold.co/400x400?text=No+Image';
-
-    // product image
-    clone.querySelector(".detail-mode-image").src = imageUrl;
-    // product title
-    clone.querySelector(".detail-mode-title").textContent = product.name;
-    // product price
-    clone.querySelector(".detail-mode-price").textContent = UTIL.currencyFormatterToBRL(product.price);
-    // product color
-    clone.querySelector(".detail-mode-color").innerHTML = `<b>Color:</b> ${UTIL.capitalizeFirstLetter(product.color)}`;
-    // product description
-    clone.querySelector(".detail-mode-description").innerHTML = `<b>Composition:</b> ${product.description}`;
-
-    container.classList.add('detail-mode');
+    container.className = "container detail-mode";
     container.innerHTML = "";
     container.appendChild(clone);
+
+    const product = await UTIL.getParams('id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
+    const imageUrl = product.imageData ? `${UTIL.BASE_URL}/image/${product.imageData.name}` : 'https://placehold.co/400x400?text=No+Image';
+
+    let img = document.getElementById('product-img');
+    img.src = imageUrl;
+
+    let title = document.getElementById('product-title');
+    title.textContent = product.name;
+    
+    let price = document.getElementById('product-price');
+    price.textContent = UTIL.currencyFormatterToBRL(product.price);
+
+    let color = document.getElementById('product-color');
+    color.textContent = "Color: " + UTIL.capitalizeFirstLetter(product.color);
+    
+    let description = document.getElementById('product-description');
+    description.textContent = "Description: " + product.description;
+
+    let size = document.getElementById('product-size');
+    size.textContent = "Size: " + UTIL.capitalizeFirstLetter(product.size);
+
+    const button = document.getElementById('add-cart-button');
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const productObj =  {
+            id : product.id
+        }
+
+        localStorage.setItem("cart", JSON.stringify(productObj));
+    });
 }
 
 export function loadAboutPage() {
