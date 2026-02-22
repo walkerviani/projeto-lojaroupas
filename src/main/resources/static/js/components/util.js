@@ -175,10 +175,34 @@ export async function updateProductForm(formInput, product, imagePreview) {
 
 export function updateUserForm(form, user) {
     const { name, cpf, email, phone, password, role } = form.elements;
-    name.value = user.name; 
+    name.value = user.name;
     cpf.value = user.cpf;
     email.value = user.email;
     phone.value = user.phone;
     password.value = user.password;
     role.value = user.role;
+}
+
+//used to show to the user if the add to cart function had success or failed
+export function actionButton(result) {
+    const button = document.querySelector('.detail-mode button');
+    if (!button) return;
+    const buttonText = button.innerText;
+
+    button.disabled = true;
+
+    if (result) {
+        button.classList.add('success');
+        button.innerText = "Added to cart!";
+    }
+    else {
+        button.classList.add('failed');
+        button.innerText = "Try Again!";
+    }
+
+    setTimeout(() => {
+        button.disabled = false;
+        button.classList.remove('success', 'failed');
+        button.innerText = buttonText;
+    }, 3000);
 }
