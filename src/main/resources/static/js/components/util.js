@@ -21,7 +21,8 @@ export function currencyFormatterToBRL(number) {
     return number.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL",
-        maximumSignificantDigits: 4
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
     });
 }
 
