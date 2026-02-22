@@ -417,7 +417,15 @@
         <label id="product-color"></label>
         <label id="product-description" class="detail-mode-description"></label>
         <label id="product-size"></label>
-        <input type="button" class="detail-mode-button" id="add-cart-button" value="Add to cart">
+        <label class="detail-mode-description">Quantity:</label>
+        <select id="product-quantity">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <button id="add-cart-button">Add to cart</button>
     </div>
 </template>
 
@@ -431,3 +439,13 @@
             <a href="/">Back to home page</a>
     </div>
 </template>
+
+<!-- Shopping cart template -->
+ <template id="template-cart">
+    <div>
+        <label class="formTitle">Shopping Cart</label>
+    </div>
+    <div id="cart-items"></div>
+    <div id="cart-total"></div>
+    <button class="clear-cart-button" id="clear-cart-button">Clear Cart</button>
+ </template>
