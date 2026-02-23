@@ -5,11 +5,15 @@ import { BASE_URL, fetchData, getCategoriesMenu } from './components/util.js';
 async function setupNavigation() {
 
     // Category menu 
-    const menu = document.getElementById('categoriesMenu');
-    document.getElementById('categoriesButton').addEventListener('click', (e) => {
-        e.preventDefault();
-        const isHidden = getComputedStyle(menu).display === "none";
-        menu.style.display = isHidden ? "block" : "none";
+    const menu = document.getElementById('categories-menu');
+    const dropdown = document.getElementById('categories-dropdown');
+
+    menu.addEventListener('mouseenter', () => {
+        dropdown.style.display = "block";
+    });
+
+    menu.addEventListener('mouseleave', () => {
+        dropdown.style.display = "none";
     });
 
     // Category options
@@ -21,7 +25,7 @@ async function setupNavigation() {
         if (element) {
             element.addEventListener('click', (e) => {
                 e.preventDefault();
-                menu.style.display = "none"; // close the menu after choosing
+                dropdown.style.display = "none"; // close the menu after choosing
                 navigateTo(`/?category=${category.name}`);
             });
         }
