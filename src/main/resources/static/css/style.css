@@ -70,30 +70,39 @@ option {
 }
 
 /*categories menu */
-#categoriesMenu {
+#categories-menu {
+    position: relative;
+}
+
+#categories-dropdown {
     display: none;
     position: absolute;
-    left: 15px;
     background: white;
-    top: calc(100% + 16px);
+    top: 100%;
+    left: 15px;
     list-style: none;
     padding: 10px;
     border: 1px solid black;
     border-radius: 3px;
 }
 
-#categoriesMenu li {
+#categories-dropdown li {
     margin: 5px 0;
     display: block;
 }
 
-#categoriesMenu a {
+#categories-dropdown a {
     text-decoration: none;
     color: #000;
 }
 
-#categoriesMenu a:hover {
+
+#categories-dropdown a:hover {
     color: grey;
+}
+
+#categories-menu:hover #categories-dropdown {
+    display: block;
 }
 
 .search-icon {
