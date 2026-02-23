@@ -31,7 +31,7 @@ export function getCategoriesMenu(categories) {
     for (let category of categories) {
         list += `<li><a href="/" id="${category.name}-menu">${category.name}</a></li>`;
     }
-    document.getElementById('categoriesMenu').innerHTML = list;
+    document.getElementById('categories-dropdown').innerHTML = list;
     return categories;
 }
 
