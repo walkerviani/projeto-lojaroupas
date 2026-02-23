@@ -1,6 +1,7 @@
 import { navigateTo } from "./router.js";
 import * as UTIL from "./util.js";
 import * as FORMS from "./form-validations.js";
+import * as CART from "./cart.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');
@@ -69,27 +70,79 @@ export async function showProductDetail() {
 
     let title = document.getElementById('product-title');
     title.textContent = product.name;
-    
+
     let price = document.getElementById('product-price');
     price.textContent = UTIL.currencyFormatterToBRL(product.price);
 
     let color = document.getElementById('product-color');
     color.textContent = "Color: " + UTIL.capitalizeFirstLetter(product.color);
-    
+
     let description = document.getElementById('product-description');
     description.textContent = "Description: " + product.description;
 
     let size = document.getElementById('product-size');
     size.textContent = "Size: " + UTIL.capitalizeFirstLetter(product.size);
 
+    const quantityInput = document.getElementById('product-quantity');
     const button = document.getElementById('add-cart-button');
+
     button.addEventListener('click', (e) => {
         e.preventDefault();
-        const productObj =  {
-            id : product.id
-        }
 
-        localStorage.setItem("cart", JSON.stringify(productObj));
+        const quantity = parseInt(quantityInput.value);
+
+        const productObj = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: quantity,
+            imageUrl: imageUrl
+        }
+        const result = CART.addToCart(productObj);
+        UTIL.actionButton(result);
+    });
+}
+
+export function loadCart() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-cart');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container cart";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    CART.renderCart();
+
+    const itensContainer = document.getElementById('cart-items');
+    if (itensContainer) {
+        itensContainer.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const productId = parseInt(e.target.dataset.id);
+
+            if (e.target.classList.contains('increase-qnt')) {
+                const cart = CART.getCartItems();
+                const item = cart.find(item => item.id === productId);
+                CART.updateQuantity(productId, item.quantity + 1);
+                CART.renderCart();
+            } else if (e.target.classList.contains('decrease-qnt')) {
+                const cart = CART.getCartItems();
+                const item = cart.find(item => item.id === productId);
+                CART.updateQuantity(productId, item.quantity - 1);
+                CART.renderCart();
+            } else if (e.target.classList.contains('remove-item')) {
+                CART.removeFromCart(productId);
+                CART.renderCart();
+            }
+        });
+    }
+
+    const clearCartButton = document.getElementById('clear-cart-button');
+    clearCartButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        CART.clearCart();
+        CART.renderCart();
     });
 }
 
