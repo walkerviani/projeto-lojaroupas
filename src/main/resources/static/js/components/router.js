@@ -16,6 +16,7 @@ const routes = {
     '/admin/users/delete' : UI.deleteUser,
     '/product' : UI.showProductDetail,
     '/cart' : UI.loadCart,
+    '/checkout' : UI.loadCheckout,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
     '/admin': UI.loadAdminPage,
