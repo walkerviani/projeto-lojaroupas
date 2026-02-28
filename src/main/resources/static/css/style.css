@@ -51,7 +51,9 @@ option {
     font-family: "Arial";
 }
 
-.inputfile {
+/* File input */
+
+.input-file {
     background-color: white;
     font-size: inherit;
     font-family: inherit;
@@ -62,14 +64,16 @@ option {
     cursor: pointer;
 }
 
-/*logo img */
+/* Logo image */
+
 .logo {
     max-width: 40px;
     height: auto;
     cursor: pointer;
 }
 
-/*categories menu */
+/* Categories navegation bar menu */
+
 #categories-menu {
     position: relative;
 }
@@ -117,7 +121,8 @@ option {
     cursor: pointer;
 }
 
-/* navegation bar links */
+/* Navegation bar links */
+
 .navegation ul {
     list-style: none;
     margin: 0;
@@ -134,7 +139,8 @@ option {
     color: antiquewhite;
 }
 
-/* search bar */
+/* Search bar */
+
 .searchbox {
     display: flex;
     align-items: center;
@@ -161,13 +167,17 @@ option {
     align-content: center;
 }
 
-/*automatically add new columns with min 200px and max 1fr */
+
+/* Main Container */
+
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatically add new columns with min 200px and max 1fr */
     gap: 20px;
     padding: 20px;
 }
+
+/* Cart container */
 
 .container.cart {
     display: flex;
@@ -194,24 +204,7 @@ option {
     border-radius: 3px;
 }
 
-.cart-list {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border: none;
-    margin: 10px;
-    gap: 5px;
-    padding: 5px;
-}
-
-.cart-list img {
-    max-width: 40px;
-    height: auto;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-.quantity-controls {
+.quantity-controls { /* '+' and '-' buttons */
     background-color: grey;
     color: white;
     border: none;
@@ -267,7 +260,7 @@ option {
     cursor: pointer;
 }
 
-.checkout-button {
+#checkout-button { /* Shopping cart checkout button redirect */
     background-color: #6495ed;
     border: none;
     border-radius: 3px;
@@ -275,10 +268,12 @@ option {
     padding: 5px;
 }
 
-.checkout-button:hover {
+#checkout-button:hover {
     background-color: rgb(40, 40, 212);
     cursor: pointer;
 }
+
+/* 404 page error container */
 
 .container.error-page {
     display: flex;
@@ -293,7 +288,7 @@ option {
     text-decoration: underline;
 }
 
-/* about page */
+/* About page container */
 .container.about {
     display: flex;
     font-size: 14px;
@@ -303,7 +298,8 @@ option {
     font-weight: 100;
 }
 
-/*selected product*/
+/* Selected product container */
+
 .container.detail-mode {
     grid-template-columns: repeat(2, 1fr);
     justify-items: center;
@@ -362,36 +358,39 @@ option {
     cursor: pointer;
 }
 
-.detail-mode button.success {
+.detail-mode button.success { /* If adding product to cart succeed */
     background-color: rgb(30, 204, 30) !important;
 }
 
-.detail-mode button.failed {
+.detail-mode button.failed { /* If adding product to cart failed */
     background-color: rgb(211, 32, 32) !important;
 }
 
-.detail-mode button:disabled {
+.detail-mode button:disabled { /* Disable the button when the result is showing */
     cursor: not-allowed;
 }
 
-/*product card */
-.card {
+/* Small product card information */
+
+.product-info {
     background: white;
     padding: 16px;
     border: 1px solid grey;
     border-radius: 3px;
 }
 
-.card-image img {
+.product-info img {
     width: 100%;
     height: 200px;
     object-fit: cover;
 }
 
-.card:hover {
+.product-info:hover {
     color: #6495ed;
     cursor: pointer;
 }
+
+/* Form container */
 
 .container.form {
     display: flex;
@@ -428,7 +427,7 @@ option {
     margin: 20px auto 0 auto;
 }
 
-.formbutton {
+.form-button {
     background-color: #6495ed;
     color: white;
     width: 260px;
@@ -439,12 +438,12 @@ option {
     margin-bottom: 0;
 }
 
-.formbutton:hover {
+.form-button:hover {
     background-color: rgb(40, 40, 212);
     cursor: pointer;
 }
 
-.formTitle {
+.form-title {
     font-size: 35px;
     font-weight: bold;
     text-align: center;
@@ -452,8 +451,9 @@ option {
     margin-bottom: 30px;
 }
 
-/* create account button */
-.greenButton {
+/* Wide green button */
+
+.green-button {
     background-color: rgb(30, 204, 30);
     color: white;
     width: 260px;
@@ -463,10 +463,12 @@ option {
     margin-top: 18px;
 }
 
-.greenButton:hover {
+.green-button:hover {
     background-color: rgb(12, 157, 12);
     cursor: pointer;
 }
+
+/* Wide red button */
 
 .red-button {
     background-color: rgb(255, 62, 4);
@@ -483,21 +485,21 @@ option {
     cursor: pointer;
 }
 
-.adminButton {
+/* Admin page button */
+
+.admin-button {
     background-color: white;
     width: 300px;
     height: 80px;
     border-radius: 3px;
 }
 
-.adminButton:hover {
+.admin-button:hover {
     background-color: rgb(211, 211, 211);
     cursor: pointer;
 }
 
-.alertButton {
-    color: red;
-}
+/* Table container */
 
 .container.table {
     display: flex;
@@ -541,6 +543,7 @@ td {
    nth = number of th, 
    child = child elements} = every odd number of child elements
   */
+
 .container.table tbody tr:nth-child(odd) {
     background-color: #eeeeee;
 }
@@ -563,6 +566,8 @@ td {
     cursor: pointer;
 }
 
+/* Delete button */
+
 .delete-option-button {
     background-color: red;
     color: white;
@@ -576,6 +581,8 @@ td {
     background-color: rgb(155, 24, 24);
     cursor: pointer;
 }
+
+/* Checkout container */
 
 .container.checkout {
     display: flex;
@@ -595,6 +602,23 @@ td {
     border: 1px grey solid;
     border-radius: 3px;
     padding: 10px;
+}
+
+.checkout-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    margin: 10px;
+    gap: 5px;
+    padding: 5px;
+}
+
+.checkout-item img {
+    max-width: 40px;
+    height: auto;
+    cursor: pointer;
+    border-radius: 3px;
 }
 
 .checkout-divider {
