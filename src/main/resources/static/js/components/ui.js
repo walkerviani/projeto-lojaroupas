@@ -126,14 +126,17 @@ export function loadCart() {
                 const item = cart.find(item => item.id === productId);
                 CART.updateQuantity(productId, item.quantity + 1);
                 CART.renderCart();
+                UTIL.updateCheckoutButton();
             } else if (e.target.classList.contains('decrease-qnt')) {
                 const cart = CART.getCartItems();
                 const item = cart.find(item => item.id === productId);
                 CART.updateQuantity(productId, item.quantity - 1);
                 CART.renderCart();
+                UTIL.updateCheckoutButton();
             } else if (e.target.classList.contains('remove-item')) {
                 CART.removeFromCart(productId);
                 CART.renderCart();
+                UTIL.updateCheckoutButton();
             }
         });
     }
@@ -143,6 +146,7 @@ export function loadCart() {
         e.preventDefault();
         CART.clearCart();
         CART.renderCart();
+        UTIL.updateCheckoutButton();
     });
 }
 
