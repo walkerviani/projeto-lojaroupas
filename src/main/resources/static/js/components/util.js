@@ -207,3 +207,14 @@ export function actionButton(result) {
         button.innerText = buttonText;
     }, 3000);
 }
+
+export function updateCheckoutButton() {
+    const checkoutButton = document.getElementById('checkout-button');
+    const cart = localStorage.getItem('cart');
+
+    if(!cart || JSON.parse(cart).length === 0) {
+        checkoutButton.style.display = "none";
+    } else {
+        checkoutButton.style.display = "flex";
+    }
+}
