@@ -16,13 +16,12 @@ export function showProducts(products) {
             ? `${UTIL.BASE_URL}/image/${product.imageData.name}`
             : 'https://placehold.co/400x400?text=No+Image';
 
-
         const card = document.createElement('div');
-        card.classList.add('card');
+        card.classList.add('product-info');
         card.innerHTML = `
-        <div class="card-image" id="card">
-            <img src="${imageUrl}">
-            </div >
+            <div id="card">
+                <img src="${imageUrl}">
+            </div>
             <div>
                 <h3>${product.name}</h3>
                 <p>${UTIL.currencyFormatterToBRL(product.price)}</p>
