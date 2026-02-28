@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.walkerviani.projetolojaroupas.entities.User;
@@ -21,6 +22,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -30,15 +34,20 @@ public class UserService {
         return obj.orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public User findByCpf(String cpf){
+    public Optional<User> findByName(String name) {
+        return userRepository.findByName(name);
+    }
+
+    public Optional<User> findByCpf(String cpf){
         return userRepository.findByCpf(cpf);
     }
 
     public User insert(User obj) {
+        obj.setPassword(passwordEncoder.encode(obj.getPassword()));
         return userRepository.save(obj);
     }
 
@@ -72,7 +81,7 @@ public class UserService {
 
     public User updatePassword(Long id, String newPassword) {
         User entity = userRepository.getReferenceById(id);
-        entity.setPassword(newPassword);
+        entity.setPassword(passwordEncoder.encode(newPassword));
         return userRepository.save(entity);
     }
 }
