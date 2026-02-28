@@ -112,7 +112,7 @@ export function renderProductsList() {
         cartTotal += itemTotal;
 
         const itemElement = document.createElement('div');
-        itemElement.classList.add('cart-list');
+        itemElement.classList.add('checkout-item');
         itemElement.innerHTML = `
         <img src="${item.imageUrl}"}>
         <div class="cart-content">
