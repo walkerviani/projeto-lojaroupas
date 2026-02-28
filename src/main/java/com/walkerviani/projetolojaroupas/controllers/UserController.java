@@ -2,6 +2,7 @@ package com.walkerviani.projetolojaroupas.controllers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,14 +42,20 @@ public class UserController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<User> findByEmail(@RequestParam String email) {
-        User obj = userService.findByEmail(email);
+    public ResponseEntity<Optional<User>> findByEmail(@RequestParam String email) {
+        Optional<User> obj = userService.findByEmail(email);
+        return ResponseEntity.ok().body(obj);
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<Optional<User>> findByName(@RequestParam String name) {
+        Optional<User> obj = userService.findByName(name);
         return ResponseEntity.ok().body(obj);
     }
 
     @GetMapping("/cpf")
-    public ResponseEntity<User> findByCpf(@RequestParam String cpf){
-        User obj = userService.findByCpf(cpf);
+    public ResponseEntity<Optional<User>> findByCpf(@RequestParam String cpf){
+        Optional<User> obj = userService.findByCpf(cpf);
         return ResponseEntity.ok().body(obj);
     }
 
