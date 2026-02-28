@@ -148,6 +148,24 @@ export function loadCart() {
         CART.renderCart();
         UTIL.updateCheckoutButton();
     });
+
+    const checkoutButton = document.getElementById('checkout-button');
+    checkoutButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateTo('/checkout');
+    });
+}
+
+export function loadCheckout() {
+    const container = document.getElementById('container');
+    const template = document.getElementById('template-checkout');
+    const clone = template.content.cloneNode(true);
+
+    container.className = "container checkout";
+    container.innerHTML = "";
+    container.appendChild(clone);
+
+    CART.renderProductsList();
 }
 
 export function loadAboutPage() {
