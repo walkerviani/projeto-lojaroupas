@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.walkerviani.projetolojaroupas.entities.Category;
 import com.walkerviani.projetolojaroupas.entities.Clothes;
@@ -46,6 +47,9 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
@@ -87,8 +91,8 @@ public class TestConfig implements CommandLineRunner {
                 img3, Size.LARGE, cat3, Color.BLUE);
         clothesRepository.saveAll(Arrays.asList(clothes1, clothes2, clothes3));
 
-        User u1 = new User("Carl", "carl@gmail.com", "18273849374", "53857495334", "10244333522", Role.USER);
-        User u2 = new User("Mariah", "mariah@gmail.com", "38492837434", "r2jdfsi3", "19454235413", Role.ADMIN);
+        User u1 = new User("Carl", "carl@gmail.com", "18273849374", passwordEncoder.encode(("53857495334")), "10244333522", Role.USER);
+        User u2 = new User("Mariah", "mariah@gmail.com", "38492837434", passwordEncoder.encode(("r2jdfsi3")), "19454235413", Role.ADMIN);
         userRepository.saveAll(Arrays.asList(u1, u2));
 
         Order ord1 = new Order(Instant.now(), OrderStatus.PAID, u1);
