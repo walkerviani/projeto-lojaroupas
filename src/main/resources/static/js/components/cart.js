@@ -95,3 +95,38 @@ export function renderCart() {
 
     cartTotalElement.textContent = `Total: ${currencyFormatterToBRL(cartTotal)}`;
 }
+
+export function renderProductsList() {
+    const cart = getCartItems();
+
+    const checkoutitemsElement = document.getElementById('checkout-items');
+    const checkoutTotalElement = document.getElementById('checkout-total');
+
+    checkoutitemsElement.innerHTML = '';
+    checkoutitemsElement.textContent = "Items";
+
+    let cartTotal = 0;
+
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        cartTotal += itemTotal;
+
+        const itemElement = document.createElement('div');
+        itemElement.classList.add('cart-list');
+        itemElement.innerHTML = `
+        <img src="${item.imageUrl}"}>
+        <div class="cart-content">
+          <p>${item.name} - ${currencyFormatterToBRL(item.price)}</p>
+        <p>Item total: ${currencyFormatterToBRL(itemTotal)}</p>
+        </div>
+        `;
+
+        checkoutitemsElement.appendChild(itemElement);
+    });
+    
+    const divider = document.createElement('div');
+    divider.classList.add('checkout-divider');
+    checkoutitemsElement.appendChild(divider);
+
+    checkoutTotalElement.textContent = `Total: ${currencyFormatterToBRL(cartTotal)}`;
+}
