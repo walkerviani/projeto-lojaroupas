@@ -1,6 +1,7 @@
-import { navigateTo } from "../modules/router.js";
-import { BASE_URL, fetchData, updateProductForm, updateUserForm } from "../utils/util.js";
-import {authenticateUser} from "../services/auth.js";
+import { navigateTo } from "./router.js";
+import { BASE_URL, updateProductForm, updateUserForm, updateAlert } from "../utils/util.js";
+import { authenticateUser, checkAuth } from "../services/auth.js";
+import * as API from "../services/api.js";
 
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');
@@ -62,8 +63,7 @@ export function validateCreateAccount() {
         }
 
         if (error !== "") {
-            alert.textContent = error;
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+            updateAlert(alert, error, "red");
         } else {
             const userData = {
                 name: name.value,
@@ -73,54 +73,23 @@ export function validateCreateAccount() {
                 password: password.value,
                 role: "USER"
             }
-            await sendAccountData(userData, alert, form);
+            await API.sendAccountData(userData, alert, form);
         }
     });
 }
 
-async function sendAccountData(userData, alert, form) {
-    try {
-        alert.style.color = "blue";
-        alert.textContent = "Creating account...";
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-
-        const response = await fetch(`${BASE_URL}/users`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(userData)
-        });
-
-        if (response.ok) {
-            alert.style.color = "green";
-            alert.textContent = "Account created successfully!";
-            form.reset();
-            setTimeout(() => navigateTo('/login'), 2000);
-        } else {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || "Error creating user. Check if your data already exists");
-        }
-    } catch (e) {
-        console.error("Error: ", e);
-        alert.style.color = "red";
-        alert.textContent = e.message;
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-}
-
-export async function validateProduct(formInput, alertInput, productId = null) {
-    const { name, price, description, size, color, category, image } = formInput.elements;
+export async function validateProduct(form, alert, productId = null) {
+    const { name, price, description, size, color, category, image } = form.elements;
 
     const isUpdateMode = productId ? true : false;
 
     if (isUpdateMode) {
         const imagePreview = document.getElementById('image-preview');
-        const product = await fetchData(`${BASE_URL}/clothes/${productId}`)
-        updateProductForm(formInput, product, imagePreview);
+        const product = await API.fetchData(`${BASE_URL}/clothes/${productId}`)
+        updateProductForm(form, product, imagePreview);
     }
 
-    formInput.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
@@ -128,7 +97,7 @@ export async function validateProduct(formInput, alertInput, productId = null) {
         const file = image.files[0];
 
         // Reset the label and error
-        alertInput.textContent = "";
+        alert.textContent = "";
         let error = "";
 
         if (name.value === "") {
@@ -166,8 +135,7 @@ export async function validateProduct(formInput, alertInput, productId = null) {
         }
 
         if (error !== "") {
-            alertInput.textContent = error;
-            alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
+            updateAlert(alert, error, "red");
         } else {
             const productData = {
                 name: name.value,
@@ -179,60 +147,9 @@ export async function validateProduct(formInput, alertInput, productId = null) {
                     id: category.value
                 }
             };
-            await sendProductData(isUpdateMode, productData, file, alertInput, formInput, productId);
+            await API.sendProductData(isUpdateMode, productData, file, alert, form, productId);
         }
     });
-}
-
-async function sendProductData(isUpdateMode, product, file, alert, form, productId) {
-    try {
-        //image upload
-        if (file) {
-            const imageFormData = new FormData();
-            imageFormData.append('image', file);
-
-            const imageResponse = await fetch(`${BASE_URL}/image`, {
-                method: 'POST',
-                body: imageFormData
-            });
-            if (!imageResponse.ok) throw new Error("Failed to upload image");
-
-            const fileName = await imageResponse.text();
-
-            product.imageData = {
-                name: fileName.trim()
-            }
-        }
-        const method = isUpdateMode ? 'PUT' : 'POST';
-        const url = isUpdateMode ? `${BASE_URL}/clothes/${productId}` : `${BASE_URL}/clothes`;
-        const productResponse = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(product)
-        });
-
-        if (productResponse.ok) {
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
-            alert.style.color = "green";
-            alert.textContent = isUpdateMode ? "Product updated successfully!" : "Product created successfully!";
-            if (isUpdateMode) {
-                const imagePreview = document.getElementById('image-preview');
-                const productInput = await fetchData(`${BASE_URL}/clothes/${productId}`)
-                updateProductForm(form, productInput, imagePreview);
-            } else {
-                form.reset();
-            }
-
-        } else {
-            throw new Error(isUpdateMode ? "Failed to upload" : "Failed to create");
-        }
-    } catch (error) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        alert.style.color = "red";
-        alert.textContent = error.message;
-    }
 }
 
 export async function validateCategory(form, nameInput, alert, categoryId = null) {
@@ -253,58 +170,27 @@ export async function validateCategory(form, nameInput, alert, categoryId = null
         }
 
         if (error !== "") {
-            alert.style.color = "red";
-            alert.textContent = error;
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
+            updateAlert(alert, error, "red");
         } else {
             const obj = {
                 name: nameInput.value,
             };
-            await sendCategoryData(obj, alert, form, categoryId);
+            await API.sendCategoryData(obj, alert, form, categoryId);
         }
     });
 }
 
-export async function sendCategoryData(obj, alert, form, id) {
-    const isUpdateMode = id ? true : false;
-    const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/category/${id}` : `${BASE_URL}/category`;
-
-    try {
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(obj)
-        })
-
-        if (response.ok) {
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
-            alert.style.color = "green";
-            alert.textContent = isUpdateMode ? "Category updated successfully!" : "Category created successfully!";
-            form.reset();
-        } else {
-            throw new Error(isUpdateMode ? "Failed to update" : "Failed to create");
-        }
-    } catch (error) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        alert.style.color = "red";
-        alert.textContent = error.message;
-    }
-}
-
-export async function validateUser(formInput, alertInput, userId = null) {
-    const { name, cpf, email, phone, password, confPassword, role } = formInput.elements;
+export async function validateUser(form, alert, userId = null) {
+    const { name, cpf, email, phone, password, confPassword, role } = form.elements;
 
     const isUpdateMode = userId ? true : false;
 
     if (isUpdateMode) {
-        const user = await fetchData(`${BASE_URL}/users/${userId}`);
-        updateUserForm(formInput, user);
+        const user = await API.fetchData(`${BASE_URL}/users/${userId}`);
+        updateUserForm(form, user);
     }
 
-    formInput.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
@@ -313,7 +199,7 @@ export async function validateUser(formInput, alertInput, userId = null) {
         const phoneRegex = /^[0-9]+$/; //alow only numbers
 
         // Reset the label and error
-        alertInput.textContent = "";
+        alert.textContent = "";
         let error = "";
 
         if (name.value === "") {
@@ -366,8 +252,7 @@ export async function validateUser(formInput, alertInput, userId = null) {
         }
 
         if (error !== "") {
-            alertInput.textContent = error;
-            alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
+            updateAlert(alert, error, "red");
         } else {
             const obj = {
                 name: name.value,
@@ -376,69 +261,19 @@ export async function validateUser(formInput, alertInput, userId = null) {
                 phone: phone.value,
                 role: role.value
             };
-            await sendUserData(obj, password, alertInput, formInput, userId);
+            await API.sendUserData(obj, password, alert, form, userId);
         }
     });
 }
 
-export async function sendUserData(obj, password, alert, form, id) {
-    const isUpdateMode = id ? true : false;
-    const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/users/${id}` : `${BASE_URL}/users`;
+export async function validateLogin(form, alert) {
+    const { email, password } = form.elements;
 
-    try {
-        if (isUpdateMode && password.value !== "") {
-            const passwordResponse = await fetch(`${BASE_URL}/users/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(password.value)
-            });
-            if (!passwordResponse.ok) throw new Error("Failed to update password");
-        }
-
-        if (!isUpdateMode) {
-            obj.password = password.value;
-        }
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(obj)
-        })
-
-        if (response.ok) {
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
-            alert.style.color = "green";
-            alert.textContent = isUpdateMode ? "User updated successfully!" : "User created successfully!";
-
-            if (isUpdateMode) {
-                const user = await fetchData(`${BASE_URL}/users/${id}`);
-                updateUserForm(form, user);
-            } else {
-                form.reset();
-            }
-
-        } else {
-            throw new Error(isUpdateMode ? "Failed to update" : "Failed to create");
-        }
-    } catch (error) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        alert.style.color = "red";
-        alert.textContent = error.message;
-    }
-}
-
-export async function validateLogin(formInput, alertInput) {
-    const { email, password } = formInput.elements;
-
-    formInput.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         // Reset the label and error
-        alertInput.textContent = "";
+        alert.textContent = "";
         let error = "";
 
         if (email.value === "") {
@@ -449,8 +284,7 @@ export async function validateLogin(formInput, alertInput) {
         }
 
         if (error !== "") {
-            alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
-            alertInput.textContent = error;
+            updateAlert(alert, error, "red");
         } else {
             const obj = {
                 email: email.value,
@@ -459,22 +293,65 @@ export async function validateLogin(formInput, alertInput) {
             try {
                 const result = await authenticateUser(obj);
 
-                alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                alert.scrollIntoView({ behavior: "smooth", block: "center" });
                 const text = result.data.toString();
                 if (result.success) {
-                    alertInput.style.color = "green";
-                    alertInput.textContent = text;
+                    updateAlert(alert, text, "green");
                     setTimeout(() => {
                         navigateTo('/');
                     }, 3000);
                 } else {
-                    alertInput.style.color = "red";
-                    alertInput.textContent = text;
+                    updateAlert(alert, text, "red");
                 }
             } catch (error) {
-                alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
-                alertInput.textContent = error.message;
+                updateAlert(alert, error.message, "red");
             }
         }
     });
+}
+
+export async function validateOrder(alert) {
+    const user = await checkAuth();
+    if (!user) {
+        updateAlert(alert, "You're not logged in! Redirecting to login...", "red");
+        setTimeout(() => {
+            navigateTo('/login');
+        }, 3000);
+        return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        return updateAlert(alert, "Your cart is empty!", "red");
+    }
+
+    try {
+        const allItems = await Promise.all(
+            cart.map(async (item) => {
+                const productData = await API.fetchData(`${BASE_URL}/clothes/${item.id}`);
+                if (!productData) throw new Error(`Product ${item.id} not found`);
+                return { quantity: item.quantity, price: productData.price, clothes: { id: productData.id } }
+            })
+        );
+
+        const orderObj = {
+            orderStatus: "PAID",
+            client: { id: user.id },
+            items: allItems,
+            payment: {}
+        };
+        const success = await API.fetchOrder(orderObj);
+        if (success) {
+            updateAlert(alert, "Your order has been created successfully!", "green");
+            localStorage.removeItem('cart');
+            setTimeout(() => {
+                navigateTo('/');
+            }, 3000);
+
+        } else {
+            updateAlert(alert, "Failed to create your order!", "red");
+        }
+    } catch (error) {
+        updateAlert(alert, "An error ocurred while processing your items", "red");
+    }
 }
