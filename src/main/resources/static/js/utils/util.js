@@ -1,25 +1,12 @@
 import { navigateTo } from "../modules/router.js";
 import { checkAuth } from "../services/auth.js";
-import { fetchOrder } from "../services/api.js";
+import { fetchOrder, fetchData } from "../services/api.js";
 
 export const BASE_URL = "http://localhost:8080";
 
-export async function fetchData(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error: ", error);
-        return null;
-    }
-}
-
 export function capitalizeFirstLetter(text) {
-    const str = text.toLowerCase();
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    const string = text.toLowerCase();
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export function currencyFormatterToBRL(number) {
@@ -40,62 +27,6 @@ export function getCategoriesMenu(categories) {
     return categories;
 }
 
-export async function createOrder() {
-    const alert = document.getElementById('alert-checkout');
-    
-    const user = await checkAuth();
-    if (!user) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        alert.textContent = "You're not logged in! Redirecting to login...";
-        setTimeout(() => {
-            navigateTo('/login');
-        }, 3000);
-        return;
-    }
-
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    if (cart.length === 0) {
-        alert.textContent = "Your cart is empty!";
-        alert.style.color = "red";
-        return;
-    }
-
-    try {
-        const allItems = await Promise.all(
-            cart.map(async (item) => {
-                const productData = await fetchData(`${BASE_URL}/clothes/${item.id}`);
-                if (!productData) throw new Error(`Product ${item.id} not found`);
-                return { quantity: item.quantity, price: productData.price, clothes: { id: productData.id } }
-            })
-        );
-
-        const orderObj = {
-            orderStatus: "PAID",
-            client: { id: user.id },
-            items: allItems,
-            payment: {}
-        };
-
-        console.log(orderObj)
-        const success = await fetchOrder(orderObj);
-        if (success) {
-            alert.style.color = "green";
-            alert.textContent = " Your order has been created successfully!";
-            localStorage.removeItem('cart');
-            setTimeout(() => {
-                navigateTo('/');
-            }, 3000);
-            
-        } else {
-            alert.style.color = "red";
-            alert.textContent = "Failed to create your order!";
-        }
-    } catch (error) {
-        alert.style.color = "red";
-        alert.textContent = "An error ocurred while processing your items";
-    }
-}
-
 export async function createSelectCategories(selectName) {
     const categories = await fetchData(`${BASE_URL}/category`);
 
@@ -107,7 +38,6 @@ export async function createSelectCategories(selectName) {
         select.appendChild(option);
     };
 }
-
 
 export function showProductTable(products) {
     let table = `
@@ -191,30 +121,6 @@ export function showUserTable(users) {
     document.getElementById('user-table').innerHTML = table;
 }
 
-export async function deleteEntity(url, alert) {
-    try {
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-
-        if (response.ok) {
-            alert.scrollIntoView({ behavior: "smooth", block: "center" });
-            alert.style.color = "green";
-            alert.textContent = "Deleted successfully!";
-        } else {
-            const errorData = await response.json();
-            console.log(errorData);
-            throw new Error(errorData.error || "Failed to delete");
-        }
-    } catch (error) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        alert.style.color = "red";
-        alert.textContent = error.message;
-    }
-}
 
 export async function getParams(paramName, callback) {
     const params = new URLSearchParams(window.location.search);
@@ -278,4 +184,10 @@ export function updateCheckoutButton() {
     } else {
         checkoutButton.style.display = "flex";
     }
+}
+
+export function updateAlert(alertElement, message, color) {
+    alertElement.style.color = color;
+    alertElement.textContent = message;
+    alertElement.scrollIntoView({ behavior: "smooth", block: "center" });
 }
