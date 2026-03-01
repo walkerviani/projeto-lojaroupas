@@ -1,7 +1,8 @@
 import { navigateTo } from "../modules/router.js";
 import * as UTIL from "../utils/util.js";
-import * as FORMS from "../modules/form-validations.js";
+import * as VALIDATION from "../modules/validations.js";
 import * as CART from "../modules/cart.js";
+import * as API from "../services/api.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');
@@ -41,13 +42,13 @@ export async function loadIndex() {
     let products;
 
     if (name) {
-        products = await UTIL.getParams('name', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/name?name=${param}`));
+        products = await UTIL.getParams('name', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/name?name=${param}`));
     }
     else if (category) {
-        products = await UTIL.getParams('category', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/category?category=${param}`));
+        products = await UTIL.getParams('category', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/category?category=${param}`));
     }
     else {
-        products = await UTIL.fetchData(`${UTIL.BASE_URL}/clothes`);
+        products = await API.fetchData(`${UTIL.BASE_URL}/clothes`);
     }
     showProducts(products);
 }
@@ -61,7 +62,7 @@ export async function showProductDetail() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const product = await UTIL.getParams('id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
+    const product = await UTIL.getParams('id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     const imageUrl = product.imageData ? `${UTIL.BASE_URL}/image/${product.imageData.name}` : 'https://placehold.co/400x400?text=No+Image';
 
     let img = document.getElementById('product-img');
@@ -173,10 +174,11 @@ export function loadCheckout() {
         navigateTo('/cart');
     });
 
+    const alert = document.getElementById('alert-checkout');
     const confirmCheckoutButton = document.getElementById('confirm-checkout');
     confirmCheckoutButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        await UTIL.createOrder();
+        await VALIDATION.validateOrder(alert);
     });
 }
 
@@ -202,7 +204,7 @@ export function loadLoginPage() {
     const form = document.getElementById('form-login');
     const alert = document.getElementById('alert-login');
 
-    FORMS.validateLogin(form, alert);
+    VALIDATION.validateLogin(form, alert);
 }
 
 export function loadCreateAccount() {
@@ -214,7 +216,7 @@ export function loadCreateAccount() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    FORMS.validateCreateAccount();
+    VALIDATION.validateCreateAccount();
 }
 
 export function loadAdminPage() {
@@ -260,7 +262,7 @@ export async function loadProductsPage() {
         }
     });
 
-    UTIL.showProductTable(await UTIL.fetchData(`${UTIL.BASE_URL}/clothes`));
+    UTIL.showProductTable(await API.fetchData(`${UTIL.BASE_URL}/clothes`));
 }
 
 export async function createProduct() {
@@ -275,7 +277,7 @@ export async function createProduct() {
 
     const form = document.getElementById('form-create-product');
     const alert = document.getElementById('alert-create-product');
-    await FORMS.validateProduct(form, alert);
+    await VALIDATION.validateProduct(form, alert);
 }
 
 export async function updateProduct() {
@@ -287,12 +289,12 @@ export async function updateProduct() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const product = await UTIL.getParams('update-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
+    const product = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     await UTIL.createSelectCategories('category-select-update-product');
     const form = document.getElementById('form-update-product');
     const alert = document.getElementById('alert-update-product');
 
-    await FORMS.validateProduct(form, alert, product.id);
+    await VALIDATION.validateProduct(form, alert, product.id);
 }
 
 export async function deleteProduct() {
@@ -304,7 +306,7 @@ export async function deleteProduct() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const product = await UTIL.getParams('delete-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
+    const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     const currentName = document.getElementById('current-product-name');
     const currentTitle = document.getElementById('current-product-title');
     currentName.textContent = product.name;
@@ -314,7 +316,7 @@ export async function deleteProduct() {
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await UTIL.deleteEntity(`${UTIL.BASE_URL}/clothes/${product.id}`, alert);
+        await API.deleteData(`${UTIL.BASE_URL}/clothes/${product.id}`, alert);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
     });
@@ -345,7 +347,7 @@ export async function loadCategoriesPage() {
         }
     });
 
-    UTIL.showCategoryTable(await UTIL.fetchData(`${UTIL.BASE_URL}/category`));
+    UTIL.showCategoryTable(await API.fetchData(`${UTIL.BASE_URL}/category`));
 }
 
 export async function createCategory() {
@@ -361,7 +363,7 @@ export async function createCategory() {
     const alert = document.getElementById('alert-create-categ');
     const input = document.getElementById('name-create-category');
 
-    await FORMS.validateCategory(form, input, alert);
+    await VALIDATION.validateCategory(form, input, alert);
 }
 
 export async function updateCategory() {
@@ -373,7 +375,7 @@ export async function updateCategory() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const category = await UTIL.getParams('update-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/category/${param}`));
+    const category = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/category/${param}`));
 
     const currentName = document.getElementById('current-update-name');
     const currentTitle = document.getElementById('current-update-title');
@@ -384,7 +386,7 @@ export async function updateCategory() {
     const nameInput = document.getElementById('name-update-category');
     const id = category.id;
 
-    await FORMS.validateCategory(form, nameInput, alert, id);
+    await VALIDATION.validateCategory(form, nameInput, alert, id);
     document.addEventListener('submit', () => {
         currentName.style.visibility = "hidden";
         currentTitle.style.visibility = "hidden";
@@ -400,7 +402,7 @@ export async function deleteCategory() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const category = await UTIL.getParams('delete-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/category/${param}`));
+    const category = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/category/${param}`));
 
     const currentName = document.getElementById('current-category-name');
     const currentTitle = document.getElementById('current-category-title');
@@ -411,7 +413,7 @@ export async function deleteCategory() {
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await UTIL.deleteEntity(`${UTIL.BASE_URL}/category/${category.id}`, alert);
+        await API.deleteData(`${UTIL.BASE_URL}/category/${category.id}`, alert);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
     });
@@ -442,7 +444,7 @@ export async function loadUsersPage() {
         }
     });
 
-    UTIL.showUserTable(await UTIL.fetchData(`${UTIL.BASE_URL}/users`));
+    UTIL.showUserTable(await API.fetchData(`${UTIL.BASE_URL}/users`));
 }
 
 export async function createUser() {
@@ -456,7 +458,7 @@ export async function createUser() {
 
     const form = document.getElementById('form-create-user');
     const alert = document.getElementById('alert-create-user');
-    await FORMS.validateUser(form, alert);
+    await VALIDATION.validateUser(form, alert);
 }
 
 export async function updateUser() {
@@ -468,12 +470,12 @@ export async function updateUser() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const user = await UTIL.getParams('update-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/users/${param}`));
+    const user = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
     const form = document.getElementById('form-update-user');
     const alert = document.getElementById('alert-update-user');
     const id = user.id;
 
-    await FORMS.validateUser(form, alert, id);
+    await VALIDATION.validateUser(form, alert, id);
 }
 
 export async function deleteUser() {
@@ -485,7 +487,7 @@ export async function deleteUser() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    const user = await UTIL.getParams('delete-id', (param) => UTIL.fetchData(`${UTIL.BASE_URL}/users/${param}`));
+    const user = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
     const currentName = document.getElementById('current-user-name');
     const currentTitle = document.getElementById('current-user-title');
     currentName.textContent = user.name;
@@ -495,7 +497,7 @@ export async function deleteUser() {
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await UTIL.deleteEntity(`${UTIL.BASE_URL}/users/${user.id}`, alert);
+        await API.deleteData(`${UTIL.BASE_URL}/users/${user.id}`, alert);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
     });
