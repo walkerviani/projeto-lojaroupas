@@ -1,4 +1,4 @@
-import { currencyFormatterToBRL } from './util.js';
+import {currencyFormatterToBRL} from '../utils/util.js';
 
 export function getCartItems() {
     const cart = localStorage.getItem('cart');
