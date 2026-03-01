@@ -1,4 +1,4 @@
-import { BASE_URL } from "../components/util.js";
+import { BASE_URL } from "../utils/util.js";
 
 export async function fetchOrder(orderObj) {
     try {

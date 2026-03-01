@@ -1,5 +1,5 @@
-import { navigateTo } from "./router.js";
-import { BASE_URL, fetchData, updateProductForm, updateUserForm } from "./util.js";
+import { navigateTo } from "../modules/router.js";
+import { BASE_URL, fetchData, updateProductForm, updateUserForm } from "../utils/util.js";
 import {authenticateUser} from "../services/auth.js";
 
 export function validateCreateAccount() {

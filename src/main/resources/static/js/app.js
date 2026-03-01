@@ -1,5 +1,5 @@
-import { handleRoute, navigateTo } from './components/router.js';
-import { BASE_URL, fetchData, getCategoriesMenu } from './components/util.js';
+import { handleRoute, navigateTo } from './modules/router.js';
+import { BASE_URL, fetchData, getCategoriesMenu } from './utils/util.js';
 
 
 async function setupNavigation() {

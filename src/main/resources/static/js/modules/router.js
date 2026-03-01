@@ -1,22 +1,21 @@
-import * as UTIL from './util.js';
-import * as UI from './ui.js';
+import * as UI from '../components/ui.js';
 
 const routes = {
     '/admin/products': UI.loadProductsPage,
     '/admin/products/create': UI.createProduct,
-    '/admin/products/update' : UI.updateProduct,
-    '/admin/products/delete' : UI.deleteProduct,
+    '/admin/products/update': UI.updateProduct,
+    '/admin/products/delete': UI.deleteProduct,
     '/admin/categories': UI.loadCategoriesPage,
     '/admin/categories/create': UI.createCategory,
     '/admin/categories/update': UI.updateCategory,
-    '/admin/categories/delete' : UI.deleteCategory,
-    '/admin/users' : UI.loadUsersPage,
-    '/admin/users/create' : UI.createUser,
-    '/admin/users/update' : UI.updateUser,
-    '/admin/users/delete' : UI.deleteUser,
-    '/product' : UI.showProductDetail,
-    '/cart' : UI.loadCart,
-    '/checkout' : UI.loadCheckout,
+    '/admin/categories/delete': UI.deleteCategory,
+    '/admin/users': UI.loadUsersPage,
+    '/admin/users/create': UI.createUser,
+    '/admin/users/update': UI.updateUser,
+    '/admin/users/delete': UI.deleteUser,
+    '/product': UI.showProductDetail,
+    '/cart': UI.loadCart,
+    '/checkout': UI.loadCheckout,
     '/about': UI.loadAboutPage,
     '/signup': UI.loadCreateAccount,
     '/admin': UI.loadAdminPage,
@@ -33,13 +32,13 @@ export async function handleRoute() {
         container.className = 'container';
         container.innerHTML = "";
     }
-    
+
     const routeAction = routes[path];
     if (routeAction) {
         await routeAction();
         return;
     }
-    
+
     //If the route is not fixed and does not have valid parameters -> error 404
     UI.loadError404();
 }

@@ -1,7 +1,7 @@
-import { navigateTo } from "./router.js";
-import * as UTIL from "./util.js";
-import * as FORMS from "./form-validations.js";
-import * as CART from "./cart.js";
+import { navigateTo } from "../modules/router.js";
+import * as UTIL from "../utils/util.js";
+import * as FORMS from "../modules/form-validations.js";
+import * as CART from "../modules/cart.js";
 
 export function showProducts(products) {
     const container = document.getElementById('container');

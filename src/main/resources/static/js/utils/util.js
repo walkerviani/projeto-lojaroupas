@@ -1,4 +1,4 @@
-import { navigateTo } from "./router.js";
+import { navigateTo } from "../modules/router.js";
 import { checkAuth } from "../services/auth.js";
 import { fetchOrder } from "../services/api.js";
 
