@@ -7,6 +7,12 @@ async function setupNavigation() {
     // Category menu 
     const menu = document.getElementById('categories-menu');
     const dropdown = document.getElementById('categories-dropdown');
+    const categoryButton = document.getElementById('categories-button');
+
+    //prevent click on 'categories' menu text
+    categoryButton.addEventListener('click', (e) => {
+        e.preventDefault();
+    });
 
     menu.addEventListener('mouseenter', () => {
         dropdown.style.display = "block";
