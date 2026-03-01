@@ -1,17 +1,21 @@
 package com.walkerviani.projetolojaroupas.services;
 
-import com.walkerviani.projetolojaroupas.entities.Order;
-import com.walkerviani.projetolojaroupas.repositories.OrderRepository;
-import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
-import com.walkerviani.projetolojaroupas.services.exceptions.OrderNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.walkerviani.projetolojaroupas.entities.Order;
+import com.walkerviani.projetolojaroupas.entities.OrderItem;
+import com.walkerviani.projetolojaroupas.repositories.OrderRepository;
+import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
+import com.walkerviani.projetolojaroupas.services.exceptions.OrderNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class OrderService {
@@ -29,6 +33,15 @@ public class OrderService {
     }
 
     public Order insert(Order obj) {
+        Instant moment = Instant.now();
+        obj.setMoment(moment);
+        if (obj.getPayment() != null) {
+            obj.getPayment().setOrder(obj);
+            obj.getPayment().setMoment(moment);
+        }
+        for(OrderItem item : obj.getItems()){
+            item.setOrder(obj);
+        }
         return orderRepository.save(obj);
     }
 
