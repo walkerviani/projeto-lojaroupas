@@ -112,6 +112,7 @@ export function loadCart() {
     container.appendChild(clone);
 
     CART.renderCart();
+    UTIL.updateCheckoutButton();
 
     const itensContainer = document.getElementById('cart-items');
     if (itensContainer) {
