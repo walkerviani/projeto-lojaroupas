@@ -79,13 +79,12 @@
     <div>
         <h1 class="form-title">Login</h1>
         <label id="alert-login" style="color:red"></label>
-
-        <form id="form-login">
-            <label for="email">E-mail</label>
-            <input type="email" id="email">
-            <label for="password">Password</label>
-            <input type="password" id="password" required>
-            <input type="submit" class="form-button" value="Login">
+        <form id="form-login" novalidate>
+            <label>E-mail</label>
+            <input type="email" id="email" name="email">
+            <label>Password</label>
+            <input type="password" id="password" name="password" required>
+            <input type="submit" class="form-button" id="login-button" value="login">
         </form>
 
         <input type="button" id="createButton" class="green-button" value="Create new Account">
@@ -459,6 +458,7 @@
 <template id="template-checkout">
     <div class="checkout-buttons">
         <div class="form-title">Getting your order</div>
+        <label id="alert-checkout" style="color: red"></label>
             <button id="confirm-checkout" class="green-button">Confirm Payment</button>
             <button id="cancel-checkout" class="red-button">Cancel checkout</button>
     </div>
