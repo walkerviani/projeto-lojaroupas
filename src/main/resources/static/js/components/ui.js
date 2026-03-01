@@ -165,6 +165,18 @@ export function loadCheckout() {
     container.appendChild(clone);
 
     CART.renderProductsList();
+
+    const cancelCheckoutButton = document.getElementById('cancel-checkout');
+    cancelCheckoutButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateTo('/cart');
+    });
+
+    const confirmCheckoutButton = document.getElementById('confirm-checkout');
+    confirmCheckoutButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.createOrder();
+    });
 }
 
 export function loadAboutPage() {
@@ -186,9 +198,10 @@ export function loadLoginPage() {
     container.innerHTML = "";
     container.appendChild(clone);
 
-    document.getElementById('createButton').addEventListener('click', () => {
-        navigateTo('/signup');
-    });
+    const form = document.getElementById('form-login');
+    const alert = document.getElementById('alert-login');
+
+    FORMS.validateLogin(form, alert);
 }
 
 export function loadCreateAccount() {
