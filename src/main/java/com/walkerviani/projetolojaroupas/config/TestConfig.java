@@ -91,8 +91,8 @@ public class TestConfig implements CommandLineRunner {
                 img3, Size.LARGE, cat3, Color.BLUE);
         clothesRepository.saveAll(Arrays.asList(clothes1, clothes2, clothes3));
 
-        User u1 = new User("Carl", "carl@gmail.com", "18273849374", passwordEncoder.encode(("53857495334")), "10244333522", Role.USER);
-        User u2 = new User("Mariah", "mariah@gmail.com", "38492837434", passwordEncoder.encode(("r2jdfsi3")), "19454235413", Role.ADMIN);
+        User u1 = new User("Admin", "admin@gmail.com", "18273849374", passwordEncoder.encode(("12345678")), "10244333522", Role.ADMIN);
+        User u2 = new User("Mariah", "mariah@gmail.com", "38492837434", passwordEncoder.encode(("r2jdfsi3")), "19454235413", Role.USER);
         userRepository.saveAll(Arrays.asList(u1, u2));
 
         Order ord1 = new Order(Instant.now(), OrderStatus.PAID, u1);
