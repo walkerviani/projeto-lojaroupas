@@ -151,8 +151,7 @@ export function updateUserForm(form, user) {
     role.value = user.role;
 }
 
-//used to show to the user if the add to cart function had success or failed
-export function actionButton(result) {
+export function showAddToCartResult(result) {
     const button = document.querySelector('.detail-mode button');
     if (!button) return;
     const buttonText = button.innerText;

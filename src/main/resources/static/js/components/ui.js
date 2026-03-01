@@ -93,7 +93,7 @@ export async function showProductDetail() {
             imageUrl: imageUrl
         }
         const result = CART.addToCart(productObj);
-        UTIL.actionButton(result);
+        UTIL.showAddToCartResult(result);
     });
 }
 
