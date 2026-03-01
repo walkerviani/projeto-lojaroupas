@@ -2,22 +2,22 @@ import * as UI from '../components/ui.js';
 
 const routes = {
     '/admin/products': UI.loadProductsPage,
-    '/admin/products/create': UI.createProduct,
-    '/admin/products/update': UI.updateProduct,
-    '/admin/products/delete': UI.deleteProduct,
+    '/admin/products/create': UI.createProductPage,
+    '/admin/products/update': UI.updateProductPage,
+    '/admin/products/delete': UI.deleteProductPage,
     '/admin/categories': UI.loadCategoriesPage,
-    '/admin/categories/create': UI.createCategory,
-    '/admin/categories/update': UI.updateCategory,
-    '/admin/categories/delete': UI.deleteCategory,
-    '/admin/users': UI.loadUsersPage,
-    '/admin/users/create': UI.createUser,
-    '/admin/users/update': UI.updateUser,
-    '/admin/users/delete': UI.deleteUser,
+    '/admin/categories/create': UI.createCategoryPage,
+    '/admin/categories/update': UI.updateCategoryPage,
+    '/admin/categories/delete': UI.deleteCategoryPage,
+    '/admin/users': UI.loadUserPage,
+    '/admin/users/create': UI.createUserPage,
+    '/admin/users/update': UI.updateUserPage,
+    '/admin/users/delete': UI.deleteUserPage,
     '/product': UI.showProductDetail,
-    '/cart': UI.loadCart,
+    '/cart': UI.loadCartPage,
     '/checkout': UI.loadCheckout,
     '/about': UI.loadAboutPage,
-    '/signup': UI.loadCreateAccount,
+    '/signup': UI.loadCreateAccountPage,
     '/admin': UI.loadAdminPage,
     '/login': UI.loadLoginPage,
     '/': UI.loadIndex,
@@ -40,7 +40,7 @@ export async function handleRoute() {
     }
 
     //If the route is not fixed and does not have valid parameters -> error 404
-    UI.loadError404();
+    UI.loadError404Page();
 }
 
 export function navigateTo(url) {
