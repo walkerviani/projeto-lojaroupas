@@ -4,7 +4,7 @@ import * as VALIDATION from "../modules/validations.js";
 import * as CART from "../modules/cart.js";
 import * as API from "../services/api.js";
 
-export function showProducts(products) {
+export function showProductsCard(products) {
     const container = document.getElementById('container');
     container.innerHTML = "";
 
@@ -50,17 +50,11 @@ export async function loadIndex() {
     else {
         products = await API.fetchData(`${UTIL.BASE_URL}/clothes`);
     }
-    showProducts(products);
+    showProductsCard(products);
 }
 
 export async function showProductDetail() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-detail');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container detail-mode";
-    container.innerHTML = "";
-    container.appendChild(clone);
+    loadContainer('template-detail', 'container detail-mode');
 
     const product = await UTIL.getParams('id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     const imageUrl = product.imageData ? `${UTIL.BASE_URL}/image/${product.imageData.name}` : 'https://placehold.co/400x400?text=No+Image';
@@ -103,14 +97,8 @@ export async function showProductDetail() {
     });
 }
 
-export function loadCart() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-cart');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container cart";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export function loadCartPage() {
+    loadContainer('template-cart', 'container cart');
 
     CART.renderCart();
     UTIL.updateCheckoutButton();
@@ -158,13 +146,7 @@ export function loadCart() {
 }
 
 export function loadCheckout() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-checkout');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container checkout";
-    container.innerHTML = "";
-    container.appendChild(clone);
+    loadContainer('template-checkout', 'container checkout');
 
     CART.renderProductsList();
 
@@ -183,23 +165,11 @@ export function loadCheckout() {
 }
 
 export function loadAboutPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-about-page');
-    const clone = template.content.cloneNode(true);
-
-    container.className = 'container about';
-    container.innerHTML = "";
-    container.appendChild(clone);
+    loadContainer('template-about-page', 'container about');
 }
 
 export function loadLoginPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-login');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+    loadContainer('template-login', 'container form');
 
     const form = document.getElementById('form-login');
     const alert = document.getElementById('alert-login');
@@ -207,26 +177,13 @@ export function loadLoginPage() {
     VALIDATION.validateLogin(form, alert);
 }
 
-export function loadCreateAccount() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-create-account');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
-
+export function loadCreateAccountPage() {
+    loadContainer('template-create-account', 'container form');
     VALIDATION.validateCreateAccount();
 }
 
 export function loadAdminPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-admin');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+    loadContainer('template-admin', 'container form');
 
     const categories = ['products', 'categories', 'orders', 'users'];
     categories.forEach(category => {
@@ -239,18 +196,10 @@ export function loadAdminPage() {
 
 // Products functions
 export async function loadProductsPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-product-menu');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container table";
-    container.innerHTML = "";
-    container.appendChild(clone);
-
+    loadContainer('template-product-menu', 'container table');
     const table = document.getElementById('product-table');
     table.addEventListener('click', function (e) {
         e.preventDefault();
-
         const click = e.target;
         if (click.classList.contains('update-button')) {
             const id = click.dataset.id;
@@ -261,50 +210,29 @@ export async function loadProductsPage() {
             navigateTo(`/admin/products/delete?delete-id=${id}`);
         }
     });
-
     UTIL.showProductTable(await API.fetchData(`${UTIL.BASE_URL}/clothes`));
 }
 
-export async function createProduct() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-create-product');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function createProductPage() {
+    loadContainer('template-create-product', 'container form');
     await UTIL.createSelectCategories('category-select-create-product');
-
     const form = document.getElementById('form-create-product');
     const alert = document.getElementById('alert-create-product');
     await VALIDATION.validateProduct(form, alert);
 }
 
-export async function updateProduct() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-update-product');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function updateProductPage() {
+    loadContainer('template-update-product', 'container form');
 
     const product = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     await UTIL.createSelectCategories('category-select-update-product');
     const form = document.getElementById('form-update-product');
     const alert = document.getElementById('alert-update-product');
-
     await VALIDATION.validateProduct(form, alert, product.id);
 }
 
-export async function deleteProduct() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-delete-product');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function deleteProductPage() {
+    loadContainer('template-delete-product', 'container form');
 
     const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     const currentName = document.getElementById('current-product-name');
@@ -324,13 +252,7 @@ export async function deleteProduct() {
 
 // Categories functions
 export async function loadCategoriesPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-category-menu');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container table";
-    container.innerHTML = "";
-    container.appendChild(clone);
+    loadContainer('template-category-menu', 'container table');
 
     const table = document.getElementById('category-table');
     table.addEventListener('click', function (e) {
@@ -350,14 +272,8 @@ export async function loadCategoriesPage() {
     UTIL.showCategoryTable(await API.fetchData(`${UTIL.BASE_URL}/category`));
 }
 
-export async function createCategory() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-create-category');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function createCategoryPage() {
+    loadContainer('template-create-category', 'container form');
 
     const form = document.getElementById('form-create-category');
     const alert = document.getElementById('alert-create-categ');
@@ -366,14 +282,8 @@ export async function createCategory() {
     await VALIDATION.validateCategory(form, input, alert);
 }
 
-export async function updateCategory() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-update-category');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function updateCategoryPage() {
+    loadContainer('template-update-category', 'container form');
 
     const category = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/category/${param}`));
 
@@ -393,14 +303,8 @@ export async function updateCategory() {
     });
 }
 
-export async function deleteCategory() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-delete-category');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function deleteCategoryPage() {
+    loadContainer('template-delete-category', 'container form');
 
     const category = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/category/${param}`));
 
@@ -420,14 +324,8 @@ export async function deleteCategory() {
 }
 
 //Users functions
-export async function loadUsersPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-users-menu');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container table";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function loadUserPage() {
+    loadContainer('template-users-menu', 'container table');
 
     const table = document.getElementById('user-table');
     table.addEventListener('click', function (e) {
@@ -447,7 +345,7 @@ export async function loadUsersPage() {
     UTIL.showUserTable(await API.fetchData(`${UTIL.BASE_URL}/users`));
 }
 
-export async function createUser() {
+export async function createUserPage() {
     const container = document.getElementById('container');
     const template = document.getElementById('template-create-user');
     const clone = template.content.cloneNode(true);
@@ -461,14 +359,8 @@ export async function createUser() {
     await VALIDATION.validateUser(form, alert);
 }
 
-export async function updateUser() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-update-user');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function updateUserPage() {
+    loadContainer('template-update-user', 'container form');
 
     const user = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
     const form = document.getElementById('form-update-user');
@@ -478,14 +370,8 @@ export async function updateUser() {
     await VALIDATION.validateUser(form, alert, id);
 }
 
-export async function deleteUser() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-delete-user');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+export async function deleteUserPage() {
+    loadContainer('template-delete-user', 'container form');
 
     const user = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
     const currentName = document.getElementById('current-user-name');
@@ -503,12 +389,16 @@ export async function deleteUser() {
     });
 }
 
-export function loadError404() {
+export function loadError404Page() {
+    loadContainer('template-error', 'container error-page');
+}
+
+function loadContainer(templateInput, classNameInput) {
     const container = document.getElementById('container');
-    const template = document.getElementById('template-error');
+    const template = document.getElementById(templateInput);
     const clone = template.content.cloneNode(true);
 
-    container.className = 'container error-page';
+    container.className = `${classNameInput}`;
     container.innerHTML = "";
     container.appendChild(clone);
 }
