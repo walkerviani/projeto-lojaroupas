@@ -1,5 +1,6 @@
 import { navigateTo } from "./router.js";
 import { BASE_URL, fetchData, updateProductForm, updateUserForm } from "./util.js";
+import {authenticateUser} from "../services/auth.js";
 
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');
@@ -19,43 +20,43 @@ export function validateCreateAccount() {
 
         if (name.value === "") {
             error = "Name is required!";
-        } 
+        }
         else if (name.value.length < 3) {
             error = "Name is too short!";
-        } 
+        }
         else if (!nameRegex.test(name.value)) {
             error = "Name must not have numbers";
-        } 
-        else if (cpf.value === "") { 
+        }
+        else if (cpf.value === "") {
             error = "CPF is required!";
-        } 
+        }
         else if (cpf.value.length < 11) {
             error = "CPF must have 11 digits";
-        } 
+        }
         else if (!cpfRegex.test(cpf.value)) {
             error = "CPF cannot have letters!";
         }
         else if (email.value === "") {
             error = "Email is required!";
-        } 
+        }
         else if (!emailRegex.test(email.value)) {
             error = "Please enter a valid email!";
-        } 
-        else if (phone.value === "") { 
+        }
+        else if (phone.value === "") {
             error = "Phone is required!";
-        } 
+        }
         else if (!phoneRegex.test(phone.value)) {
             error = "Please enter a valid phone with DDD (11 digits)!";
-        } 
-        else if (password.value === "") { 
+        }
+        else if (password.value === "") {
             error = "Password is required!";
-        } 
+        }
         else if (password.value.length < 8) {
             error = "Password minimum size is 8";
-        } 
-        else if (confPassword.value === "") { 
+        }
+        else if (confPassword.value === "") {
             error = "Confirmation password is required!";
-        } 
+        }
         else if (confPassword.value !== password.value) {
             error = "Passwords don't match";
         }
@@ -412,7 +413,7 @@ export async function sendUserData(obj, password, alert, form, id) {
             alert.scrollIntoView({ behavior: "smooth", block: "center" });
             alert.style.color = "green";
             alert.textContent = isUpdateMode ? "User updated successfully!" : "User created successfully!";
-            
+
             if (isUpdateMode) {
                 const user = await fetchData(`${BASE_URL}/users/${id}`);
                 updateUserForm(form, user);
@@ -428,4 +429,52 @@ export async function sendUserData(obj, password, alert, form, id) {
         alert.style.color = "red";
         alert.textContent = error.message;
     }
+}
+
+export async function validateLogin(formInput, alertInput) {
+    const { email, password } = formInput.elements;
+
+    formInput.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Reset the label and error
+        alertInput.textContent = "";
+        let error = "";
+
+        if (email.value === "") {
+            error = "Email is required!";
+        }
+        else if (password.value === "") {
+            error = "Password is required";
+        }
+
+        if (error !== "") {
+            alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
+            alertInput.textContent = error;
+        } else {
+            const obj = {
+                email: email.value,
+                password: password.value
+            };
+            try {
+                const result = await authenticateUser(obj);
+
+                alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                const text = result.data.toString();
+                if (result.success) {
+                    alertInput.style.color = "green";
+                    alertInput.textContent = text;
+                    setTimeout(() => {
+                        navigateTo('/');
+                    }, 3000);
+                } else {
+                    alertInput.style.color = "red";
+                    alertInput.textContent = text;
+                }
+            } catch (error) {
+                alertInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                alertInput.textContent = error.message;
+            }
+        }
+    });
 }
