@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, updateProductForm, updateUserForm, updateAlert } from "../utils/util.js";
+import { BASE_URL, updateAlert } from "../utils/util.js";
 import { authenticateUser, checkAuth } from "../services/auth.js";
 import * as API from "../services/api.js";
 
@@ -152,6 +152,17 @@ export async function validateProduct(form, alert, productId = null) {
     });
 }
 
+export function updateProductForm(form, product, imagePreview) {
+    const { name, price, description, size, color, category } = form.elements;
+    name.value = product.name;
+    price.value = product.price;
+    description.value = product.description;
+    size.value = product.size;
+    color.value = product.color;
+    category.value = product.category.id;
+    imagePreview.src = `${BASE_URL}/image/${product.imageData.name}`;
+}
+
 export async function validateCategory(form, nameInput, alert, categoryId = null) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -264,6 +275,16 @@ export async function validateUser(form, alert, userId = null) {
             await API.sendUserData(obj, password, alert, form, userId);
         }
     });
+}
+
+export function updateUserForm(form, user) {
+    const { name, cpf, email, phone, password, role } = form.elements;
+    name.value = user.name;
+    cpf.value = user.cpf;
+    email.value = user.email;
+    phone.value = user.phone;
+    password.value = user.password;
+    role.value = user.role;
 }
 
 export async function validateLogin(form, alert) {

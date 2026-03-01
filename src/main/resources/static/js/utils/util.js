@@ -130,27 +130,6 @@ export async function getParams(paramName, callback) {
     return await callback(param);
 }
 
-export async function updateProductForm(formInput, product, imagePreview) {
-    const { name, price, description, size, color, category } = formInput.elements;
-    name.value = product.name;
-    price.value = product.price;
-    description.value = product.description;
-    size.value = product.size;
-    color.value = product.color;
-    category.value = product.category.id;
-    imagePreview.src = `${BASE_URL}/image/${product.imageData.name}`;
-}
-
-export function updateUserForm(form, user) {
-    const { name, cpf, email, phone, password, role } = form.elements;
-    name.value = user.name;
-    cpf.value = user.cpf;
-    email.value = user.email;
-    phone.value = user.phone;
-    password.value = user.password;
-    role.value = user.role;
-}
-
 export function showAddToCartResult(result) {
     const button = document.querySelector('.detail-mode button');
     if (!button) return;
