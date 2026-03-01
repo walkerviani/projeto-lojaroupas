@@ -1,3 +1,7 @@
+import { navigateTo } from "./router.js";
+import { checkAuth } from "../services/auth.js";
+import { fetchOrder } from "../services/api.js";
+
 export const BASE_URL = "http://localhost:8080";
 
 export async function fetchData(url) {
@@ -9,6 +13,7 @@ export async function fetchData(url) {
         return await response.json();
     } catch (error) {
         console.error("Error: ", error);
+        return null;
     }
 }
 
@@ -33,6 +38,62 @@ export function getCategoriesMenu(categories) {
     }
     document.getElementById('categories-dropdown').innerHTML = list;
     return categories;
+}
+
+export async function createOrder() {
+    const alert = document.getElementById('alert-checkout');
+    
+    const user = await checkAuth();
+    if (!user) {
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        alert.textContent = "You're not logged in! Redirecting to login...";
+        setTimeout(() => {
+            navigateTo('/login');
+        }, 3000);
+        return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        alert.textContent = "Your cart is empty!";
+        alert.style.color = "red";
+        return;
+    }
+
+    try {
+        const allItems = await Promise.all(
+            cart.map(async (item) => {
+                const productData = await fetchData(`${BASE_URL}/clothes/${item.id}`);
+                if (!productData) throw new Error(`Product ${item.id} not found`);
+                return { quantity: item.quantity, price: productData.price, clothes: { id: productData.id } }
+            })
+        );
+
+        const orderObj = {
+            orderStatus: "PAID",
+            client: { id: user.id },
+            items: allItems,
+            payment: {}
+        };
+
+        console.log(orderObj)
+        const success = await fetchOrder(orderObj);
+        if (success) {
+            alert.style.color = "green";
+            alert.textContent = " Your order has been created successfully!";
+            localStorage.removeItem('cart');
+            setTimeout(() => {
+                navigateTo('/');
+            }, 3000);
+            
+        } else {
+            alert.style.color = "red";
+            alert.textContent = "Failed to create your order!";
+        }
+    } catch (error) {
+        alert.style.color = "red";
+        alert.textContent = "An error ocurred while processing your items";
+    }
 }
 
 export async function createSelectCategories(selectName) {
@@ -212,7 +273,7 @@ export function updateCheckoutButton() {
     const checkoutButton = document.getElementById('checkout-button');
     const cart = localStorage.getItem('cart');
 
-    if(!cart || JSON.parse(cart).length === 0) {
+    if (!cart || JSON.parse(cart).length === 0) {
         checkoutButton.style.display = "none";
     } else {
         checkoutButton.style.display = "flex";
