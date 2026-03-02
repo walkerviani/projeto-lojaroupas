@@ -1,6 +1,7 @@
 import { handleRoute, navigateTo } from './modules/router.js';
 import { BASE_URL, getCategoriesMenu } from './utils/util.js';
 import { fetchData } from "./services/api.js";
+import { checkAuth } from "./services/auth.js";
 
 async function setupNavigation() {
 
@@ -44,12 +45,6 @@ async function setupNavigation() {
         navigateTo('/');
     });
 
-    //About page
-    document.getElementById('aboutButton').addEventListener('click', (e) => {
-        e.preventDefault();
-        navigateTo('/about');
-    });
-
     //Login page
     document.getElementById('loginButton').addEventListener('click', (e) => {
         e.preventDefault();
@@ -70,6 +65,17 @@ async function setupNavigation() {
     document.getElementById('shopping-cart').addEventListener('click', (e) => {
         e.preventDefault();
         navigateTo('/cart');
+    });
+
+    //Orders
+    document.getElementById('orders-button').addEventListener('click', (e) => {
+        e.preventDefault();
+        const result = checkAuth();
+        if(!result) {
+            navigateTo('/my-purchases');
+        } else {
+            navigateTo('/login');
+        }
     });
 }
 
