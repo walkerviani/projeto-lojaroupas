@@ -164,10 +164,6 @@ export function loadCheckout() {
     });
 }
 
-export function loadAboutPage() {
-    loadContainer('template-about-page', 'container about');
-}
-
 export function loadLoginPage() {
     loadContainer('template-login', 'container form');
 
