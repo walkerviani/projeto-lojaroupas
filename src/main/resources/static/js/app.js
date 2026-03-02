@@ -70,11 +70,11 @@ async function setupNavigation() {
     //Orders
     document.getElementById('orders-button').addEventListener('click', (e) => {
         e.preventDefault();
-        const result = checkAuth();
-        if(!result) {
-            navigateTo('/my-purchases');
-        } else {
+        const user = checkAuth();
+        if(!user) {
             navigateTo('/login');
+        } else {
+            navigateTo('/my-purchases');
         }
     });
 }
