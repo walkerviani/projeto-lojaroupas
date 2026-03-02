@@ -47,7 +47,6 @@ export async function checkAuth() {
             throw new Error("You need to be logged in");
         }
     } catch (error) {
-        console.error("Error: ", error);
         return null;
     }
 }
