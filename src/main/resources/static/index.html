@@ -12,27 +12,36 @@
 
 <body>
     <header>
-        <!-- Navegation Bar -->
-        <img class="logo" id="logo" src="/images/logo.png">
-
-        <nav class="navegation">
-            <ul style="position: relative">
-                <li id="categories-menu">
-                    <a id="categories-button" href="/">Categories</a>
-                    <ul id="categories-dropdown">
+        <div class="header-inner">
+            <div class="header-group-left">
+                <img class="logo" id="logo" src="/images/logo.png">
+                <nav class="navegation">
+                    <ul>
+                        <li id="categories-menu">
+                            <a id="categories-button" href="/">Categories</a>
+                            <ul id="categories-dropdown">
+                        </li>
                     </ul>
-                </li>
-                <li><a id="loginButton" href="/">Login</a></li>
-                
-            </ul>
-        </nav>
+                </nav>
+            </div>
+            <div class="header-group-right">
+                <nav class="navegation">
+                    <ul>
+                        <li><a id="loginButton" href="/">Login</a></li>
+                        <li><a id="orders-button" href="/">Orders</a></li>
+                    </ul>
+                </nav>
 
-        <img class="cart-icon" id="shopping-cart" src="/images/shopping_cart_icon.svg">
+                <img class="cart-icon" id="shopping-cart" src="/images/shopping_cart_icon.svg">
 
-        <form class="searchbox" action="#" method="get">
-            <input type="search" id="searchInput" placeholder="Search...">
-            <button id="searchButton" type="submit"><img class="search-icon" src="/images/search_icon.svg"></button>
-        </form>
+                <form class="searchbox" action="#" method="get">
+                    <input type="search" id="searchInput" placeholder="Search...">
+                    <button id="searchButton" type="submit">
+                        <img class="search-icon" src="/images/search_icon.svg">
+                    </button>
+                </form>
+            </div>
+        </div>
     </header>
     <main>
         <div class="container" id="container"></div>
@@ -443,8 +452,8 @@
     <div class="checkout-buttons">
         <div class="form-title">Getting your order</div>
         <label id="alert-checkout"></label>
-            <button id="confirm-checkout" class="green-button">Confirm Payment</button>
-            <button id="cancel-checkout" class="red-button">Cancel checkout</button>
+        <button id="confirm-checkout" class="green-button">Confirm Payment</button>
+        <button id="cancel-checkout" class="red-button">Cancel checkout</button>
     </div>
     <div class="checkout-list">
         <div id="checkout-items"></div>
