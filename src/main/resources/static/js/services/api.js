@@ -13,7 +13,7 @@ export async function fetchData(url) {
     }
 }
 
-export async function fetchOrder(orderObj) {
+export async function postOrder(orderObj) {
     try {
         const response = await fetch(`${BASE_URL}/orders`, {
             method: 'POST',

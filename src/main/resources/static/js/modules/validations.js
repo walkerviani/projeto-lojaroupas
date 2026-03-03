@@ -361,7 +361,7 @@ export async function validateOrder(alert) {
             items: allItems,
             payment: {}
         };
-        const success = await API.fetchOrder(orderObj);
+        const success = await API.postOrder(orderObj);
         if (success) {
             updateAlert(alert, "Your order has been created successfully!", "green");
             localStorage.removeItem('cart');
