@@ -1,6 +1,6 @@
 import { navigateTo } from "../modules/router.js";
 import { checkAuth } from "../services/auth.js";
-import { fetchOrder, fetchData } from "../services/api.js";
+import { fetchData } from "../services/api.js";
 
 export const BASE_URL = "http://localhost:8080";
 
@@ -168,4 +168,48 @@ export function updateAlert(alertElement, message, color) {
     alertElement.style.color = color;
     alertElement.textContent = message;
     alertElement.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+export async function showUserPurchases() {
+    const templateElement = document.getElementById('user-purchases');
+    templateElement.innerHTML = '';
+
+    const user = await checkAuth();
+    if (!user) return null;
+
+    const orders = await fetchData(`${BASE_URL}/orders/client/${user.id}`);
+    const ordersArray = Array.isArray(orders) ? orders : [orders];
+
+    ordersArray.forEach((order, index) => {
+        let orderNumber = index + 1;
+        const purchaseDate = new Date(order.moment).toLocaleDateString('pt-BR');
+
+        const purchaseElement = document.createElement('div');
+        purchaseElement.classList.add('orders-card');
+
+        let orderInfo = `<div class="orders-info">Order ${orderNumber} - Status: ${order.orderStatus} - ${purchaseDate}</div>`;
+
+        order.items.forEach(item => {
+            const clothes = item.clothes;
+            const imageName = clothes.imageData?.name;
+            const imageUrl = imageName
+                ? `${BASE_URL}/image/${imageName}`
+                : 'https://placehold.co/400x400?text=No+Image';
+
+            orderInfo += `
+                 <div class="orders-content">
+                      <div><img src="${imageUrl}"></div>
+                      <div class="cart-content">
+                      <p>${clothes.name} - ${currencyFormatterToBRL(clothes.price)}</p>
+                      <p>Quantity: ${item.quantity}</p>
+                      <p>Total: ${currencyFormatterToBRL(item.subtotal)}</p>
+                      </div>
+                 </div>
+        `;
+        });
+
+        orderInfo += `<div>Order Total: ${currencyFormatterToBRL(order.total)}</div>`;
+        purchaseElement.innerHTML = orderInfo;
+        templateElement.appendChild(purchaseElement);
+    });
 }
