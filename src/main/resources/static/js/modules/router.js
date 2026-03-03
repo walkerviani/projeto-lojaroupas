@@ -16,7 +16,7 @@ const routes = {
     '/product': UI.showProductDetail,
     '/cart': UI.loadCartPage,
     '/checkout': UI.loadCheckout,
-    '/my-purchases' : UI.loadPurchases,
+    '/my-purchases' : UI.loadUserPurchases,
     '/signup': UI.loadCreateAccountPage,
     '/admin': UI.loadAdminPage,
     '/login': UI.loadLoginPage,
