@@ -32,6 +32,10 @@ public class OrderService {
         return obj.orElseThrow(() -> new OrderNotFoundException("Order not found"));
     }
 
+    public List<Order> findByClientId(Long clientId) {
+        return orderRepository.findByClientId(clientId);
+    }
+
     public Order insert(Order obj) {
         Instant moment = Instant.now();
         obj.setMoment(moment);
