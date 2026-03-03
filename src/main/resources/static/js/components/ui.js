@@ -19,15 +19,17 @@ export function showProductsCard(products) {
             : 'https://placehold.co/400x400?text=No+Image';
 
         const card = document.createElement('div');
-        card.classList.add('product-info');
+        card.classList.add('product-card');
         card.innerHTML = `
-            <div id="card">
+        <div class="product-info">
+            <div class="product-img" id="card">
                 <img src="${imageUrl}">
             </div>
-            <div>
+            <div class="product-info-text">
                 <h3>${product.name}</h3>
                 <p>${UTIL.currencyFormatterToBRL(product.price)}</p>
             </div>
+        </div>
             `;
         card.addEventListener('click', () => navigateTo(`/product?id=${product.id}`));
         container.appendChild(card);
