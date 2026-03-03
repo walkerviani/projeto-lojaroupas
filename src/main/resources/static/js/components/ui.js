@@ -3,6 +3,7 @@ import * as UTIL from "../utils/util.js";
 import * as VALIDATION from "../modules/validations.js";
 import * as CART from "../modules/cart.js";
 import * as API from "../services/api.js";
+import * as AUTH from "../services/auth.js";
 
 export function showProductsCard(products) {
     const container = document.getElementById('container');
@@ -387,6 +388,17 @@ export async function deleteUserPage() {
 
 export function loadError404Page() {
     loadContainer('template-error', 'container error-page');
+}
+
+export async function loadUserPurchases() {
+    loadContainer('template-purchases', 'container orders');
+
+    const user = await AUTH.checkAuth();
+    if (!user) {
+        navigateTo('/login');
+    } else { 
+        UTIL.showUserPurchases();
+    }
 }
 
 function loadContainer(templateInput, classNameInput) {
