@@ -114,10 +114,10 @@ export function renderProductsList() {
         const itemElement = document.createElement('div');
         itemElement.classList.add('checkout-item');
         itemElement.innerHTML = `
-        <img src="${item.imageUrl}"}>
+        <img src="${item.imageUrl}">
         <div class="cart-content">
           <p>${item.name} - ${currencyFormatterToBRL(item.price)}</p>
-        <p>Item total: ${currencyFormatterToBRL(itemTotal)}</p>
+          <p>Item total: ${currencyFormatterToBRL(itemTotal)}</p>
         </div>
         `;
 
