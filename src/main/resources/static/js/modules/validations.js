@@ -320,7 +320,7 @@ export async function validateLogin(form, alert) {
                     updateAlert(alert, text, "green");
                     setTimeout(() => {
                         navigateTo('/');
-                    }, 3000);
+                    }, 1000);
                 } else {
                     updateAlert(alert, text, "red");
                 }
