@@ -173,6 +173,12 @@ export function loadLoginPage() {
     const form = document.getElementById('form-login');
     const alert = document.getElementById('alert-login');
 
+    const createAccountButton = document.getElementById('create-account-button');
+
+    createAccountButton.addEventListener('click', (e) => {
+        navigateTo('/signup');
+    });
+    
     VALIDATION.validateLogin(form, alert);
 }
 
