@@ -209,9 +209,10 @@ option {
     align-items: center;
     gap: 40px;
     padding: 20px;
-    border: 1px solid grey;
-    border-radius: 3px;
+    border-radius: 5px;
     margin: 20px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .cart-item img {
@@ -222,7 +223,7 @@ option {
 }
 
 .quantity-controls { /* '+' and '-' buttons */
-    background-color: grey;
+    background-color: #6495ed;
     color: white;
     border: none;
     width: 20px;
@@ -231,8 +232,15 @@ option {
 }
 
 .quantity-controls:hover {
-    background-color: rgb(171, 171, 171);
+    background-color: #3876ea;
     cursor: pointer;
+}
+
+.quantity-buttons {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    gap: 4px;
 }
 
 .remove-item-button {
@@ -265,7 +273,7 @@ option {
 }
 
 .clear-cart-button {
-    background-color: grey;
+    background-color: rgb(255, 62, 4);
     border: none;
     border-radius: 3px;
     color: white;
@@ -273,7 +281,7 @@ option {
 }
 
 .clear-cart-button:hover {
-    background-color: rgb(96, 96, 96);
+    background-color: rgb(139, 32, 0);
     cursor: pointer;
 }
 
@@ -651,16 +659,18 @@ td {
 }
 
 .checkout-list {
-    border: 1px grey solid;
-    border-radius: 3px;
+    background-color: white;
+    border-radius: 5px;
     padding: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .checkout-item {
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: none;
+    background-color: #f5f7f9;
+    border-radius: 5px;
     margin: 10px;
     gap: 5px;
     padding: 5px;
@@ -703,7 +713,6 @@ td {
     margin: 20px;
     gap: 10px;
     padding: 10px;
-    border: 1px grey solid;
     border-radius: 5px;
     background-color: white;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -728,4 +737,11 @@ td {
     cursor: pointer;
     border-radius: 3px;
     align-items: center;
+}
+
+.login-page {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }

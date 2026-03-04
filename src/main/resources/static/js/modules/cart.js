@@ -80,9 +80,9 @@ export function renderCart() {
         <img src="${item.imageUrl}"}>
         <div class="cart-content">
           <p>${item.name} - ${currencyFormatterToBRL(item.price)}</p>
-          <div>
+          <div class="quantity-buttons">
            <button class="quantity-controls decrease-qnt" data-id="${item.id}">-</button>
-           <span>Quantity: ${item.quantity}</span>
+           <label>Quantity: ${item.quantity}</label>
            <button class="quantity-controls increase-qnt" data-id="${item.id}">+</button>
           </div>
         <p>Item total: ${currencyFormatterToBRL(itemTotal)}</p>
@@ -103,7 +103,7 @@ export function renderProductsList() {
     const checkoutTotalElement = document.getElementById('checkout-total');
 
     checkoutitemsElement.innerHTML = '';
-    checkoutitemsElement.textContent = "Items";
+    checkoutitemsElement.textContent = "Items: ";
 
     let cartTotal = 0;
 
@@ -117,6 +117,7 @@ export function renderProductsList() {
         <img src="${item.imageUrl}">
         <div class="cart-content">
           <p>${item.name} - ${currencyFormatterToBRL(item.price)}</p>
+          <p>Quantity: ${item.quantity}</p>
           <p>Item total: ${currencyFormatterToBRL(itemTotal)}</p>
         </div>
         `;
