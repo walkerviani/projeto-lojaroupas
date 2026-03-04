@@ -178,7 +178,7 @@ export function loadLoginPage() {
     createAccountButton.addEventListener('click', (e) => {
         navigateTo('/signup');
     });
-    
+
     VALIDATION.validateLogin(form, alert);
 }
 
@@ -242,6 +242,7 @@ export async function deleteProductPage() {
     const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
     const currentName = document.getElementById('current-product-name');
     const currentTitle = document.getElementById('current-product-title');
+    currentName.style.color = "red";
     currentName.textContent = product.name;
 
     const button = document.getElementById('delete-product');
@@ -294,6 +295,7 @@ export async function updateCategoryPage() {
 
     const currentName = document.getElementById('current-update-name');
     const currentTitle = document.getElementById('current-update-title');
+    currentName.style.color = "red";
     currentName.textContent = category.name;
 
     const form = document.getElementById('form-update-category');
@@ -315,6 +317,7 @@ export async function deleteCategoryPage() {
 
     const currentName = document.getElementById('current-category-name');
     const currentTitle = document.getElementById('current-category-title');
+    currentName.style.color = "red";
     currentName.textContent = category.name;
 
     const button = document.getElementById('delete-category');
@@ -381,6 +384,7 @@ export async function deleteUserPage() {
     const user = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
     const currentName = document.getElementById('current-user-name');
     const currentTitle = document.getElementById('current-user-title');
+    currentName.style.color = "red";
     currentName.textContent = user.name;
 
     const button = document.getElementById('delete-user');
