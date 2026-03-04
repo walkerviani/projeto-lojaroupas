@@ -54,38 +54,38 @@
 
 <!-- Template Create Account Page -->
 <template id="template-create-account">
-    <div>
-        <h1 class="form-title">Create a new account</h1>
+    <div class="form-background">
+        <h1 class="form-title">Sign Up</h1>
         <label id="alert-create-account"></label>
 
         <form id="form-create-account" novalidate>
-            <label for="name">Name</label>
+            <label>Name</label>
             <input type="text" id="name" name="name" minlength="3" maxlength="80" required>
 
-            <label for="cpf">CPF</label>
+            <label>CPF</label>
             <input type="text" id="cpf" name="cpf" minlength="11" maxlength="11" required>
 
-            <label for="email">Email</label>
+            <label>Email</label>
             <input type="email" id="email" name="email" autocomplete="email" maxlength="35" required>
 
-            <label for="phone">Phone</label>
+            <label>Phone</label>
             <input type="text" id="phone" name="phone" minlength="11" maxlength="11" required>
 
-            <label for="password">Password</label>
+            <label>Password</label>
             <input type="password" id="password" name="password" autocomplete="new-password" name="password"
                 minlength="8" required>
 
-            <label for="confPassword">Confirm your password</label>
+            <label>Confirm your password</label>
             <input type="password" id="confPassword" name="confPassword" autocomplete="new-password" required>
 
-            <input type="submit" class="green-button" value="Sign up">
+            <input type="submit" class="green-button" value="Sign Up">
         </form>
     </div>
 </template>
 
 <!-- Template Login Page -->
 <template id="template-login">
-    <div class="login-page">
+    <div class="form-background">
         <h1 class="form-title">Login</h1>
         <label id="alert-login"></label>
         <form id="form-login" novalidate>
@@ -95,7 +95,7 @@
             <input type="password" id="password" name="password" required>
             <input type="submit" class="form-button" id="login-button" value="Login">
         </form>
-        <input type="button" id="create-account-button" class="green-button" value="Create new Account">
+        <input type="button" id="create-account-button" class="green-button" value="Sign Up">
     </div>
 </template>
 
@@ -117,7 +117,7 @@
     <div>
         <h1 class="form-title">Products</h1>
     </div>
-    <div>
+    <div class="form-background">
         <a href="/admin/products/create">Create new Product</a>
         <table id="product-table">
         </table>
@@ -126,7 +126,7 @@
 
 <!-- Create -->
 <template id="template-create-product">
-    <div>
+    <div class="form-background">
         <h1 class="form-title">Create Product</h1>
         <label id="alert-create-product"></label>
         <form id="form-create-product" novalidate>
@@ -178,7 +178,7 @@
 
 <!-- Update -->
 <template id="template-update-product">
-    <div>
+    <div class="form-background">
         <h1 class="form-title">Update Product</h1>
         <label id="alert-update-product"></label>
         <form id="form-update-product" novalidate>
@@ -231,14 +231,12 @@
 
 <!-- Delete -->
 <template id="template-delete-product">
-    <div>
-        <div>
-            <h1 class="form-title">Delete a product</h1>
-            <label id="alert-delete-product"></label>
-            <label id="current-product-title">Do you really want to delete the product below?</label>
-            <label id="current-product-name"></label>
-            <button class="delete-option-button" id="delete-product">Delete</button>
-        </div>
+    <div class="form-background">
+        <h1 class="form-title">Delete a product</h1>
+        <label id="alert-delete-product"></label>
+        <label id="current-product-title">Do you really want to delete the product below?</label>
+        <label id="current-product-name"></label>
+        <button class="delete-option-button" id="delete-product">Delete</button>
     </div>
 </template>
 
@@ -249,7 +247,7 @@
     <div>
         <h1 class="form-title">Categories</h1>
     </div>
-    <div>
+    <div class="form-background">
         <a href="/admin/categories/create">Create new Category</a>
         <table id="category-table">
         </table>
@@ -258,7 +256,7 @@
 
 <!-- Create -->
 <template id="template-create-category">
-    <div>
+    <div class="form-background">
         <h1 class="form-title">Create Category</h1>
         <label id="alert-create-categ"></label>
         <form id="form-create-category" novalidate>
@@ -271,34 +269,30 @@
 
 <!-- Update -->
 <template id="template-update-category">
-    <div>
-        <div>
-            <h1 class="form-title">Update a category</h1>
-            <label id="alert-update-category"></label>
-            <label id="current-update-title">Current name</label>
-            <label id="current-update-name"></label>
-            <form id="form-update-category" novalidate>
+    <div class="form-background">
+        <h1 class="form-title">Update a category</h1>
+        <label id="alert-update-category"></label>
+        <label id="current-update-title">Current name</label>
+        <label id="current-update-name"></label>
+        <form id="form-update-category" novalidate>
 
-                <label>Update name</label>
-                <input type="text" id="name-update-category" name="name" minlength="3" maxlength="80" required>
-                <input type="submit" id="update-category-name" class="form-button" value="Update category">
+            <label>Update name</label>
+            <input type="text" id="name-update-category" name="name" minlength="3" maxlength="80" required>
+            <input type="submit" id="update-category-name" class="form-button" value="Update category">
 
-            </form>
-        </div>
+        </form>
     </div>
 </template>
 
 <!-- Delete -->
 <template id="template-delete-category">
-    <div>
-        <div>
+        <div class="form-background">
             <h1 class="form-title">Delete a category</h1>
             <label id="alert-delete-category"></label>
             <label id="current-category-title">Do you really want to delete the category below?</label>
             <label id="current-category-name"></label>
             <button class="delete-option-button" id="delete-category">Delete</button>
         </div>
-    </div>
 </template>
 
 <!-- TEMPLATES USERS -->
@@ -308,7 +302,7 @@
     <div>
         <h1 class="form-title">Users</h1>
     </div>
-    <div>
+    <div class="form-background">
         <a href="/admin/users/create">Create new User</a>
         <table id="user-table">
         </table>
@@ -317,7 +311,7 @@
 
 <!-- Create -->
 <template id="template-create-user">
-    <div>
+    <div class="form-background">
         <h1 class="form-title">Create User</h1>
         <label id="alert-create-user"></label>
         <form id="form-create-user" novalidate>
@@ -354,7 +348,7 @@
 
 <!-- Update -->
 <template id="template-update-user">
-    <div>
+    <div class="form-background">
         <h1 class="form-title">Update User</h1>
         <label id="alert-update-user"></label>
         <form id="form-update-user" novalidate>
@@ -387,15 +381,13 @@
 
 <!-- Delete -->
 <template id="template-delete-user">
-    <div>
-        <div>
+        <div class="form-background">
             <h1 class="form-title">Delete a user</h1>
             <label id="alert-delete-user"></label>
             <label id="current-user-title">Do you really want to delete the user below?</label>
             <label id="current-user-name"></label>
             <button class="delete-option-button" id="delete-user">Delete</button>
         </div>
-    </div>
 </template>
 
 <!-- Template product detail -->
@@ -410,14 +402,14 @@
         <label id="product-description" class="detail-mode-description"></label>
         <label id="product-size"></label>
         <div class="detail-mode-quantity">
-        <label class="detail-mode-description">Quantity:</label>
-        <select id="product-quantity">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+            <label class="detail-mode-description">Quantity:</label>
+            <select id="product-quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
         </div>
         <button id="add-cart-button">Add to cart</button>
     </div>
@@ -449,11 +441,13 @@
 
 <!-- Checkout template -->
 <template id="template-checkout">
-    <div class="checkout-buttons">
-        <div class="form-title">Getting your order</div>
-        <label id="alert-checkout"></label>
-        <button id="confirm-checkout" class="green-button">Confirm Payment</button>
-        <button id="cancel-checkout" class="red-button">Cancel checkout</button>
+    <div class="form-background">
+        <div class="checkout-menu">
+            <div class="form-title">Getting your order</div>
+            <label id="alert-checkout"></label>
+            <button id="confirm-checkout" class="green-button">Confirm Payment</button>
+            <button id="cancel-checkout" class="red-button">Cancel checkout</button>
+        </div>
     </div>
     <div class="checkout-list">
         <div id="checkout-items"></div>
@@ -462,9 +456,9 @@
 </template>
 
 <!-- Orders page (user purchases) -->
- <template id="template-purchases">
+<template id="template-purchases">
     <div>
         <div class="form-title">Your purchases</div>
         <div id="user-purchases"></div>
     </div>
- </template>
+</template>
