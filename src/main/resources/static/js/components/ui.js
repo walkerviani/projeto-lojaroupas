@@ -393,12 +393,11 @@ export function loadError404Page() {
 }
 
 export async function loadUserPurchases() {
-    loadContainer('template-purchases', 'container orders');
-
     const user = await AUTH.checkAuth();
     if (!user) {
         navigateTo('/login');
     } else { 
+        loadContainer('template-purchases', 'container orders');
         UTIL.showUserPurchases();
     }
 }
