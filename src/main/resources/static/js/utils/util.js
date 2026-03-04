@@ -180,6 +180,12 @@ export async function showUserPurchases() {
     const orders = await fetchData(`${BASE_URL}/orders/client/${user.id}`);
     const ordersArray = Array.isArray(orders) ? orders : [orders];
 
+    if(ordersArray.length === 0) {
+        const orderInfo = "You don't have any orders yet!";
+        templateElement.classList.add('orders-info');
+        return templateElement.innerHTML = orderInfo;
+    }
+
     ordersArray.forEach((order, index) => {
         let orderNumber = index + 1;
         const purchaseDate = new Date(order.moment).toLocaleDateString('pt-BR');
