@@ -27,7 +27,7 @@
             <div class="header-group-right">
                 <nav class="navegation">
                     <ul>
-                        <li><a id="loginButton" href="/">Login</a></li>
+                        <li><a id="login-button" href="/"></a></li>
                         <li><a id="orders-button" href="/">Orders</a></li>
                     </ul>
                 </nav>
@@ -101,13 +101,11 @@
 
 <!-- Template Admin Menu -->
 <template id="template-admin">
-    <div>
-        <h1 class="form-title">Admin Menu</h1>
-        <input type="button" class="admin-button" id="products" value="Products">
-        <input type="button" class="admin-button" id="categories" value="Categories">
-        <input type="button" class="admin-button" id="orders" value="Orders">
-        <input type="button" class="admin-button" id="users" value="Users">
-    </div>
+    <h1 class="form-title">Admin Menu</h1>
+    <button class="large-white-button" id="products">Products</button>
+    <button class="large-white-button" id="categories">Categories</button>
+    <button class="large-white-button" id="orders">Orders</button>
+    <button class="large-white-button" id="users">Users</button>
 </template>
 
 <!-- TEMPLATES PRODUCTS -->
@@ -286,13 +284,13 @@
 
 <!-- Delete -->
 <template id="template-delete-category">
-        <div class="form-background">
-            <h1 class="form-title">Delete a category</h1>
-            <label id="alert-delete-category"></label>
-            <label id="current-category-title">Do you really want to delete the category below?</label>
-            <label id="current-category-name"></label>
-            <button class="delete-option-button" id="delete-category">Delete</button>
-        </div>
+    <div class="form-background">
+        <h1 class="form-title">Delete a category</h1>
+        <label id="alert-delete-category"></label>
+        <label id="current-category-title">Do you really want to delete the category below?</label>
+        <label id="current-category-name"></label>
+        <button class="delete-option-button" id="delete-category">Delete</button>
+    </div>
 </template>
 
 <!-- TEMPLATES USERS -->
@@ -381,13 +379,13 @@
 
 <!-- Delete -->
 <template id="template-delete-user">
-        <div class="form-background">
-            <h1 class="form-title">Delete a user</h1>
-            <label id="alert-delete-user"></label>
-            <label id="current-user-title">Do you really want to delete the user below?</label>
-            <label id="current-user-name"></label>
-            <button class="delete-option-button" id="delete-user">Delete</button>
-        </div>
+    <div class="form-background">
+        <h1 class="form-title">Delete a user</h1>
+        <label id="alert-delete-user"></label>
+        <label id="current-user-title">Do you really want to delete the user below?</label>
+        <label id="current-user-name"></label>
+        <button class="delete-option-button" id="delete-user">Delete</button>
+    </div>
 </template>
 
 <!-- Template product detail -->
@@ -460,5 +458,15 @@
     <div>
         <div class="form-title">Your purchases</div>
         <div id="user-purchases"></div>
+    </div>
+</template>
+
+<!-- User profile page -->
+<template id="template-profile">
+    <div class="profile-menu">
+        <button class="small-white-button">Account Setting</button>
+        <button class="small-white-button">Change your password</button>
+    </div>
+    <div class="profile-data" id="profile-option">
     </div>
 </template>
