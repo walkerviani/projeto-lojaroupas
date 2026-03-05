@@ -46,9 +46,23 @@ async function setupNavigation() {
     });
 
     //Login page
-    document.getElementById('loginButton').addEventListener('click', (e) => {
+    const loginButton = document.getElementById('login-button');
+    
+    const user = await checkAuth();
+    if(!user) {
+        loginButton.textContent = "Login";
+    } else {
+        loginButton.textContent = "Profile";
+    }
+
+    loginButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        navigateTo('/login');
+        const user = await checkAuth();
+        if(!user) {
+            navigateTo('/login');
+        } else {
+            navigateTo('/profile');
+        }
     });
 
     //Search
