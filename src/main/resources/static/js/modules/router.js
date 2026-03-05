@@ -18,6 +18,7 @@ const routes = {
     '/checkout': UI.loadCheckout,
     '/my-purchases' : UI.loadUserPurchases,
     '/signup': UI.loadCreateAccountPage,
+    '/profile' : UI.loadUserProfilePage,
     '/admin': UI.loadAdminPage,
     '/login': UI.loadLoginPage,
     '/': UI.loadIndex,
