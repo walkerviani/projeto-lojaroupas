@@ -59,11 +59,6 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
-    public String getMethodName(@RequestParam String param) {
-        return new String();
-    }
-    
-
     @PostMapping
     public ResponseEntity<User> insert(@RequestBody User obj) {
         obj = userService.insert(obj);
