@@ -182,13 +182,24 @@ export function loadLoginPage() {
     VALIDATION.validateLogin(form, alert);
 }
 
+export function loadUserProfilePage() {
+    loadContainer('template-profile', 'container profile');
+
+    const accountSettings = document.getElementById('profile-settings');
+    accountSettings.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.loadAccountSettings();
+    });
+    
+}
+
 export function loadCreateAccountPage() {
     loadContainer('template-create-account', 'container form');
     VALIDATION.validateCreateAccount();
 }
 
 export function loadAdminPage() {
-    loadContainer('template-admin', 'container form');
+    loadContainer('template-admin', 'container admin-menu');
 
     const categories = ['products', 'categories', 'orders', 'users'];
     categories.forEach(category => {
