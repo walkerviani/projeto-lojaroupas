@@ -502,61 +502,11 @@ option {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-button {
-    background-color: #6495ed;
-    color: white;
-    width: 260px;
-    border: none;
-    border-radius: 3px;
-    padding: 5px;
-    margin-top: 18px;
-    margin-bottom: 0;
-}
-
-.form-button:hover {
-    background-color: rgb(40, 40, 212);
-    cursor: pointer;
-}
-
 .form-title {
     font-size: 35px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
-}
-
-/* Wide green button */
-
-.green-button {
-    background-color: rgb(30, 204, 30);
-    color: white;
-    width: 260px;
-    border: none;
-    border-radius: 3px;
-    padding: 5px;
-    margin-top: 18px;
-}
-
-.green-button:hover {
-    background-color: rgb(12, 157, 12);
-    cursor: pointer;
-}
-
-/* Wide red button */
-
-.red-button {
-    background-color: rgb(255, 62, 4);
-    color: white;
-    width: 260px;
-    border: none;
-    border-radius: 3px;
-    padding: 5px;
-    margin-top: 18px;
-}
-
-.red-button:hover {
-    background-color: rgb(139, 32, 0);
-    cursor: pointer;
 }
 
 /* Table container */
@@ -761,8 +711,64 @@ td {
     gap: 10px;
 }
 
-/* White Buttons */
+.profile-box {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    gap: 10px;
+}
 
+.profile-box-input {
+    padding: 3px;
+    max-width: 75%;
+    margin-bottom: 3px;
+}
+
+.profile-box-input:disabled {
+    border: none;
+    border-radius: 2px;
+}
+
+.profile-box-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.profile-invisible-button {
+    display: none;
+}
+
+.profile-box-itens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    width: 100%;
+}
+
+.profile-box-item {
+    display: flex;
+    flex-direction: column;
+}
+
+#account-alert {
+    display: block;
+    text-align: center;
+    min-height: 24px;
+    visibility: hidden;
+    margin-bottom: 10px;
+}
+
+#account-alert:not(:empty) {
+    visibility: visible;
+}
+
+/* ------- Buttons ------- */
+
+/* Small white button */
 .small-white-button {
     background-color: white;
     font-weight:500;
@@ -778,6 +784,7 @@ td {
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
 
+/* Large white button */
 .large-white-button {
     background-color: white;
     font-weight:500;
@@ -792,4 +799,55 @@ td {
     background-color: #f5f7f9;
     cursor: pointer;
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+
+/* Large green button */
+.large-green-button {
+    background-color: rgb(30, 204, 30);
+    color: white;
+    width: 260px;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.large-green-button:hover {
+    background-color: rgb(12, 157, 12);
+    cursor: pointer;
+}
+
+/* Large red button */
+.large-red-button {
+    background-color: rgb(255, 62, 4);
+    color: white;
+    width: 260px;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.large-red-button:hover {
+    background-color: rgb(139, 32, 0);
+    cursor: pointer;
+}
+
+/* Large blue button */
+.large-blue-button {
+    background-color: #6495ed;
+    color: white;
+    width: 260px;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.large-blue-button:hover {
+    background-color: rgb(40, 40, 212);
+    cursor: pointer;
+}
+
+
+/* alert label */
+.alert {
+    color: red;
 }
