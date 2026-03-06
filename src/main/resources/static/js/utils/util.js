@@ -1,6 +1,7 @@
 import { navigateTo } from "../modules/router.js";
 import { checkAuth } from "../services/auth.js";
 import { fetchData } from "../services/api.js";
+import { validateProfile } from "../modules/validations.js";
 
 export const BASE_URL = "http://localhost:8080";
 
@@ -180,7 +181,7 @@ export async function showUserPurchases() {
     const orders = await fetchData(`${BASE_URL}/orders/client/${user.id}`);
     const ordersArray = Array.isArray(orders) ? orders : [orders];
 
-    if(ordersArray.length === 0) {
+    if (ordersArray.length === 0) {
         const orderInfo = "You don't have any orders yet!";
         templateElement.classList.add('orders-info');
         return templateElement.innerHTML = orderInfo;
@@ -217,5 +218,97 @@ export async function showUserPurchases() {
         orderInfo += `<div>Order Total: ${currencyFormatterToBRL(order.total)}</div>`;
         purchaseElement.innerHTML = orderInfo;
         templateElement.appendChild(purchaseElement);
+    });
+}
+
+export async function loadAccountSettings() {
+    const element = document.getElementById('profile-option');
+    element.innerHTML = '';
+
+    const user = await checkAuth();
+    if (!user) {
+        navigateTo('/');
+    }
+
+    const accountElement = document.createElement('div');
+    accountElement.classList.add('profile-box');
+    accountElement.innerHTML = `
+            <form id="form-update-profile" novalidate>
+                <div class="profile-box-itens">
+                
+                    <div class="profile-box-item">
+                        <label>Full Name</label>
+                        <input class="profile-box-input" name="name" type="text" value="${user.name}" minlength="3" maxlength="80" disabled></input>
+                    </div>
+                
+                    <div class="profile-box-item">
+                        <label>E-mail</label>
+                        <input class="profile-box-input" name="email" type="text" value="${user.email}" maxlength="40" disabled></input>
+                    </div>
+
+                    <div class="profile-box-item">
+                        <label>CPF</label>
+                        <input class="profile-box-input" name="cpf" type="text" value="${user.cpf}" minlength="11" maxlength="11" disabled></input>
+                    </div>
+
+                    <div class="profile-box-item">
+                        <label>Phone</label>
+                        <input class="profile-box-input" name="phone" type="text" value="${user.phone}" minlength="11" maxlength="11" disabled></input>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="alert" id="account-alert"></label>
+                </div>
+
+                <div class="profile-box-buttons">
+                    <button id="cancel-update-profile" class="red-button profile-invisible-button">Cancel</button>
+                    <button id="update-profile" class="large-blue-button">Update</button>
+                    <input type="submit" id="update-profile-button" class="large-green-button profile-invisible-button" value="Save"></input>
+                </div>
+            </form>    
+    `;
+    element.appendChild(accountElement);
+
+    editAccount(user.id);
+}
+
+function editAccount(userId) {
+    const updateButton = document.getElementById('update-profile');
+    const cancelButton = document.getElementById('cancel-update-profile');
+    const saveButton = document.getElementById('update-profile-button');
+
+    const alert = document.getElementById('account-alert');
+    const form = document.getElementById('form-update-profile');
+
+    const inputs = form.querySelectorAll('.profile-box-input');
+
+    updateButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        cancelButton.style.display = "block";
+        saveButton.style.display = "block";
+        updateButton.style.display = "none";
+
+        inputs.forEach(input => input.disabled = false);
+    });
+
+    cancelButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        form.reset();
+
+        alert.textContent = "";
+        cancelButton.style.display = "none";
+        saveButton.style.display = "none";
+        updateButton.style.display = "block";
+
+        inputs.forEach(input => input.disabled = true);
+
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await validateProfile(form, alert, userId);
     });
 }
