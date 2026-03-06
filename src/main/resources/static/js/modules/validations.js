@@ -31,7 +31,7 @@ export function validateCreateAccount() {
         else if (cpf.value === "") {
             error = "CPF is required!";
         }
-        else if (cpf.value.length < 11) {
+        else if (cpf.value.length !== 11) {
             error = "CPF must have 11 digits";
         }
         else if (!cpfRegex.test(cpf.value)) {
@@ -225,7 +225,7 @@ export async function validateUser(form, alert, userId = null) {
         else if (cpf.value === "") {
             error = "Cpf is required!";
         }
-        else if (cpf.value.length < 11) {
+        else if (cpf.value.length !== 11) {
             error = "Cpf must have 11 digits";
         }
         else if (!cpfRegex.test(cpf.value)) {
@@ -374,5 +374,88 @@ export async function validateOrder(alert) {
         }
     } catch (error) {
         updateAlert(alert, "An error ocurred while processing your items", "red");
+    }
+}
+
+export async function validateProfile(form, alert, userId) {
+    const { name, cpf, email, phone } = form.elements;
+
+    const user = await API.fetchData(`${BASE_URL}/users/${userId}`);
+    const role = user.role;
+
+    const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
+    const cpfRegex = /^[0-9]+$/; //alow only numbers
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
+    const phoneRegex = /^[0-9]+$/; //alow only numbers
+
+    // Reset the label and error
+    alert.textContent = "";
+    let error = "";
+
+    if (name.value === "") {
+        error = "Name is required!";
+    }
+    else if (name.value.length < 3) {
+        error = "Name is too short!";
+    }
+    else if (!nameRegex.test(name.value)) {
+        error = "Name must not have numbers";
+    }
+    else if (cpf.value === "") {
+        error = "Cpf is required!";
+    }
+    else if (cpf.value.length !== 11) {
+        error = "Cpf must have 11 digits";
+    }
+    else if (!cpfRegex.test(cpf.value)) {
+        error = "Cpf must have only numbers";
+    }
+    else if (email.value === "") {
+        error = "Email is required!";
+    }
+    else if (!emailRegex.test(email.value)) {
+        error = "Email is not valid!";
+    }
+    else if (phone.value === "") {
+        error = "Phone is required!";
+    }
+    else if (phone.value.length < 11) {
+        error = "Phone is too short";
+    }
+    else if (!phoneRegex.test(phone.value)) {
+        error = "Phone must have only numbers";
+    }
+
+    if (error !== "") {
+        updateAlert(alert, error, "red");
+        return;
+    }
+    
+    const obj = {
+        name: name.value,
+        email: email.value,
+        cpf: cpf.value,
+        phone: phone.value,
+        role: role
+    };
+
+    const response = await API.putUser(obj, userId);
+
+    if (response === true) {
+        updateAlert(alert, "Updated successfully!", "green");
+        setTimeout(() => {
+                        alert.textContent = "";
+                    }, 2000);
+
+        // disable the inputs
+        const inputs = form.querySelectorAll('.profile-box-input');
+        inputs.forEach(input => input.disabled = true);
+        
+        // buttons back to original state
+        document.getElementById('update-profile').style.display = "block";
+        document.getElementById('cancel-update-profile').style.display = "none";
+        document.getElementById('update-profile-button').style.display = "none";
+    } else {
+        updateAlert(alert, response.message, "red");
     }
 }
