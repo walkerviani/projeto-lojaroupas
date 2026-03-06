@@ -199,3 +199,29 @@ export async function sendUserData(obj, password, alert, form, id) {
         updateAlert(alert, error.message, "red");
     }
 }
+
+export async function putUser(obj, userId){
+    try {
+        const response = await fetch(`${BASE_URL}/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        if(!response.ok) {
+            const errorText = await response.text();
+            return {
+                message: errorText || "Update failed!",
+                result: false
+            };
+        } else {
+            return true;
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            result: false
+        };
+    }
+}
