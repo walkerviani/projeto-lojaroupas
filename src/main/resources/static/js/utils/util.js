@@ -1,7 +1,7 @@
 import { navigateTo } from "../modules/router.js";
 import { checkAuth } from "../services/auth.js";
-import { fetchData } from "../services/api.js";
-import { validateProfile } from "../modules/validations.js";
+import { fetchData,  } from "../services/api.js";
+import { validateProfile, validateProfilePassword } from "../modules/validations.js";
 
 export const BASE_URL = "http://localhost:8080";
 
@@ -237,34 +237,34 @@ export async function loadAccountSettings() {
                 <div class="profile-box-itens">
                 
                     <div class="profile-box-item">
-                        <label>Full Name</label>
-                        <input class="profile-box-input" name="name" type="text" value="${user.name}" minlength="3" maxlength="80" disabled></input>
+                        <label class="bold-title">Full Name</label>
+                        <input class="profile-box-input large-input" name="name" type="text" value="${user.name}" minlength="3" maxlength="80" disabled></input>
                     </div>
                 
                     <div class="profile-box-item">
-                        <label>E-mail</label>
-                        <input class="profile-box-input" name="email" type="text" value="${user.email}" maxlength="40" disabled></input>
+                        <label class="bold-title">E-mail</label>
+                        <input class="profile-box-input large-input" name="email" type="text" value="${user.email}" maxlength="40" disabled></input>
                     </div>
 
                     <div class="profile-box-item">
-                        <label>CPF</label>
-                        <input class="profile-box-input" name="cpf" type="text" value="${user.cpf}" minlength="11" maxlength="11" disabled></input>
+                        <label class="bold-title">CPF</label>
+                        <input class="profile-box-input large-input" name="cpf" type="text" value="${user.cpf}" minlength="11" maxlength="11" disabled></input>
                     </div>
 
                     <div class="profile-box-item">
-                        <label>Phone</label>
-                        <input class="profile-box-input" name="phone" type="text" value="${user.phone}" minlength="11" maxlength="11" disabled></input>
+                        <label class="bold-title">Phone</label>
+                        <input class="profile-box-input large-input" name="phone" type="text" value="${user.phone}" minlength="11" maxlength="11" disabled></input>
                     </div>
                 </div>
 
                 <div>
-                    <label class="alert" id="account-alert"></label>
+                    <label class="alert-message alert" id="account-alert"></label>
                 </div>
 
                 <div class="profile-box-buttons">
-                    <button id="cancel-update-profile" class="red-button profile-invisible-button">Cancel</button>
+                    <button id="cancel-update-profile" class="large-red-button display-none">Cancel</button>
                     <button id="update-profile" class="large-blue-button">Update</button>
-                    <input type="submit" id="update-profile-button" class="large-green-button profile-invisible-button" value="Save"></input>
+                    <input type="submit" id="update-profile-button" class="large-green-button display-none" value="Save"></input>
                 </div>
             </form>    
     `;
@@ -311,4 +311,45 @@ function editAccount(userId) {
         e.preventDefault();
         await validateProfile(form, alert, userId);
     });
+}
+
+export async function loadPasswordSettings() {
+    const element = document.getElementById('profile-option');
+    element.innerHTML = '';
+
+    const user = await checkAuth();
+    if (!user) {
+        navigateTo('/');
+    }
+
+    const accountElement = document.createElement('div');
+    accountElement.classList.add('profile-box');
+    accountElement.innerHTML = `
+            <form id="profile-update-password-form" novalidate>
+                <div class="flex-column">
+                    
+                    <label class="bold-title">Update password</label>
+                    
+                    <label class="alert-message alert" id="profile-password-alert"></label>
+                    
+                    <div class="flex-column" id="profile-current-password-div">
+                        <label class="bold-title">Enter your current password</label>
+                        <input type="password" class="large-input" id="profile-current-password-input" name="password" minlength="8" required>
+                        <input type="button" id="profile-current-password-button" class="large-blue-button" value="Confirm"></input>
+                    </div>
+
+                    <div class="flex-column display-none" id="profile-update-password-div">
+                        <label class="bold-title">Enter your new password</label>
+                        <input type="password" class="large-input" id="profile-new-password-input" name="password" minlength="8" required>
+                        <label class="bold-title">Confirm your new password</label>
+                        <input type="password" class="large-input" id="profile-confirm-password-input" name="password" minlength="8" required>
+                        <input type="submit" class="large-blue-button" value="Confirm"></input>
+                    </div>
+
+                </div>
+            </form>    
+    `;
+    element.appendChild(accountElement);
+
+    validateProfilePassword(user.id);
 }
