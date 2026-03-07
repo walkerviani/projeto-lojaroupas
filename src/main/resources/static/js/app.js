@@ -2,8 +2,12 @@ import { handleRoute, navigateTo } from './modules/router.js';
 import { BASE_URL, getCategoriesMenu } from './utils/util.js';
 import { fetchData } from "./services/api.js";
 import { checkAuth } from "./services/auth.js";
+import { updateAuthUI } from "./components/ui.js";
 
 async function setupNavigation() {
+
+    //update login button text to profile if the user is authenticated
+    await updateAuthUI();
 
     // Category menu 
     const menu = document.getElementById('categories-menu');
@@ -47,18 +51,10 @@ async function setupNavigation() {
 
     //Login page
     const loginButton = document.getElementById('login-button');
-    
-    const user = await checkAuth();
-    if(!user) {
-        loginButton.textContent = "Login";
-    } else {
-        loginButton.textContent = "Profile";
-    }
-
     loginButton.addEventListener('click', async (e) => {
         e.preventDefault();
         const user = await checkAuth();
-        if(!user) {
+        if (!user) {
             navigateTo('/login');
         } else {
             navigateTo('/profile');
@@ -82,10 +78,10 @@ async function setupNavigation() {
     });
 
     //Orders
-    document.getElementById('orders-button').addEventListener('click', (e) => {
+    document.getElementById('orders-button').addEventListener('click', async (e) => {
         e.preventDefault();
-        const user = checkAuth();
-        if(!user) {
+        const user = await checkAuth();
+        if (!user) {
             navigateTo('/login');
         } else {
             navigateTo('/my-purchases');
@@ -98,5 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
     handleRoute();
     window.addEventListener("popstate", () => {
         handleRoute();
+        updateAuthUI();
     });
 });
