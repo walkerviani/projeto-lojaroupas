@@ -1,5 +1,5 @@
 import { BASE_URL, updateAlert } from "../utils/util.js";
-import {updateProductForm, updateUserForm} from "../modules/validations.js";
+import { updateProductForm, updateUserForm } from "../modules/validations.js";
 
 export async function fetchData(url) {
     try {
@@ -200,7 +200,7 @@ export async function sendUserData(obj, password, alert, form, id) {
     }
 }
 
-export async function putUser(obj, userId){
+export async function putUser(obj, userId) {
     try {
         const response = await fetch(`${BASE_URL}/users/${userId}`, {
             method: 'PUT',
@@ -209,7 +209,7 @@ export async function putUser(obj, userId){
             },
             body: JSON.stringify(obj)
         });
-        if(!response.ok) {
+        if (!response.ok) {
             const errorText = await response.text();
             return {
                 message: errorText || "Update failed!",
@@ -223,5 +223,56 @@ export async function putUser(obj, userId){
             message: error.message,
             result: false
         };
+    }
+}
+
+export async function checkUserPassword(userId, currentPassword) {
+    try {
+        const response = await fetch(`${BASE_URL}/users/${userId}/check-password?password=${currentPassword}`, {
+            method: 'POST',
+        });
+        if (!response.ok) {
+            return {
+                success: false,
+                message: "current password is incorrect"
+            }
+        }
+        const isValid = await response.json();
+        return {
+            success: isValid,
+            message: ""
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message
+        }
+    }
+}
+
+export async function sendUserPassword(userId, password) {
+    try {
+        const response = await fetch(`${BASE_URL}/users/${userId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(password)
+        });
+
+        if (response.ok) {
+            return {
+                success: true,
+                message: "Password updated successfully!"
+            }
+        } else {
+            return {
+                success: false,
+                message: "Failed to update your password. Try again!"
+            }
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
