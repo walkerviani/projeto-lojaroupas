@@ -196,6 +196,15 @@ export function loadUserProfilePage() {
         e.preventDefault();
         await loadPasswordSettings();
     });
+
+    const logout = document.getElementById('profile-logout');
+    logout.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const response = await AUTH.deauthenticateUser();
+        if(response === true) {
+            navigateTo('/');
+        }
+    });
 }
 
 export function loadCreateAccountPage() {
