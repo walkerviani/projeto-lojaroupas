@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -81,9 +82,18 @@ public class UserController {
     @Transactional
     @PatchMapping(value = "/{id}")
     public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody String newPassword) {
-        String s = newPassword.replaceAll("^\"|\"$", "").trim();
-        User obj = userService.updatePassword(id, s);
+        String removeQuotes = newPassword.replaceAll("^\"|\"$", "").trim();
+        User obj = userService.updatePassword(id, removeQuotes);
         return ResponseEntity.ok().body(obj);
     }
 
+    @PostMapping(value = "/{id}/check-password")
+    public ResponseEntity<Boolean> checkCurrentPassword(@PathVariable Long id, @RequestParam String password) {
+        boolean isValid = userService.checkCurrentPassword(id, password);
+        if(isValid) {
+            return ResponseEntity.ok().body(isValid);
+        }else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 }
