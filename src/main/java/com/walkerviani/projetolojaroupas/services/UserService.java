@@ -42,7 +42,7 @@ public class UserService {
         return userRepository.findByName(name);
     }
 
-    public Optional<User> findByCpf(String cpf){
+    public Optional<User> findByCpf(String cpf) {
         return userRepository.findByCpf(cpf);
     }
 
@@ -83,5 +83,12 @@ public class UserService {
         User entity = userRepository.getReferenceById(id);
         entity.setPassword(passwordEncoder.encode(newPassword));
         return userRepository.save(entity);
+    }
+
+    public boolean checkCurrentPassword(Long id, String password) {
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return passwordEncoder.matches(password, entity.getPassword());
     }
 }
