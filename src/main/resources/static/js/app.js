@@ -6,9 +6,6 @@ import { updateAuthUI } from "./components/ui.js";
 
 async function setupNavigation() {
 
-    //update login button text to profile if the user is authenticated
-    await updateAuthUI();
-
     // Category menu 
     const menu = document.getElementById('categories-menu');
     const dropdown = document.getElementById('categories-dropdown');
@@ -50,7 +47,7 @@ async function setupNavigation() {
     });
 
     //Login page
-    const loginButton = document.getElementById('login-button');
+    const loginButton = document.getElementById('nav-login-button');
     loginButton.addEventListener('click', async (e) => {
         e.preventDefault();
         const user = await checkAuth();
@@ -94,6 +91,5 @@ document.addEventListener("DOMContentLoaded", () => {
     handleRoute();
     window.addEventListener("popstate", () => {
         handleRoute();
-        updateAuthUI();
     });
 });
