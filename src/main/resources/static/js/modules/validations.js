@@ -430,7 +430,7 @@ export async function validateProfile(form, alert, userId) {
         updateAlert(alert, error, "red");
         return;
     }
-    
+
     const obj = {
         name: name.value,
         email: email.value,
@@ -444,13 +444,13 @@ export async function validateProfile(form, alert, userId) {
     if (response === true) {
         updateAlert(alert, "Updated successfully!", "green");
         setTimeout(() => {
-                        alert.textContent = "";
-                    }, 2000);
+            alert.textContent = "";
+        }, 2000);
 
         // disable the inputs
         const inputs = form.querySelectorAll('.profile-box-input');
         inputs.forEach(input => input.disabled = true);
-        
+
         // buttons back to original state
         document.getElementById('update-profile').style.display = "block";
         document.getElementById('cancel-update-profile').style.display = "none";
@@ -458,4 +458,67 @@ export async function validateProfile(form, alert, userId) {
     } else {
         updateAlert(alert, response.message, "red");
     }
+}
+
+export function validateProfilePassword(userId) {
+    const currentPasswordButton = document.getElementById('profile-current-password-button');
+
+    const alert = document.getElementById('profile-password-alert');
+    const form = document.getElementById('profile-update-password-form');
+
+    const updatePasswordElement = document.getElementById("profile-update-password-div");
+    const currentPasswordElement = document.getElementById("profile-current-password-div");
+
+    const currentPasswordInput = document.getElementById('profile-current-password-input');
+    const newPasswordInput = document.getElementById('profile-new-password-input');
+    const confirmPasswordInput = document.getElementById('profile-confirm-password-input');
+
+    currentPasswordButton.addEventListener('click', async () => {
+        const passwordValue = currentPasswordInput.value;
+
+        if (!passwordValue) {
+            updateAlert(alert, "Enter your current password", "red");
+        } else {
+            const response = await API.checkUserPassword(userId, passwordValue);
+            if (response.success === true) {
+                updateAlert(alert, response.message, "green");
+                currentPasswordElement.style.display = "none";
+                updatePasswordElement.style.display = "flex";
+            } else {
+                updateAlert(alert, response.message, "red");
+            }
+        }
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const passwordValue = newPasswordInput.value;
+        const confirmPasswordValue = confirmPasswordInput.value;
+
+        if (!passwordValue) {
+            updateAlert(alert, "Password is required", "red");
+        }
+        else if (passwordValue.length < 8) {
+            updateAlert(alert, "Password is too short (Minimum 8 digits)", "red");
+        }
+        else if (!confirmPasswordValue) {
+            updateAlert(alert, "The confirmation password is required!", "red");
+        }
+        else if (confirmPasswordValue !== passwordValue) {
+            updateAlert(alert, "The passwords don't match!", "red");
+        } else {
+            const response = await API.sendUserPassword(userId, passwordValue);
+
+            if (response.success === true) {
+                updateAlert(alert, response.message, "green");
+                setTimeout(() => {
+                    const configElement = document.getElementById('profile-option');
+                    configElement.innerHTML = `<h1>Select an option</h1>`;
+                }, 2000);
+            } else {
+                updateAlert(alert, response.message, "red");
+            }
+        }
+    });
 }
