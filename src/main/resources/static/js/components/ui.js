@@ -422,7 +422,7 @@ export async function loadUserPurchases() {
     const user = await AUTH.checkAuth();
     if (!user) {
         navigateTo('/login');
-    } else { 
+    } else {
         loadContainer('template-purchases', 'container orders');
         UTIL.showUserPurchases();
     }
@@ -521,6 +521,19 @@ async function loadPasswordSettings() {
     element.appendChild(accountElement);
 
     VALIDATION.validateProfilePassword(user.id);
+}
+
+export async function updateAuthUI() {
+    const loginButton = document.getElementById('login-button');
+    if (!loginButton) return;
+
+    const user = await AUTH.checkAuth();
+
+    if (!user) {
+        loginButton.textContent = "Login";
+    } else {
+        loginButton.textContent = "Profile";
+    }
 }
 
 function loadContainer(templateInput, classNameInput) {
