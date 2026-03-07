@@ -44,7 +44,8 @@ export async function handleRoute() {
     UI.loadError404Page();
 }
 
-export function navigateTo(url) {
+export async function navigateTo(url) {
     history.pushState(null, "", url);
     handleRoute();
+    await UI.updateAuthUI(); //update login button text to profile if the user is authenticated
 }
