@@ -533,7 +533,7 @@ async function loadPasswordSettings() {
 }
 
 export async function updateAuthUI() {
-    const loginButton = document.getElementById('login-button');
+    const loginButton = document.getElementById('nav-login-button');
     if (!loginButton) return;
 
     const user = await AUTH.checkAuth();
