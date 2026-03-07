@@ -377,7 +377,7 @@ export async function validateOrder(alert) {
     }
 }
 
-export async function validateProfile(form, alert, userId) {
+export async function validateProfileData(form, alert, userId) {
     const { name, cpf, email, phone } = form.elements;
 
     const user = await API.fetchData(`${BASE_URL}/users/${userId}`);
@@ -444,8 +444,9 @@ export async function validateProfile(form, alert, userId) {
     if (response === true) {
         updateAlert(alert, "Updated successfully!", "green");
         setTimeout(() => {
-            alert.textContent = "";
-        }, 2000);
+                    const configElement = document.getElementById('profile-option');
+                    configElement.innerHTML = `<h1>Select an option</h1>`;
+                }, 2000);
 
         // disable the inputs
         const inputs = form.querySelectorAll('.profile-box-input');
