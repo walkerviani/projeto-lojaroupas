@@ -739,10 +739,6 @@ td {
     width: 100%;
 }
 
-.profile-invisible-button {
-    display: none;
-}
-
 .profile-box-itens {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -752,18 +748,6 @@ td {
 .profile-box-item {
     display: flex;
     flex-direction: column;
-}
-
-#account-alert {
-    display: block;
-    text-align: center;
-    min-height: 24px;
-    visibility: hidden;
-    margin-bottom: 10px;
-}
-
-#account-alert:not(:empty) {
-    visibility: visible;
 }
 
 /* ------- Buttons ------- */
@@ -850,4 +834,36 @@ td {
 /* alert label */
 .alert {
     color: red;
+}
+
+.alert-message {
+    display: block;
+    text-align: center;
+    min-height: 24px;
+    visibility: hidden;
+    margin-bottom: 10px;
+}
+
+.alert-message:not(:empty) {
+    visibility: visible;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.bold-title {
+    font-weight: 500;
+}
+
+.large-input {
+    padding: 5px;
+}
+
+.display-none {
+    display: none;
 }
