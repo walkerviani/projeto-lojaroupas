@@ -27,7 +27,10 @@ export async function deauthenticateUser() {
             method: 'POST',
             credentials: "include"
         });
-        return response.ok;
+        if(response.ok) {
+            return true;
+        }
+        return false;
     } catch (error) {
         console.error("Deauthentication error: ", error);
         return false;
