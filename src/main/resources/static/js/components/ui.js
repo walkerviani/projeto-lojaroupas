@@ -190,7 +190,12 @@ export function loadUserProfilePage() {
         e.preventDefault();
         await UTIL.loadAccountSettings();
     });
-    
+
+    const passwordSettings = document.getElementById('profile-password');
+    passwordSettings.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.loadPasswordSettings();
+    });
 }
 
 export function loadCreateAccountPage() {
