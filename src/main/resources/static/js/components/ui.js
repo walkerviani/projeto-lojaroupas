@@ -423,6 +423,32 @@ export async function deleteUserPage() {
     });
 }
 
+//Orders function
+export async function loadOrdersPage() {
+    loadContainer('template-orders-menu', 'container table');
+
+    const table = document.getElementById('orders-table');
+    table.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const click = e.target;
+        if (click.classList.contains('detail-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/orders/detail?detail-id=${id}`);
+        }
+        if (click.classList.contains('update-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/orders/update?update-id=${id}`);
+        }
+        if (click.classList.contains('delete-button')) {
+            const id = click.dataset.id;
+            navigateTo(`/admin/orders/delete?delete-id=${id}`);
+        }
+    });
+
+    UTIL.showOrdersTable(await API.fetchData(`${UTIL.BASE_URL}/orders`));
+}
+
 export function loadError404Page() {
     loadContainer('template-error', 'container error-page');
 }
