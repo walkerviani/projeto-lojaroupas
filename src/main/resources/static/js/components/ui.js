@@ -449,6 +449,20 @@ export async function loadOrdersPage() {
     UTIL.showOrdersTable(await API.fetchData(`${UTIL.BASE_URL}/orders`));
 }
 
+export async function deleteOrdersPage() {
+    loadContainer('template-delete-order', 'container form');
+
+    const order = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
+
+    const button = document.getElementById('delete-order');
+    const alert = document.getElementById('alert-delete-order');
+
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await API.deleteData(`${UTIL.BASE_URL}/orders/${order.id}`, alert);
+    });
+}
+
 export function loadError404Page() {
     loadContainer('template-error', 'container error-page');
 }
@@ -463,7 +477,7 @@ export async function loadUserPurchases() {
     }
 }
 
-//user profile data setting
+//User profile data setting
 async function loadAccountSettings() {
     const element = document.getElementById('profile-option');
     element.innerHTML = '';
@@ -516,7 +530,7 @@ async function loadAccountSettings() {
     UTIL.bindProfileEvents(user.id);
 }
 
-//user profile change password setting
+//User profile change password setting
 async function loadPasswordSettings() {
     const element = document.getElementById('profile-option');
     element.innerHTML = '';
@@ -558,6 +572,7 @@ async function loadPasswordSettings() {
     VALIDATION.validateProfilePassword(user.id);
 }
 
+//Show more details about the order in /admin/orders
 export async function loadOrderDetail() {
     loadContainer('template-order-detail', 'container orders');
 
