@@ -663,6 +663,13 @@ td {
     text-align: center;
 }
 
+.orders-customer-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+}
+
 .orders-card {
     display: flex;
     flex-direction: column;
