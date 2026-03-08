@@ -122,6 +122,36 @@ export function showUserTable(users) {
     document.getElementById('user-table').innerHTML = table;
 }
 
+export function showOrdersTable(orders) {
+    let table = `
+    <tr>
+        <td>ID</td>
+        <td>Date</td>
+        <td>Status</td>
+        <td>Total</td>
+        <td>Client</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>`;
+
+    for (let order of orders) {
+        let date = new Date(order.moment).toLocaleDateString("pt-BR");
+        table += `
+        <tr>
+          <td>${order.Id}</td>
+          <td>${date}</td>
+          <td>${order.orderStatus}</td>
+          <td>${currencyFormatterToBRL(order.total)}</td>
+          <td>${order.client.name}</td>
+          <td class="table-detail-button"><button name="detail" data-id="${order.id}" class="detail-button">Details</button></td>
+          <td class="table-update-button"><button name="update" data-id="${order.id}" class="update-button">Update</button></td>
+          <td class="table-delete-button"><button name="delete" data-id="${order.id}" class="delete-button">Delete</button></td>
+        </tr>
+        `;
+    }
+    document.getElementById('orders-table').innerHTML = table;
+}
 
 export async function getParams(paramName, callback) {
     const params = new URLSearchParams(window.location.search);
