@@ -201,7 +201,7 @@ export function loadUserProfilePage() {
     logout.addEventListener('click', async (e) => {
         e.preventDefault();
         const response = await AUTH.deauthenticateUser();
-        if(response === true) {
+        if (response === true) {
             navigateTo('/');
         }
     });
@@ -556,6 +556,56 @@ async function loadPasswordSettings() {
     element.appendChild(accountElement);
 
     VALIDATION.validateProfilePassword(user.id);
+}
+
+export async function loadOrderDetail() {
+    loadContainer('template-order-detail', 'container orders');
+
+    const templateElement = document.getElementById('order-detail');
+    templateElement.innerHTML = '';
+
+    const order = await UTIL.getParams('detail-id', (param) => API.fetchData(`${UTIL.BASE_URL}/orders/${param}`));
+    
+    const purchaseDate = new Date(order.moment).toLocaleDateString('pt-BR');
+
+    const purchaseElement = document.createElement('div');
+    purchaseElement.classList.add('orders-card');
+
+    let orderInfo = `
+    <p><b>Order ${order.Id} - Status: ${order.orderStatus} - ${purchaseDate}</b></p>
+    <p><b>Customer Data:</b></p>
+    <div class="orders-customer-info">
+    <p><b>Id:</b> ${order.client.id}</p>
+    <p><b>Name:</b> ${order.client.name}</p>
+    <p><b>Email:</b> ${order.client.email}</p>
+    <p><b>CPF:</b> ${order.client.cpf}</p>
+    <p><b>Phone:</b> ${order.client.phone}</p>
+    </div>
+    `;
+
+    orderInfo += `<b>Itens:</b>`;
+    order.items.forEach(item => {
+        const clothes = item.clothes;
+        const imageName = clothes.imageData?.name;
+        const imageUrl = imageName
+            ? `${UTIL.BASE_URL}/image/${imageName}`
+            : 'https://placehold.co/400x400?text=No+Image';
+
+        orderInfo += `
+                     <div class="orders-content">
+                          <div><img src="${imageUrl}"></div>
+                          <div class="cart-content">
+                          <p>${clothes.name} - ${UTIL.currencyFormatterToBRL(clothes.price)}</p>
+                          <p>Quantity: ${item.quantity}</p>
+                          <p>Total: ${UTIL.currencyFormatterToBRL(item.subtotal)}</p>
+                          </div>
+                     </div>
+            `;
+    });
+
+    orderInfo += `<div><b>Order Total:</b> ${UTIL.currencyFormatterToBRL(order.total)}</div>`;
+    purchaseElement.innerHTML = orderInfo;
+    templateElement.appendChild(purchaseElement);
 }
 
 export async function updateAuthUI() {
