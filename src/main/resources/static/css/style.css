@@ -556,6 +556,15 @@ td {
     background-color: #eeeeee;
 }
 
+.table-detail-button button {
+    background-color: #6495ed;
+}
+
+.table-detail-button button:hover {
+    background-color:rgb(40, 40, 212);
+    cursor: pointer;
+}
+
 .table-update-button button {
     background-color: rgb(12, 157, 12);
 }
