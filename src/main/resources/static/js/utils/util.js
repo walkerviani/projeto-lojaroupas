@@ -40,6 +40,7 @@ export async function createSelectCategories(selectName) {
     };
 }
 
+//Admin route product menu table
 export function showProductTable(products) {
     let table = `
     <tr>
@@ -70,6 +71,7 @@ export function showProductTable(products) {
     document.getElementById('product-table').innerHTML = table;
 }
 
+//Admin route category menu table
 export function showCategoryTable(categories) {
     let table = `
     <tr>
@@ -92,6 +94,7 @@ export function showCategoryTable(categories) {
     document.getElementById('category-table').innerHTML = table;
 }
 
+//Admin route user menu table
 export function showUserTable(users) {
     let table = `
     <tr>
@@ -122,6 +125,7 @@ export function showUserTable(users) {
     document.getElementById('user-table').innerHTML = table;
 }
 
+//Admin route orders menu table
 export function showOrdersTable(orders) {
     let table = `
     <tr>
@@ -144,7 +148,7 @@ export function showOrdersTable(orders) {
           <td>${order.orderStatus}</td>
           <td>${currencyFormatterToBRL(order.total)}</td>
           <td>${order.client.name}</td>
-          <td class="table-detail-button"><button name="detail" data-id="${order.id}" class="detail-button">Details</button></td>
+          <td class="table-detail-button"><button name="detail" data-id="${order.Id}" class="detail-button">Details</button></td>
           <td class="table-update-button"><button name="update" data-id="${order.id}" class="update-button">Update</button></td>
           <td class="table-delete-button"><button name="delete" data-id="${order.id}" class="delete-button">Delete</button></td>
         </tr>
