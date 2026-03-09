@@ -276,3 +276,31 @@ export async function sendUserPassword(userId, password) {
         }
     }
 }
+
+export async function findProductByName(productName) {
+    try {
+        const response = await fetch(`${BASE_URL}/clothes/name?name=${encodeURIComponent(productName)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json'},
+        });
+
+        if(!response.ok) {
+            const responseText = await response.text();
+            return {
+                success: false,
+                message: responseText
+            }
+        }
+        
+        const data = await response.json();
+        return {
+            success: true,
+            data: data
+        }
+    } catch (error) {
+        return {
+                success: false,
+                message: error.message
+            }
+    }
+}
