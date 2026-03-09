@@ -1,6 +1,6 @@
 import { navigateTo } from "../modules/router.js";
 import { checkAuth } from "../services/auth.js";
-import { fetchData, } from "../services/api.js";
+import { fetchData, findProductByName } from "../services/api.js";
 import { validateProfileData } from "../modules/validations.js";
 
 export const BASE_URL = "http://localhost:8080";
@@ -149,8 +149,8 @@ export function showOrdersTable(orders) {
           <td>${currencyFormatterToBRL(order.total)}</td>
           <td>${order.client.name}</td>
           <td class="table-detail-button"><button name="detail" data-id="${order.Id}" class="detail-button">Details</button></td>
-          <td class="table-update-button"><button name="update" data-id="${order.id}" class="update-button">Update</button></td>
-          <td class="table-delete-button"><button name="delete" data-id="${order.id}" class="delete-button">Delete</button></td>
+          <td class="table-update-button"><button name="update" data-id="${order.Id}" class="update-button">Update</button></td>
+          <td class="table-delete-button"><button name="delete" data-id="${order.Id}" class="delete-button">Delete</button></td>
         </tr>
         `;
     }
@@ -292,5 +292,92 @@ export function bindProfileEvents(userId) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         await validateProfileData(form, alert, userId);
+    });
+}
+
+export async function renderProductSearch(alert) {
+    const input = document.getElementById('find-product-create-order');
+    const display = document.getElementById('product-found-create-order');
+    const query = input.value;
+
+    if (!query) {
+        return updateAlert(alert, "Type a product name", "red");
+    }
+
+    display.innerHTML = "";
+
+    const result = await findProductByName(query);
+
+    if (result.success) {
+        const product = result.data;
+
+        if (!product || product.length === 0) {
+            return updateAlert(alert, "No products found", "red");
+        }
+
+        display.innerHTML = "Products: ";
+        product.forEach((item) => {
+
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('product-display');
+            itemElement.innerHTML = `
+                <p>${item.name} - ${currencyFormatterToBRL(item.price)}</p>
+                <p>Quantity</p>
+                
+                <div class="flex-row">
+                    <button class="quantity-controls decrease-qnt" data-id="${item.id}">-</button>
+                    <span class="qnt-value" id="item-qnt-${item.id}">0</span>
+                    <button class="quantity-controls increase-qnt" data-id="${item.id}">+</button>
+                </div>
+                
+                <button class="small-green-button" data-id="${item.id}" data-price="${item.price}" style="margin-top: 5px">Add to order</button>
+            `;
+
+            display.appendChild(itemElement);
+        });
+    } else {
+        return updateAlert(alert, `${result.message} `, "red");
+    }
+}
+
+export function bindOrderEvents() {
+    const display = document.getElementById('product-found-create-order');
+    if (!display) return;
+
+    display.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const click = e.target;
+        const productId = click.getAttribute('data-id');
+
+        if (!productId) return;
+
+        const qntSpan = document.getElementById(`item-qnt-${productId}`);
+
+        //increase product quantity
+        if (click.classList.contains('increase-qnt')) {
+            qntSpan.textContent = parseInt(qntSpan.textContent) + 1;
+        }
+
+        //decrease product quantity
+        if (click.classList.contains('decrease-qnt')) {
+            let currentValue = parseInt(qntSpan.textContent);
+            if (currentValue > 0) qntSpan.textContent = currentValue - 1;
+        }
+
+        if (click.classList.contains('small-green-button')) {
+            const quantity = parseInt(qntSpan.textContent);
+            if (quantity > 0) {
+                const productData = {
+                    id: productId,
+                    price: parseFloat(click.getAttribute('data-price')),
+                    quantity: quantity
+                }
+
+                addToOrderStorage(productData);
+
+                qntSpan.textContent = "0";
+            }
+        }
     });
 }
