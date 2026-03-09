@@ -801,6 +801,20 @@ td {
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
 
+.small-green-button {
+    background-color: rgb(30, 204, 30);
+    color: white;
+    width: 100px;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.small-green-button:hover {
+    background-color: rgb(12, 157, 12);
+    cursor: pointer;
+}
+
 /* Large green button */
 .large-green-button {
     background-color: rgb(30, 204, 30);
@@ -872,6 +886,14 @@ td {
     gap: 10px;
 }
 
+.flex-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+}
+
 .bold-title {
     font-weight: 500;
 }
@@ -882,4 +904,15 @@ td {
 
 .display-none {
     display: none;
+}
+
+.product-display {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    background-color: #e5e5e5;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
