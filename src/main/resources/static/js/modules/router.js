@@ -5,18 +5,23 @@ const routes = {
     '/admin/products/create': UI.createProductPage,
     '/admin/products/update': UI.updateProductPage,
     '/admin/products/delete': UI.deleteProductPage,
+    
     '/admin/categories': UI.loadCategoriesPage,
     '/admin/categories/create': UI.createCategoryPage,
     '/admin/categories/update': UI.updateCategoryPage,
     '/admin/categories/delete': UI.deleteCategoryPage,
+
     '/admin/users': UI.loadUserPage,
     '/admin/users/create': UI.createUserPage,
     '/admin/users/update': UI.updateUserPage,
     '/admin/users/delete': UI.deleteUserPage,
+
     '/admin/orders' : UI.loadOrdersPage,
     '/admin/orders/create' : UI.createOrdersPage,
+    '/admin/orders/update' : UI.updateOrdersPage,
     '/admin/orders/delete' : UI.deleteOrdersPage,
     '/admin/orders/detail' : UI.loadOrderDetail,
+
     '/product': UI.showProductDetail,
     '/cart': UI.loadCartPage,
     '/checkout': UI.loadCheckout,
