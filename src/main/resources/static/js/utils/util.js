@@ -295,6 +295,7 @@ export function bindProfileEvents(userId) {
     });
 }
 
+// Render product search in '/admin' create order
 export async function renderProductSearch(alert) {
     const input = document.getElementById('find-product-create-order');
     const display = document.getElementById('product-found-create-order');
@@ -340,6 +341,7 @@ export async function renderProductSearch(alert) {
     }
 }
 
+// Bind order events in '/admin' create order
 export function bindOrderEvents() {
     const display = document.getElementById('product-found-create-order');
     if (!display) return;
@@ -387,6 +389,7 @@ export function bindOrderEvents() {
     });
 }
 
+// Add selected product in bindOrderEvents to session storage
 function addToOrderStorage(product) {
     // Check if there are saved items, otherwise create an empty array
     let orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
@@ -407,6 +410,7 @@ function addToOrderStorage(product) {
     renderSelectedItems();
 }
 
+// Render selected items (items that are saved in session storage) in '/admin' create order
 export function renderSelectedItems() {
     const orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
 
@@ -442,7 +446,7 @@ export function renderSelectedItems() {
 
         selectedItemsElement.appendChild(itemElement);
     });
-    //add order total price
+    // Add order total price
     const totalElement = document.createElement('h3');
     totalElement.textContent = `Order Total: ${currencyFormatterToBRL(cartTotal / 100)}`
     selectedItemsElement.appendChild(totalElement);
@@ -492,4 +496,32 @@ export function bindSelectedItemsEvent() {
             renderSelectedItems(); // Render the items again
         }
     });
+}
+
+// Display user data in '/admin' after providing an user Id
+export async function renderUserData(alert) {
+    const input = document.getElementById('client-id-create-order');
+    const display = document.getElementById('client-data-create-order');
+    const query = input.value;
+
+    if (!query) {
+        return updateAlert(alert, "Type an user id", "red");
+    }
+
+    display.innerHTML = "";
+
+    const user = await fetchData(`${BASE_URL}/users/${query}`);
+
+    if(user) {
+        display.innerHTML = `
+            <div style="align-items:start">
+                <h3>User Data</h3>
+                <p><b>Name:</b> ${user.name}</p>
+                <p><b>E-mail:</b> ${user.email}</p>
+                <p><b>CPF:</b> ${user.cpf}</p>
+            </div>
+        `;
+    } else {
+        return updateAlert(alert, "User not found", "red");
+    }
 }
