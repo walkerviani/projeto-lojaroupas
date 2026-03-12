@@ -402,6 +402,45 @@
     </div>
 </template>
 
+<!-- Create -->
+<template id="template-create-order">
+    <div class="form-background">
+        <h1 class="form-title">Create a new Order</h1>
+        <label id="alert-create-order"></label>
+        <form id="form-create-order" novalidate>
+
+            <label>User Id</label>
+            <input type="text" id="client-id-create-order" name="client-id" required>
+            <button class="large-blue-button" id="find-user-by-name">Find</button>
+
+            <div id="client-data-create-order"></div>
+
+            <label>Type product name to find</label>
+            <input type="text" id="find-product-create-order" required>
+            <div class="flex-column">
+                <button class="large-blue-button" id="find-product-by-name">Find</button>
+                <button class="large-red-button" id="clear-search-product">Clear Search</button>
+            </div>
+
+            <div id="product-found-create-order"></div>
+            <label>Selected Items</label>
+            <div id="added-product-create-order"></div>
+
+            <label>Order Status</label>
+            <select name="order-status" id="order-status-select" required>
+                <option value="">Please choose an option</option>
+                <option value="WAITING_PAYMENT">WAITING_PAYMENT</option>
+                <option value="PAID">PAID</option>
+                <option value="SHIPPED">SHIPPED</option>
+                <option value="DELIVERED">DELIVERED</option>
+                <option value="CANCELLED">CANCELLED</option>
+            </select>
+
+            <input type="submit" id="create-user-button" class="large-blue-button" value="Create a user">
+        </form>
+    </div>
+</template>
+
 <!-- Delete -->
 <template id="template-delete-order">
     <div class="form-background">
