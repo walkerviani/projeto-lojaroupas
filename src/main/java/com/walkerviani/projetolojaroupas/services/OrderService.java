@@ -4,24 +4,28 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.walkerviani.projetolojaroupas.entities.Clothes;
 import com.walkerviani.projetolojaroupas.entities.Order;
 import com.walkerviani.projetolojaroupas.entities.OrderItem;
+import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.repositories.OrderRepository;
+import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 import com.walkerviani.projetolojaroupas.services.exceptions.OrderNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final ClothesRepository clothesRepository;
 
     public List<Order> findAll() {
         return orderRepository.findAll();
@@ -43,7 +47,11 @@ public class OrderService {
             obj.getPayment().setOrder(obj);
             obj.getPayment().setMoment(moment);
         }
-        for(OrderItem item : obj.getItems()){
+        for (OrderItem item : obj.getItems()) {
+            Clothes clothes = clothesRepository.findById(item.getClothes().getId())
+                    .orElseThrow(() -> new ClothesNotFoundException("Product not found"));
+
+            item.setPrice(clothes.getPrice());
             item.setOrder(obj);
         }
         return orderRepository.save(obj);
