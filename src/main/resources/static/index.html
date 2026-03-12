@@ -110,7 +110,7 @@
 
 <!-- TEMPLATES PRODUCTS -->
 
-<!-- Menu -->
+<!-- Products Menu -->
 <template id="template-product-menu">
     <div>
         <h1 class="form-title">Products</h1>
@@ -122,7 +122,7 @@
     </div>
 </template>
 
-<!-- Create -->
+<!-- Products Create -->
 <template id="template-create-product">
     <div class="form-background">
         <h1 class="form-title">Create Product</h1>
@@ -174,7 +174,7 @@
     </div>
 </template>
 
-<!-- Update -->
+<!-- Products Update -->
 <template id="template-update-product">
     <div class="form-background">
         <h1 class="form-title">Update Product</h1>
@@ -227,7 +227,7 @@
     </div>
 </template>
 
-<!-- Delete -->
+<!-- Products Delete -->
 <template id="template-delete-product">
     <div class="form-background">
         <h1 class="form-title">Delete a product</h1>
@@ -240,7 +240,7 @@
 
 <!-- TEMPLATES CATEGORIES -->
 
-<!-- Menu -->
+<!-- Categories Menu -->
 <template id="template-category-menu">
     <div>
         <h1 class="form-title">Categories</h1>
@@ -252,7 +252,7 @@
     </div>
 </template>
 
-<!-- Create -->
+<!-- Categories Create -->
 <template id="template-create-category">
     <div class="form-background">
         <h1 class="form-title">Create Category</h1>
@@ -265,7 +265,7 @@
     </div>
 </template>
 
-<!-- Update -->
+<!-- Categories Update -->
 <template id="template-update-category">
     <div class="form-background">
         <h1 class="form-title">Update a category</h1>
@@ -282,7 +282,7 @@
     </div>
 </template>
 
-<!-- Delete -->
+<!-- Categories Delete -->
 <template id="template-delete-category">
     <div class="form-background">
         <h1 class="form-title">Delete a category</h1>
@@ -295,7 +295,7 @@
 
 <!-- TEMPLATES USERS -->
 
-<!-- Menu -->
+<!-- Users Menu -->
 <template id="template-users-menu">
     <div>
         <h1 class="form-title">Users</h1>
@@ -307,7 +307,7 @@
     </div>
 </template>
 
-<!-- Create -->
+<!-- Users Create -->
 <template id="template-create-user">
     <div class="form-background">
         <h1 class="form-title">Create User</h1>
@@ -344,7 +344,7 @@
     </div>
 </template>
 
-<!-- Update -->
+<!-- Users Update -->
 <template id="template-update-user">
     <div class="form-background">
         <h1 class="form-title">Update User</h1>
@@ -377,7 +377,7 @@
     </div>
 </template>
 
-<!-- Delete -->
+<!-- Users Delete -->
 <template id="template-delete-user">
     <div class="form-background">
         <h1 class="form-title">Delete a user</h1>
@@ -390,7 +390,7 @@
 
 <!-- TEMPLATES ORDERS -->
 
-<!-- Menu -->
+<!-- Orders Menu -->
 <template id="template-orders-menu">
     <div>
         <h1 class="form-title">Orders</h1>
@@ -402,7 +402,7 @@
     </div>
 </template>
 
-<!-- Create -->
+<!-- Orders Create -->
 <template id="template-create-order">
     <div class="form-background">
         <h1 class="form-title">Create a new Order</h1>
@@ -441,7 +441,46 @@
     </div>
 </template>
 
-<!-- Delete -->
+<!-- Orders Update -->
+<template id="template-update-order">
+    <div class="form-background">
+        <h1 class="form-title">Update Order</h1>
+        <label id="alert-update-order"></label>
+        <form id="form-update-order" novalidate>
+
+            <label>User Id</label>
+            <input type="text" id="client-id-update-order" name="userId" required>
+            <button class="large-blue-button" id="find-user-by-id-update-order">Find</button>
+
+            <div id="client-data-update-order"></div>
+
+            <label>Type product name to find</label>
+            <input type="text" id="find-product-update-order" required>
+            <div class="flex-column">
+                <button class="large-blue-button" id="find-product-by-name-update-order">Find</button>
+                <button class="large-red-button" id="clear-search-product-update-order">Clear Search</button>
+            </div>
+
+            <div id="product-found-update-order"></div>
+            <label>Selected Items</label>
+            <div id="added-product-update-order"></div>
+
+            <label>Order Status</label>
+            <select name="orderStatus" id="order-status-select-update-order" required>
+                <option value="">Please choose an option</option>
+                <option value="WAITING_PAYMENT">WAITING_PAYMENT</option>
+                <option value="PAID">PAID</option>
+                <option value="SHIPPED">SHIPPED</option>
+                <option value="DELIVERED">DELIVERED</option>
+                <option value="CANCELLED">CANCELLED</option>
+            </select>
+
+            <input type="submit" id="update-admin-order-button" class="large-blue-button" value="Update order">
+        </form>
+    </div>
+</template>
+
+<!-- Orders Delete -->
 <template id="template-delete-order">
     <div class="form-background">
         <h1 class="form-title">Delete order</h1>
@@ -451,7 +490,7 @@
     </div>
 </template>
 
-<!-- Order detail -->
+<!-- Orders Detail -->
 <template id="template-order-detail">
     <div>
         <div class="form-title">Order Details</div>
@@ -459,7 +498,7 @@
     </div>
 </template>
 
-<!-- Template product detail -->
+<!-- Template Product Detail -->
 <template id="template-detail">
     <div class="detail-mode-img">
         <img id="product-img">
@@ -484,7 +523,7 @@
     </div>
 </template>
 
-<!-- 404 error page -->
+<!-- 404 Error Page -->
 <template id="template-error">
     <div>
         <h1>404 - Page not found!</h1>
@@ -495,7 +534,7 @@
     </div>
 </template>
 
-<!-- Shopping cart template -->
+<!-- Shopping Cart Template -->
 <template id="template-cart">
     <div>
         <label class="form-title">Shopping Cart</label>
@@ -508,7 +547,7 @@
     </div>
 </template>
 
-<!-- Checkout template -->
+<!-- Checkout Template -->
 <template id="template-checkout">
     <div class="form-background">
         <div class="checkout-menu">
@@ -524,7 +563,7 @@
     </div>
 </template>
 
-<!-- Orders page (user purchases) -->
+<!-- Orders Page (user purchases) -->
 <template id="template-purchases">
     <div>
         <div class="form-title">Your purchases</div>
@@ -532,7 +571,7 @@
     </div>
 </template>
 
-<!-- User profile page -->
+<!-- User Profile Page -->
 <template id="template-profile">
     <div class="profile-menu">
         <button class="small-white-button" id="profile-settings">Account Settings</button>
