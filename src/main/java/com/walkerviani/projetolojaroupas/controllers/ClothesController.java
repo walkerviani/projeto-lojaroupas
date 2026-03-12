@@ -3,7 +3,6 @@ package com.walkerviani.projetolojaroupas.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +20,14 @@ import com.walkerviani.projetolojaroupas.entities.enums.Color;
 import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.services.ClothesService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/clothes")
 public class ClothesController {
 
-    @Autowired
-    private ClothesService clothesService;
+    private final ClothesService clothesService;
 
     @GetMapping
     public ResponseEntity<List<Clothes>> findAll() {

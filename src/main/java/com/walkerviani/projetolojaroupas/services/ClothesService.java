@@ -3,7 +3,6 @@ package com.walkerviani.projetolojaroupas.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -18,15 +17,14 @@ import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundExce
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class ClothesService {
 
-    @Autowired
-    private ClothesRepository clothesRepository;
-
-    @Autowired
-    private StorageRepository storageRepository;
+    private final ClothesRepository clothesRepository;
+    private final StorageRepository storageRepository;
 
     public List<Clothes> findAll() {
         return clothesRepository.findAll();

@@ -2,7 +2,6 @@ package com.walkerviani.projetolojaroupas.controllers;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.walkerviani.projetolojaroupas.services.StorageService;
 
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/image")
 public class StorageController {
 
-    @Autowired
-    private StorageService storageService;
+    private final StorageService storageService;
 
     @PostMapping
     public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) throws IOException{

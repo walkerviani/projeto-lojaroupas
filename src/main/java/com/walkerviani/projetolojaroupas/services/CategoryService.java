@@ -1,23 +1,25 @@
 package com.walkerviani.projetolojaroupas.services;
 
-import com.walkerviani.projetolojaroupas.entities.Category;
-import com.walkerviani.projetolojaroupas.repositories.CategoryRepository;
-import com.walkerviani.projetolojaroupas.services.exceptions.CategoryNotFoundException;
-import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.walkerviani.projetolojaroupas.entities.Category;
+import com.walkerviani.projetolojaroupas.repositories.CategoryRepository;
+import com.walkerviani.projetolojaroupas.services.exceptions.CategoryNotFoundException;
+import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public List<Category> findAll() {
         return categoryRepository.findAll();
