@@ -51,7 +51,7 @@ public class Clothes implements Serializable {
     private Category category;
 
     @OneToMany(mappedBy = "id.clothes")
-    private Set<OrderItem> items = new HashSet<>();
+    private final Set<OrderItem> items = new HashSet<>();
 
     public Clothes() {
 
