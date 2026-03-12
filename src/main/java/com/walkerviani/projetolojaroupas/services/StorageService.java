@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,11 +11,13 @@ import com.walkerviani.projetolojaroupas.entities.ImageData;
 import com.walkerviani.projetolojaroupas.repositories.StorageRepository;
 import com.walkerviani.projetolojaroupas.util.ImageUtils;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class StorageService {
 
-    @Autowired
-    private StorageRepository storageRepository;
+    private final StorageRepository storageRepository;
 
     public String uploadFile(MultipartFile file) throws IOException {
         String randomId = UUID.randomUUID().toString();
