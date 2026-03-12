@@ -29,7 +29,7 @@ public class Category implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
-    private Set<Clothes> clothes = new HashSet<>();
+    private final Set<Clothes> clothes = new HashSet<>();
 
     public Category() {
     }
