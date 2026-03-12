@@ -801,6 +801,7 @@ td {
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
 
+/* Small green button */
 .small-green-button {
     background-color: rgb(30, 204, 30);
     color: white;
@@ -812,6 +813,21 @@ td {
 
 .small-green-button:hover {
     background-color: rgb(12, 157, 12);
+    cursor: pointer;
+}
+
+/* Small Red Button */
+.small-red-button {
+    background-color: rgb(255, 62, 4);
+    color: white;
+    width: 100px;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.small-red-button:hover {
+    background-color: rgb(139, 32, 0);
     cursor: pointer;
 }
 
