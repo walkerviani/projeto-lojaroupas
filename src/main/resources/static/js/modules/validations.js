@@ -13,7 +13,7 @@ export function validateCreateAccount() {
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
         const phoneRegex = /^\d{11}$/; //numeric number with 11 digits long
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
-        const cpfRegex = /^[0-9]+$/; //alow only numbers
+        const cpfRegex = /^[0-9]+$/; //allow only numbers
 
         // Reset the label and error
         alert.textContent = "";
@@ -205,9 +205,9 @@ export async function validateUser(form, alert, userId = null) {
         e.preventDefault();
 
         const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
-        const cpfRegex = /^[0-9]+$/; //alow only numbers
+        const cpfRegex = /^[0-9]+$/; //allow only numbers
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
-        const phoneRegex = /^[0-9]+$/; //alow only numbers
+        const phoneRegex = /^[0-9]+$/; //allow only numbers
 
         // Reset the label and error
         alert.textContent = "";
@@ -331,7 +331,55 @@ export async function validateLogin(form, alert) {
     });
 }
 
-export async function validateOrder(alert) {
+export async function validateAdminOrder(alert, form) {
+    const { userId, orderStatus } = form.elements;
+    const orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
+
+    const userRegex = /^[0-9]+$/; //allow only numbers
+
+    if (userId.value === "" || !userRegex.test(userId.value)) {
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        updateAlert(alert, "Provide a valid user ID!", "red");
+    }
+    else if (orderItems.length === 0) {
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        updateAlert(alert, "Order cannot have empty products!", "red")
+    }
+    else if (orderStatus.value === "") {
+        alert.scrollIntoView({ behavior: "smooth", block: "center" });
+        updateAlert(alert, "You must select a valid order status!", "red");
+    }
+    else {
+        try {
+            const allItems = orderItems.map((item) => ({
+                quantity: item.quantity,
+                clothes: { id: item.id }
+            }));
+
+            const orderObj = {
+                orderStatus: orderStatus.value,
+                client: { id: Number(userId.value) },
+                items: allItems,
+                payment: {}
+            };
+            const success = await API.postOrder(orderObj);
+            if (success) {
+                updateAlert(alert, "Your order has been created successfully!", "green");
+                sessionStorage.removeItem('orderItems');
+                setTimeout(() => {
+                    navigateTo('/admin/orders');
+                }, 3000);
+
+            } else {
+                updateAlert(alert, "Failed to create your order!", "red");
+            }
+        } catch (error) {
+            updateAlert(alert, "An error ocurred while processing your items", "red");
+        }
+    }
+}
+
+export async function validateUserOrder(alert) {
     const user = await checkAuth();
     if (!user) {
         updateAlert(alert, "You're not logged in! Redirecting to login...", "red");
@@ -347,17 +395,14 @@ export async function validateOrder(alert) {
     }
 
     try {
-        const allItems = await Promise.all(
-            cart.map(async (item) => {
-                const productData = await API.fetchData(`${BASE_URL}/clothes/${item.id}`);
-                if (!productData) throw new Error(`Product ${item.id} not found`);
-                return { quantity: item.quantity, price: productData.price, clothes: { id: productData.id } }
-            })
-        );
+        const allItems = cart.map((item) => ({
+                quantity: item.quantity,
+                clothes: { id: item.id }
+            }));
 
         const orderObj = {
             orderStatus: "PAID",
-            client: { id: user.id },
+            client: { id: Number(user.id) },
             items: allItems,
             payment: {}
         };
@@ -373,7 +418,7 @@ export async function validateOrder(alert) {
             updateAlert(alert, "Failed to create your order!", "red");
         }
     } catch (error) {
-        updateAlert(alert, "An error ocurred while processing your items", "red");
+        updateAlert(alert, "An error occurred while processing your items", "red");
     }
 }
 
@@ -384,9 +429,9 @@ export async function validateProfileData(form, alert, userId) {
     const role = user.role;
 
     const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
-    const cpfRegex = /^[0-9]+$/; //alow only numbers
+    const cpfRegex = /^[0-9]+$/; //allow only numbers
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
-    const phoneRegex = /^[0-9]+$/; //alow only numbers
+    const phoneRegex = /^[0-9]+$/; //allow only numbers
 
     // Reset the label and error
     alert.textContent = "";
@@ -444,9 +489,9 @@ export async function validateProfileData(form, alert, userId) {
     if (response === true) {
         updateAlert(alert, "Updated successfully!", "green");
         setTimeout(() => {
-                    const configElement = document.getElementById('profile-option');
-                    configElement.innerHTML = `<h1>Select an option</h1>`;
-                }, 2000);
+            const configElement = document.getElementById('profile-option');
+            configElement.innerHTML = `<h1>Select an option</h1>`;
+        }, 2000);
 
         // disable the inputs
         const inputs = form.querySelectorAll('.profile-box-input');
