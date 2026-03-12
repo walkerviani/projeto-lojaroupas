@@ -330,7 +330,7 @@ export async function renderProductSearch(alert) {
                     <button class="quantity-controls increase-qnt" data-id="${item.id}">+</button>
                 </div>
                 
-                <button class="small-green-button" data-id="${item.id}" data-price="${item.price}" style="margin-top: 5px">Add to order</button>
+                <button class="small-green-button" data-id="${item.id}" data-price="${item.price}" data-name="${item.name}" style="margin-top: 5px">Add to order</button>
             `;
 
             display.appendChild(itemElement);
@@ -349,35 +349,147 @@ export function bindOrderEvents() {
 
         const click = e.target;
         const productId = click.getAttribute('data-id');
+        const productName = click.getAttribute('data-name');
 
         if (!productId) return;
 
         const qntSpan = document.getElementById(`item-qnt-${productId}`);
 
-        //increase product quantity
+        // Increase product quantity
         if (click.classList.contains('increase-qnt')) {
             qntSpan.textContent = parseInt(qntSpan.textContent) + 1;
         }
 
-        //decrease product quantity
+        // Decrease product quantity
         if (click.classList.contains('decrease-qnt')) {
             let currentValue = parseInt(qntSpan.textContent);
             if (currentValue > 0) qntSpan.textContent = currentValue - 1;
         }
 
+        // Handle "add to cart" button click
         if (click.classList.contains('small-green-button')) {
             const quantity = parseInt(qntSpan.textContent);
             if (quantity > 0) {
                 const productData = {
                     id: productId,
-                    price: parseFloat(click.getAttribute('data-price')),
+                    name: productName,
+                    price: parseInt(click.getAttribute('data-price') * 100),
                     quantity: quantity
                 }
 
+                // Add to session storage
                 addToOrderStorage(productData);
 
+                // Reset product quantity after adding to session storage
                 qntSpan.textContent = "0";
             }
+        }
+    });
+}
+
+function addToOrderStorage(product) {
+    // Check if there are saved items, otherwise create an empty array
+    let orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
+
+    const existingItem = orderItems.find(item => item.id === product.id);
+
+    // If the item already exists in the cart, just update the quantity
+    if (existingItem) {
+        existingItem.quantity += product.quantity;
+    } else {
+        // If its not added, add to the array
+        orderItems.push(product);
+    }
+
+    // Save the updated array back to session storage
+    sessionStorage.setItem('orderItems', JSON.stringify(orderItems));
+
+    renderSelectedItems();
+}
+
+export function renderSelectedItems() {
+    const orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
+
+    const selectedItemsElement = document.getElementById('added-product-create-order');
+    selectedItemsElement.innerHTML = '';
+
+    if (orderItems.length === 0) {
+        selectedItemsElement.textContent = "No items added yet.";
+        return;
+    }
+
+    selectedItemsElement.textContent = "Items: ";
+    let cartTotal = 0;
+
+    orderItems.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        cartTotal += itemTotal;
+
+        const itemElement = document.createElement('div');
+        itemElement.classList.add('product-display');
+        itemElement.innerHTML = `
+        <div>
+            <p>${item.name} - ${currencyFormatterToBRL(item.price / 100)}</p>
+            <div class="flex-row">
+                <button class="quantity-controls decrease-cart-qnt" data-id="${item.id}">-</button>
+                <span class="qnt-value" id="cart-item-qnt-${item.id}">${item.quantity}</span>
+                <button class="quantity-controls increase-cart-qnt" data-id="${item.id}">+</button>
+            </div>
+            <p>Item total: ${currencyFormatterToBRL(itemTotal / 100)}</p>
+        </div>
+        <button class="small-red-button" data-id="${item.id}" style="margin-top: 5px">Remove item</button>
+        `;
+
+        selectedItemsElement.appendChild(itemElement);
+    });
+    //add order total price
+    const totalElement = document.createElement('h3');
+    totalElement.textContent = `Order Total: ${currencyFormatterToBRL(cartTotal / 100)}`
+    selectedItemsElement.appendChild(totalElement);
+}
+
+export function bindSelectedItemsEvent() {
+    const display = document.getElementById('added-product-create-order');
+    if (!display) return;
+
+    display.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const click = e.target;
+        const productId = click.getAttribute('data-id');
+
+        if (!productId) return;
+
+        // Get order cart
+        let orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
+
+        // Search product index on the array
+        const productIndex = orderItems.findIndex(item => item.id === productId);
+        if (productId === -1) return; // If not found, stop the execution
+
+        // Increase product quantity
+        if (click.classList.contains('increase-cart-qnt')) {
+            orderItems[productIndex].quantity += 1;
+            sessionStorage.setItem('orderItems', JSON.stringify(orderItems));
+            renderSelectedItems(); // Render the items again
+        }
+
+        // Decrease product quantity
+        if (click.classList.contains('decrease-cart-qnt')) {
+            // Only decrease if quantity is bigger than 1
+            if (orderItems[productIndex].quantity > 1) {
+                orderItems[productIndex].quantity -= 1;
+                sessionStorage.setItem('orderItems', JSON.stringify(orderItems));
+                renderSelectedItems(); // Render the items again
+            }
+        }
+
+        // Decrease product quantity
+        if (click.classList.contains('small-red-button')) {
+            // Remove the item from the array
+            orderItems.splice(productIndex, 1);
+            sessionStorage.setItem('orderItems', JSON.stringify(orderItems));
+            renderSelectedItems(); // Render the items again
         }
     });
 }
