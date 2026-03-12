@@ -410,8 +410,8 @@
         <form id="form-create-order" novalidate>
 
             <label>User Id</label>
-            <input type="text" id="client-id-create-order" name="client-id" required>
-            <button class="large-blue-button" id="find-user-by-name">Find</button>
+            <input type="text" id="client-id-create-order" name="userId" required>
+            <button class="large-blue-button" id="find-user-by-id">Find</button>
 
             <div id="client-data-create-order"></div>
 
@@ -427,7 +427,7 @@
             <div id="added-product-create-order"></div>
 
             <label>Order Status</label>
-            <select name="order-status" id="order-status-select" required>
+            <select name="orderStatus" id="order-status-select" required>
                 <option value="">Please choose an option</option>
                 <option value="WAITING_PAYMENT">WAITING_PAYMENT</option>
                 <option value="PAID">PAID</option>
@@ -436,7 +436,7 @@
                 <option value="CANCELLED">CANCELLED</option>
             </select>
 
-            <input type="submit" id="create-user-button" class="large-blue-button" value="Create a user">
+            <input type="submit" id="create-admin-order-button" class="large-blue-button" value="Create a order">
         </form>
     </div>
 </template>
