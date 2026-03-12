@@ -163,7 +163,7 @@ export function loadCheckout() {
     const confirmCheckoutButton = document.getElementById('confirm-checkout');
     confirmCheckoutButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        await VALIDATION.validateOrder(alert);
+        await VALIDATION.validateUserOrder(alert);
     });
 }
 
@@ -212,6 +212,7 @@ export function loadCreateAccountPage() {
     VALIDATION.validateCreateAccount();
 }
 
+// Load '/admin' menu
 export function loadAdminPage() {
     loadContainer('template-admin', 'container admin-menu');
 
@@ -224,7 +225,7 @@ export function loadAdminPage() {
     });
 }
 
-// Products functions
+// Products table in '/admin'
 export async function loadProductsPage() {
     loadContainer('template-product-menu', 'container table');
     const table = document.getElementById('product-table');
@@ -281,7 +282,7 @@ export async function deleteProductPage() {
     });
 }
 
-// Categories functions
+// Categories table in '/admin'
 export async function loadCategoriesPage() {
     loadContainer('template-category-menu', 'container table');
 
@@ -356,7 +357,7 @@ export async function deleteCategoryPage() {
     });
 }
 
-//Users functions
+// Users table in '/admin'
 export async function loadUserPage() {
     loadContainer('template-users-menu', 'container table');
 
@@ -379,13 +380,7 @@ export async function loadUserPage() {
 }
 
 export async function createUserPage() {
-    const container = document.getElementById('container');
-    const template = document.getElementById('template-create-user');
-    const clone = template.content.cloneNode(true);
-
-    container.className = "container form";
-    container.innerHTML = "";
-    container.appendChild(clone);
+    loadContainer('template-create-user', 'container form');
 
     const form = document.getElementById('form-create-user');
     const alert = document.getElementById('alert-create-user');
@@ -423,7 +418,7 @@ export async function deleteUserPage() {
     });
 }
 
-//Orders function
+// Orders table in '/admin'
 export async function loadOrdersPage() {
     loadContainer('template-orders-menu', 'container table');
 
@@ -449,6 +444,46 @@ export async function loadOrdersPage() {
     UTIL.showOrdersTable(await API.fetchData(`${UTIL.BASE_URL}/orders`));
 }
 
+export function createOrdersPage() {
+    loadContainer('template-create-order', 'container form');
+
+    const form = document.getElementById('form-create-order');
+    const alert = document.getElementById('alert-create-order');
+
+    UTIL.renderSelectedItems();
+    UTIL.bindOrderEvents();
+    UTIL.bindSelectedItemsEvent();
+
+    // Find user by id button
+    const clientIdButton = document.getElementById('find-user-by-id');
+    clientIdButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.renderUserData(alert);
+    });
+
+    // Find products by name button
+    const findProductButton = document.getElementById('find-product-by-name');
+    findProductButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.renderProductSearch(alert);
+    });
+
+    // Clear search products button
+    const clearSearchButton = document.getElementById('clear-search-product');
+    const display = document.getElementById('product-found-create-order');
+    clearSearchButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        display.innerHTML = "";
+    });
+
+    // Validate the form
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await VALIDATION.validateAdminOrder(alert, form);
+    });
+}
+
+// Delete an order in '/admin'
 export async function deleteOrdersPage() {
     loadContainer('template-delete-order', 'container form');
 
@@ -477,7 +512,7 @@ export async function loadUserPurchases() {
     }
 }
 
-//User profile data setting
+// User profile data setting
 async function loadAccountSettings() {
     const element = document.getElementById('profile-option');
     element.innerHTML = '';
@@ -530,7 +565,7 @@ async function loadAccountSettings() {
     UTIL.bindProfileEvents(user.id);
 }
 
-//User profile change password setting
+// User profile change password setting
 async function loadPasswordSettings() {
     const element = document.getElementById('profile-option');
     element.innerHTML = '';
@@ -572,7 +607,7 @@ async function loadPasswordSettings() {
     VALIDATION.validateProfilePassword(user.id);
 }
 
-//Show more details about the order in /admin/orders
+// Show more details about the selected order in '/admin/orders'
 export async function loadOrderDetail() {
     loadContainer('template-order-detail', 'container orders');
 
@@ -580,7 +615,7 @@ export async function loadOrderDetail() {
     templateElement.innerHTML = '';
 
     const order = await UTIL.getParams('detail-id', (param) => API.fetchData(`${UTIL.BASE_URL}/orders/${param}`));
-    
+
     const purchaseDate = new Date(order.moment).toLocaleDateString('pt-BR');
 
     const purchaseElement = document.createElement('div');
@@ -623,6 +658,7 @@ export async function loadOrderDetail() {
     templateElement.appendChild(purchaseElement);
 }
 
+// Update navigation bar login button based on the authentication status
 export async function updateAuthUI() {
     const loginButton = document.getElementById('nav-login-button');
     if (!loginButton) return;
@@ -636,6 +672,7 @@ export async function updateAuthUI() {
     }
 }
 
+// Load page container using template ID and CSS class
 function loadContainer(templateInput, classNameInput) {
     const container = document.getElementById('container');
     const template = document.getElementById(templateInput);
