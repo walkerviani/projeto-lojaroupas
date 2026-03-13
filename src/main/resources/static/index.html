@@ -406,7 +406,7 @@
 <template id="template-create-order">
     <div class="form-background">
         <h1 class="form-title">Create a new Order</h1>
-        <label id="alert-create-order"></label>
+        <label class="alert" id="alert-create-order"></label>
         <form id="form-create-order" novalidate>
 
             <label>User Id</label>
@@ -422,9 +422,9 @@
                 <button class="large-red-button" id="clear-search-product">Clear Search</button>
             </div>
 
-            <div id="product-found-create-order"></div>
+            <div class="product-found" id="product-found-create-order"></div>
             <label>Selected Items</label>
-            <div id="added-product-create-order"></div>
+            <div class="product-added" id="added-product-create-order"></div>
 
             <label>Order Status</label>
             <select name="orderStatus" id="order-status-select" required>
@@ -445,7 +445,7 @@
 <template id="template-update-order">
     <div class="form-background">
         <h1 class="form-title">Update Order</h1>
-        <label id="alert-update-order"></label>
+        <label class="alert" id="alert-update-order"></label>
         <form id="form-update-order" novalidate>
 
             <label>User Id</label>
@@ -461,9 +461,9 @@
                 <button class="large-red-button" id="clear-search-product-update-order">Clear Search</button>
             </div>
 
-            <div id="product-found-update-order"></div>
+            <div class="product-found" id="product-found-update-order"></div>
             <label>Selected Items</label>
-            <div id="added-product-update-order"></div>
+            <div class="product-added" id="added-product-update-order"></div>
 
             <label>Order Status</label>
             <select name="orderStatus" id="order-status-select-update-order" required>
