@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, updateAlert } from "../utils/util.js";
+import { BASE_URL, updateAlert, renderSelectedItems, bindOrderEvents, bindSelectedItemsEvent } from "../utils/util.js";
 import { authenticateUser, checkAuth } from "../services/auth.js";
 import * as API from "../services/api.js";
 
@@ -331,9 +331,11 @@ export async function validateLogin(form, alert) {
     });
 }
 
-export async function validateAdminOrder(alert, form) {
+export async function validateAdminOrder(alert, form, id = null) {
     const { userId, orderStatus } = form.elements;
     const orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
+
+    const isUpdateMode = id ? true : false;
 
     const userRegex = /^[0-9]+$/; //allow only numbers
 
@@ -362,7 +364,14 @@ export async function validateAdminOrder(alert, form) {
                 items: allItems,
                 payment: {}
             };
-            const success = await API.postOrder(orderObj);
+
+            if(isUpdateMode) {
+                orderObj.id = Number(id);
+            }
+            
+            const success = isUpdateMode ? await API.putOrder(orderObj)
+                : await API.postOrder(orderObj);
+
             if (success) {
                 updateAlert(alert, "Your order has been created successfully!", "green");
                 sessionStorage.removeItem('orderItems');
@@ -377,6 +386,22 @@ export async function validateAdminOrder(alert, form) {
             updateAlert(alert, "An error ocurred while processing your items", "red");
         }
     }
+}
+
+export async function updateOrderForm(form, order) {
+    const { userId, orderStatus } = form.elements;
+
+    userId.value = order.client.id;
+    orderStatus.value = order.orderStatus;
+
+    const allItems = order.items.map((item) => ({
+        id: item.clothes.id,
+        name: item.clothes.name,
+        price: item.price * 100, //price is multiplied by 100 because it will be divided by 100 when rendered
+        quantity: item.quantity,
+    }));
+
+    sessionStorage.setItem('orderItems', JSON.stringify(allItems));
 }
 
 export async function validateUserOrder(alert) {
@@ -396,9 +421,9 @@ export async function validateUserOrder(alert) {
 
     try {
         const allItems = cart.map((item) => ({
-                quantity: item.quantity,
-                clothes: { id: item.id }
-            }));
+            quantity: item.quantity,
+            clothes: { id: item.id }
+        }));
 
         const orderObj = {
             orderStatus: "PAID",
