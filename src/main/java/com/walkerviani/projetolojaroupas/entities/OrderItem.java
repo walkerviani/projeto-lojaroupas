@@ -1,15 +1,16 @@
 package com.walkerviani.projetolojaroupas.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.walkerviani.projetolojaroupas.entities.pk.OrderItemPK;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.walkerviani.projetolojaroupas.entities.pk.OrderItemPK;
+
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "order_item")
@@ -19,7 +20,7 @@ public class OrderItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private OrderItemPK id = new OrderItemPK();
+    private final OrderItemPK id = new OrderItemPK();
     private int quantity;
     private BigDecimal price;
 
