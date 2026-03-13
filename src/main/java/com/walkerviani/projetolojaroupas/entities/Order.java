@@ -11,6 +11,7 @@ import java.util.Set;
 import com.walkerviani.projetolojaroupas.entities.enums.OrderStatus;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +32,7 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+    @Column(updatable = false)
     private Instant moment;
     private OrderStatus orderStatus;
 
@@ -38,8 +40,8 @@ public class Order implements Serializable {
     @JoinColumn(name = "id_client")
     private User client;
 
-    @OneToMany(mappedBy = "id.order", cascade= CascadeType.ALL)
-    private Set<OrderItem> items = new HashSet<>();
+    @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final Set<OrderItem> items = new HashSet<>();
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
