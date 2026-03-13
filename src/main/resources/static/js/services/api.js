@@ -32,6 +32,25 @@ export async function postOrder(orderObj) {
     }
 }
 
+export async function putOrder(orderObj) {
+    try {
+        const response = await fetch(`${BASE_URL}/orders/${orderObj.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderObj)
+        });
+        if (response.ok) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        return false;
+    }
+}
+
 export async function deleteData(url, alert) {
     try {
         const response = await fetch(url, {
