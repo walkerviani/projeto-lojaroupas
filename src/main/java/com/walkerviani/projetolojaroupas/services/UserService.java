@@ -14,6 +14,7 @@ import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 import com.walkerviani.projetolojaroupas.services.exceptions.UserNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -74,6 +75,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User updatePassword(Long id, String newPassword) {
         User entity = userRepository.getReferenceById(id);
         entity.setPassword(passwordEncoder.encode(newPassword));
