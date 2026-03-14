@@ -1,8 +1,6 @@
 package com.walkerviani.projetolojaroupas.controllers;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.walkerviani.projetolojaroupas.entities.User;
 import com.walkerviani.projetolojaroupas.services.UserService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -31,32 +30,13 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        return ResponseEntity.ok().body(userService.findAll());
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
+    public ResponseEntity<User> findById(@PathVariable Long id, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("LoggedUser");
+        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         User obj = userService.findById(id);
-        return ResponseEntity.ok().body(obj);
-    }
-
-    @GetMapping("/email")
-    public ResponseEntity<Optional<User>> findByEmail(@RequestParam String email) {
-        Optional<User> obj = userService.findByEmail(email);
-        return ResponseEntity.ok().body(obj);
-    }
-
-    @GetMapping("/name")
-    public ResponseEntity<Optional<User>> findByName(@RequestParam String name) {
-        Optional<User> obj = userService.findByName(name);
-        return ResponseEntity.ok().body(obj);
-    }
-
-    @GetMapping("/cpf")
-    public ResponseEntity<Optional<User>> findByCpf(@RequestParam String cpf){
-        Optional<User> obj = userService.findByCpf(cpf);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -68,27 +48,44 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("LoggedUser");
+        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("LoggedUser");
+        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        obj.setRole(null);
         obj = userService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
 
     @Transactional
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody String newPassword) {
+    public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody String newPassword, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("LoggedUser");
+        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         String removeQuotes = newPassword.replaceAll("^\"|\"$", "").trim();
         User obj = userService.updatePassword(id, removeQuotes);
         return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping(value = "/{id}/check-password")
-    public ResponseEntity<Boolean> checkCurrentPassword(@PathVariable Long id, @RequestParam String password) {
+    public ResponseEntity<Boolean> checkCurrentPassword(@PathVariable Long id, @RequestParam String password, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("LoggedUser");
+        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         boolean isValid = userService.checkCurrentPassword(id, password);
         if(isValid) {
             return ResponseEntity.ok().body(isValid);

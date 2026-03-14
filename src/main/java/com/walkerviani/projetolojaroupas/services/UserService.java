@@ -36,15 +36,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findByName(String name) {
-        return userRepository.findByName(name);
-    }
-
-    public Optional<User> findByCpf(String cpf) {
-        return userRepository.findByCpf(cpf);
-    }
-
     public User insert(User obj) {
+        if (findByEmail(obj.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already in use");
+        }
         obj.setPassword(passwordEncoder.encode(obj.getPassword()));
         return userRepository.save(obj);
     }
@@ -74,7 +69,9 @@ public class UserService {
         entity.setEmail(obj.getEmail());
         entity.setPhone(obj.getPhone());
         entity.setCpf(obj.getCpf());
-        entity.setRole(obj.getRole());
+        if (obj.getRole() != null) {
+            entity.setRole(obj.getRole());
+        }
     }
 
     public User updatePassword(Long id, String newPassword) {
