@@ -18,6 +18,7 @@ import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 import com.walkerviani.projetolojaroupas.services.exceptions.OrderNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -67,6 +68,7 @@ public class OrderService {
         }
     }
 
+    @Transactional
     public Order update(Long id, Order obj) {
         try {
             Order entity = orderRepository.getReferenceById(id);
@@ -78,7 +80,19 @@ public class OrderService {
     }
 
     private void updateData(Order entity, Order obj) {
-        entity.setMoment(obj.getMoment());
         entity.setOrderStatus(obj.getOrderStatus());
+
+        if (obj.getItems() != null) {
+
+            entity.getItems().clear();
+
+            obj.getItems().forEach(item -> {
+                Clothes clothes = clothesRepository.findById(item.getClothes().getId())
+                        .orElseThrow(() -> new ClothesNotFoundException("Product not found"));
+
+                OrderItem newItem = new OrderItem(entity, clothes, item.getQuantity(), clothes.getPrice());
+                entity.getItems().add(newItem);
+            });
+        }
     }
 }
