@@ -296,9 +296,10 @@ export function bindProfileEvents(userId) {
 }
 
 // Render product search in '/admin' create order
-export async function renderProductSearch(alert) {
-    const input = document.getElementById('find-product-create-order');
-    const display = document.getElementById('product-found-create-order');
+export async function renderProductSearch() {
+    const alert = document.querySelector(".alert");
+    const input = document.querySelector(".renderProductSearch-input");
+    const display = document.querySelector(".product-found");
     const query = input.value;
 
     if (!query) {
@@ -343,7 +344,7 @@ export async function renderProductSearch(alert) {
 
 // Bind order events in '/admin' create order
 export function bindOrderEvents() {
-    const display = document.getElementById('product-found-create-order');
+    const display = document.querySelector('.product-found');
     if (!display) return;
 
     display.addEventListener('click', (e) => {
@@ -371,7 +372,7 @@ export function bindOrderEvents() {
         // Handle "add to cart" button click
         if (click.classList.contains('small-green-button')) {
             const quantity = parseInt(qntSpan.textContent);
-            if (quantity > 0) {
+            if (!quantity <= 0) {
                 const productData = {
                     id: productId,
                     name: productName,
@@ -384,6 +385,9 @@ export function bindOrderEvents() {
 
                 // Reset product quantity after adding to session storage
                 qntSpan.textContent = "0";
+            } else {
+                const alert = document.querySelector(".alert");
+                updateAlert(alert, "Product quantity must be greater than 0 to add", "red");
             }
         }
     });
@@ -413,8 +417,8 @@ function addToOrderStorage(product) {
 // Render selected items (items that are saved in session storage) in '/admin' create order
 export function renderSelectedItems() {
     const orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
-
-    const selectedItemsElement = document.getElementById('added-product-create-order');
+    const selectedItemsElement = document.querySelector(".product-added");
+    
     selectedItemsElement.innerHTML = '';
 
     if (orderItems.length === 0) {
@@ -453,7 +457,7 @@ export function renderSelectedItems() {
 }
 
 export function bindSelectedItemsEvent() {
-    const display = document.getElementById('added-product-create-order');
+    const display = document.querySelector('.product-added');
     if (!display) return;
 
     display.addEventListener('click', (e) => {
@@ -468,8 +472,8 @@ export function bindSelectedItemsEvent() {
         let orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
 
         // Search product index on the array
-        const productIndex = orderItems.findIndex(item => item.id === productId);
-        if (productId === -1) return; // If not found, stop the execution
+        const productIndex = orderItems.findIndex(item => item.id == productId);
+        if (productIndex === -1) return; // If not found, stop the execution
 
         // Increase product quantity
         if (click.classList.contains('increase-cart-qnt')) {
@@ -499,9 +503,10 @@ export function bindSelectedItemsEvent() {
 }
 
 // Display user data in '/admin' after providing an user Id
-export async function renderUserData(alert) {
-    const input = document.getElementById('client-id-create-order');
-    const display = document.getElementById('client-data-create-order');
+export async function renderUserData() {
+    const alert = document.querySelector(".alert");
+    const input = document.querySelector(".renderUserData-input");
+    const display = document.querySelector(".renderUserData-display");
     const query = input.value;
 
     if (!query) {

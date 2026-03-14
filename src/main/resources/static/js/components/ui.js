@@ -444,28 +444,31 @@ export async function loadOrdersPage() {
     UTIL.showOrdersTable(await API.fetchData(`${UTIL.BASE_URL}/orders`));
 }
 
+// Create an order in '/admin'
 export function createOrdersPage() {
     loadContainer('template-create-order', 'container form');
+
+    sessionStorage.removeItem('orderItems'); // Reset session storage when loading the page
 
     const form = document.getElementById('form-create-order');
     const alert = document.getElementById('alert-create-order');
 
     UTIL.renderSelectedItems();
-    UTIL.bindOrderEvents();
+    UTIL.bindOrderEvents('product-found-create-order');
     UTIL.bindSelectedItemsEvent();
 
     // Find user by id button
     const clientIdButton = document.getElementById('find-user-by-id');
     clientIdButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        await UTIL.renderUserData(alert);
+        await UTIL.renderUserData();
     });
 
     // Find products by name button
     const findProductButton = document.getElementById('find-product-by-name');
     findProductButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        await UTIL.renderProductSearch(alert);
+        await UTIL.renderProductSearch();
     });
 
     // Clear search products button
@@ -480,6 +483,50 @@ export function createOrdersPage() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         await VALIDATION.validateAdminOrder(alert, form);
+    });
+}
+
+export async function updateOrdersPage() {
+    loadContainer('template-update-order', 'container form');
+
+    sessionStorage.removeItem('orderItems'); // Reset session storage when loading the page
+
+    const order = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/orders/${param}`));
+    const form = document.getElementById('form-update-order');
+    const alert = document.getElementById('alert-update-order');
+    const id = order.Id;
+
+    VALIDATION.updateOrderForm(form, order);
+    UTIL.renderSelectedItems();
+    UTIL.bindOrderEvents();
+    UTIL.bindSelectedItemsEvent();
+
+    // Find user by id button
+    const clientIdButton = document.getElementById('find-user-by-id-update-order');
+    clientIdButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.renderUserData();
+    });
+
+    // Find products by name button
+    const findProductButton = document.getElementById('find-product-by-name-update-order');
+    findProductButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await UTIL.renderProductSearch();
+    });
+    
+    // Clear search products button
+    const clearSearchButton = document.getElementById('clear-search-product-update-order');
+    const display = document.getElementById('product-found-update-order');
+    clearSearchButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        display.innerHTML = "";
+    });
+
+    // Validate the form
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await VALIDATION.validateAdminOrder(alert, form, id);
     });
 }
 

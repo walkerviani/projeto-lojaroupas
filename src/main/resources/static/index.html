@@ -410,13 +410,13 @@
         <form id="form-create-order" novalidate>
 
             <label>User Id</label>
-            <input type="text" id="client-id-create-order" name="userId" required>
+            <input class="renderUserData-input" type="text" id="client-id-create-order" name="userId" required>
             <button class="large-blue-button" id="find-user-by-id">Find</button>
 
-            <div id="client-data-create-order"></div>
+            <div class="renderUserData-display" id="client-data-create-order"></div>
 
             <label>Type product name to find</label>
-            <input type="text" id="find-product-create-order" required>
+            <input type="text" class="renderProductSearch-input" id="find-product-create-order" required>
             <div class="flex-column">
                 <button class="large-blue-button" id="find-product-by-name">Find</button>
                 <button class="large-red-button" id="clear-search-product">Clear Search</button>
@@ -449,13 +449,13 @@
         <form id="form-update-order" novalidate>
 
             <label>User Id</label>
-            <input type="text" id="client-id-update-order" name="userId" required>
+            <input class="renderUserData-input" type="text" id="client-id-update-order" name="userId" required>
             <button class="large-blue-button" id="find-user-by-id-update-order">Find</button>
 
-            <div id="client-data-update-order"></div>
+            <div class="renderUserData-display" id="client-data-update-order"></div>
 
             <label>Type product name to find</label>
-            <input type="text" id="find-product-update-order" required>
+            <input type="text" class="renderProductSearch-input" id="find-product-update-order" required>
             <div class="flex-column">
                 <button class="large-blue-button" id="find-product-by-name-update-order">Find</button>
                 <button class="large-red-button" id="clear-search-product-update-order">Clear Search</button>
