@@ -5,7 +5,7 @@ public enum Size {
     MEDIUM(2),
     LARGE(3);
 
-    private int code;
+    private final int code;
 
     private Size(int code){
         this.code = code;
