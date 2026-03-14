@@ -29,6 +29,7 @@ public class AuthController {
         try {
             User user = authService.authUser(input.email(), input.password());
             session.setAttribute("LoggedUser", user.getId());
+            session.setAttribute("UserRole", user.getRole().name());
             return ResponseEntity.ok("Login successful");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
