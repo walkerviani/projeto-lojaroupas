@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.walkerviani.projetolojaroupas.entities.enums.OrderStatus;
 
 import jakarta.persistence.CascadeType;
@@ -40,6 +41,7 @@ public class Order implements Serializable {
     @JoinColumn(name = "id_client")
     private User client;
 
+    @JsonProperty("items")
     @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<OrderItem> items = new HashSet<>();
 
