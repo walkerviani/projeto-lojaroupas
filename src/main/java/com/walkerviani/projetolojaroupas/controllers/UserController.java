@@ -4,7 +4,6 @@ import java.net.URI;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -68,7 +67,6 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @Transactional
     @PatchMapping(value = "/{id}")
     public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody String newPassword, HttpSession session) {
         User loggedUser = (User) session.getAttribute("LoggedUser");
