@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.walkerviani.projetolojaroupas.entities.Clothes;
 import com.walkerviani.projetolojaroupas.entities.ImageData;
-import com.walkerviani.projetolojaroupas.entities.enums.Color;
-import com.walkerviani.projetolojaroupas.entities.enums.Size;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.repositories.StorageRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
@@ -39,20 +37,12 @@ public class ClothesService {
         return clothesRepository.findByNameContainingIgnoreCase(name);
     }
 
-    public List<Clothes> findBySize(Size size) {
-        return clothesRepository.findBySize(size);
-    }
-
-    public List<Clothes> findByColor(Color color) {
-        return clothesRepository.findByColor(color);
-    }
-
     public List<Clothes> findByCategory(String category) {
         return clothesRepository.findByCategoryNameIgnoreCase(category);
     }
 
     public Clothes insert(Clothes obj) {
-        if (obj.getImageData().getName() != null) {
+        if (obj.getImageData() != null && obj.getImageData().getName() != null) {
             ImageData image = storageRepository.findByName(obj.getImageData().getName())
                     .orElseThrow(() -> new RuntimeException("Image not found!"));
             obj.setImageData(image);
@@ -87,14 +77,15 @@ public class ClothesService {
         entity.setDescription(obj.getDescription());
         entity.setColor(obj.getColor());
         entity.setSize(obj.getSize());
-        entity.setCategory(obj.getCategory());
+
+        if (obj.getCategory() != null) {
+            entity.setCategory(obj.getCategory());
+        }
 
         if (obj.getImageData() != null && obj.getImageData().getName() != null) {
 
             ImageData newImage = storageRepository.findByName(obj.getImageData().getName())
                     .orElseThrow(() -> new RuntimeException("Image not found!"));
-
-            entity.setImageData(null);
 
             entity.setImageData(newImage);
         }
