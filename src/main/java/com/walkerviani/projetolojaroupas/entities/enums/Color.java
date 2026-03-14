@@ -13,7 +13,7 @@ public enum Color {
     BEIGE(10),
     BROWN(11);
 
-    private int code;
+    private final int code;
 
     private Color(int code) {
         this.code = code;

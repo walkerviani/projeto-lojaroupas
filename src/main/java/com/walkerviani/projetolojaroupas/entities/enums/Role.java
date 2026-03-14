@@ -4,7 +4,7 @@ public enum Role {
     USER(1),
     ADMIN(2);
 
-    private int code;
+    private final int code;
 
     private Role(int code){
         this.code = code;
