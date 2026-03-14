@@ -534,14 +534,14 @@ export async function updateOrdersPage() {
 export async function deleteOrdersPage() {
     loadContainer('template-delete-order', 'container form');
 
-    const order = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
+    const order = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/orders/${param}`));
 
     const button = document.getElementById('delete-order');
     const alert = document.getElementById('alert-delete-order');
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await API.deleteData(`${UTIL.BASE_URL}/orders/${order.id}`, alert);
+        await API.deleteData(`${UTIL.BASE_URL}/orders/${order.Id}`, alert);
     });
 }
 
