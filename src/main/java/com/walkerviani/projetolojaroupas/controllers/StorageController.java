@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/image")
+@RequestMapping(value = "/api/image")
 public class StorageController {
 
     private final StorageService storageService;

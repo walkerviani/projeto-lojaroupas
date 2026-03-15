@@ -24,7 +24,7 @@ public class AuthController {
     public record LoginInput(String email, String password) {
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginInput input, HttpSession session) {
         try {
             User user = authService.authUser(input.email(), input.password());
