@@ -43,7 +43,7 @@ public class CategoryService {
         } catch (EmptyResultDataAccessException e) {
             throw new CategoryNotFoundException("Category not found");
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Cannot delete category: it has associated products.");
         }
     }
 
