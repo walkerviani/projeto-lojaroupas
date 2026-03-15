@@ -41,6 +41,7 @@ public class OrderService {
         return orderRepository.findByClientId(clientId);
     }
 
+    @Transactional
     public Order insert(Order obj) {
         Instant moment = Instant.now();
         obj.setMoment(moment);
