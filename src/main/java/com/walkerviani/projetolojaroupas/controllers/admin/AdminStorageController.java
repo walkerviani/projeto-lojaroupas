@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/admin/image")
+@RequestMapping(value = "/api/admin/image")
 public class AdminStorageController {
 
     private final StorageService storageService;
