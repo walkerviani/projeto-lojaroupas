@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/auth")
+@RequestMapping(value = "/api/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -24,7 +24,7 @@ public class AuthController {
     public record LoginInput(String email, String password) {
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginInput input, HttpSession session) {
         try {
             User user = authService.authUser(input.email(), input.password());
