@@ -199,6 +199,7 @@ export function updateCheckoutButton() {
     }
 }
 
+// Show a message in alert container
 export function updateAlert(message, color) {
     const alert = document.querySelector('.alert');
     alert.style.color = color;
@@ -213,7 +214,7 @@ export async function showUserPurchases() {
     const user = await checkAuth();
     if (!user) return null;
 
-    const orders = await fetchData(`${BASE_URL}/orders/client/${user.id}`);
+    const orders = await fetchData(`${BASE_URL}/api/orders/client/${user.id}`);
     const ordersArray = Array.isArray(orders) ? orders : [orders];
 
     if (ordersArray.length === 0) {
@@ -261,18 +262,18 @@ export function bindProfileEvents(userId) {
     const cancelButton = document.getElementById('cancel-update-profile');
     const saveButton = document.getElementById('update-profile-button');
 
-    const alert = document.getElementById('account-alert');
     const form = document.getElementById('form-update-profile');
-
     const inputs = form.querySelectorAll('.profile-box-input');
 
     updateButton.addEventListener('click', (e) => {
         e.preventDefault();
 
+        // Hide update button and show cancel and save button
         cancelButton.style.display = "block";
         saveButton.style.display = "block";
         updateButton.style.display = "none";
 
+        // Allow to insert data
         inputs.forEach(input => input.disabled = false);
     });
 
@@ -281,18 +282,19 @@ export function bindProfileEvents(userId) {
 
         form.reset();
 
-        alert.textContent = "";
+        updateAlert("", "red");
         cancelButton.style.display = "none";
         saveButton.style.display = "none";
         updateButton.style.display = "block";
 
+        // Block input insert
         inputs.forEach(input => input.disabled = true);
 
     });
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        await validateProfileData(form, alert, userId);
+        await validateProfileData(userId);
     });
 }
 
