@@ -12,6 +12,7 @@ import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundExce
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 import com.walkerviani.projetolojaroupas.services.exceptions.OrderNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.UserNotFoundException;
+import com.walkerviani.projetolojaroupas.services.exceptions.ValidationException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -36,6 +37,21 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity <StandardError> databaseError(DatabaseException e, HttpServletRequest request) {
         String string = "Database error";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        StandardError error = new StandardError(
+            Instant.now(), 
+            status.value(), 
+            string, 
+            e.getMessage(), 
+            request.getRequestURI());
+        
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<StandardError> validationError(RuntimeException e, HttpServletRequest request) {
+        String string = "Validation error";
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         StandardError error = new StandardError(
