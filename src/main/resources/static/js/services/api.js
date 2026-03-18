@@ -1,5 +1,5 @@
 import { BASE_URL, updateAlert } from "../utils/util.js";
-import { updateProductForm, updateUserForm } from "../modules/validations.js";
+import { updateProductForm } from "../modules/validations.js";
 
 export async function fetchData(url) {
     try {
@@ -51,7 +51,7 @@ export async function putOrder(orderObj) {
     }
 }
 
-export async function deleteData(url, alert) {
+export async function deleteData(url) {
     try {
         const response = await fetch(url, {
             method: 'DELETE',
@@ -59,41 +59,52 @@ export async function deleteData(url, alert) {
                 'Content-Type': 'application/json'
             },
         });
-
+        const responseData = await response.json();
         if (response.ok) {
-            updateAlert(alert, "Deleted successfully!", "green");
+            return {
+                success: true,
+                message: "Deleted successfully!"
+            }
         } else {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "Failed to delete");
+            return {
+                success: false,
+                message: responseData.message
+            }
         }
     } catch (error) {
-        updateAlert(alert, error.message, "red");
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
 
-export async function sendAccountData(userData, alert, form) {
+export async function sendAccountData(userObj) {
     try {
-        updateAlert(alert, "Creating account...", "blue");
-
-        const response = await fetch(`${BASE_URL}/users`, {
-            method: "POST",
+        const response = await fetch(`${BASE_URL}/api/admin/users`, {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userObj)
         });
 
         if (response.ok) {
-            updateAlert(alert, "Account created successfully!", "green");
-            form.reset();
-            setTimeout(() => navigateTo('/login'), 2000);
+            return {
+                success: true,
+                message: "Account created successfully!"
+            }
         } else {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || "Error creating user. Check if your data already exists");
+            return {
+                success: false,
+                message: "Error creating user"
+            }
         }
     } catch (error) {
-        console.error("Error: ", error);
-        updateAlert(alert, error.message, "red");
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
 
@@ -146,10 +157,10 @@ export async function sendProductData(isUpdateMode, product, file, alert, form, 
     }
 }
 
-export async function sendCategoryData(obj, alert, form, id) {
-    const isUpdateMode = id ? true : false;
+export async function sendCategoryData(categoryObj, categoryId) {
+    const isUpdateMode = categoryId ? true : false;
     const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/category/${id}` : `${BASE_URL}/category`;
+    const url = isUpdateMode ? `${BASE_URL}/api/admin/categories/${categoryId}` : `${BASE_URL}/api/admin/categories`;
 
     try {
         const response = await fetch(url, {
@@ -157,65 +168,81 @@ export async function sendCategoryData(obj, alert, form, id) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(categoryObj)
         })
-
+        const responseData = await response.json();
         if (response.ok) {
-            const message = isUpdateMode ? "Category updated successfully!" : "Category created successfully!";
-            updateAlert(alert, message, "green");
-            form.reset();
+            return {
+                success: true,
+                message: isUpdateMode ? "Category updated successfully!" : "Category created successfully!"
+            }
         } else {
-            throw new Error(isUpdateMode ? "Failed to update" : "Failed to create");
+            return {
+                success: false,
+                message: responseData.message
+            }
         }
     } catch (error) {
-        updateAlert(alert, error.message, "red");
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
 
-export async function sendUserData(obj, password, alert, form, id) {
-    const isUpdateMode = id ? true : false;
+export async function sendUserData(userObj, password, userId) {
+    const isUpdateMode = userId ? true : false;
     const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/users/${id}` : `${BASE_URL}/users`;
+    const url = isUpdateMode ? `${BASE_URL}/api/admin/users/${userId}` : `${BASE_URL}/api/admin/users`;
 
     try {
+        // Update password
         if (isUpdateMode && password.value !== "") {
-            const passwordResponse = await fetch(`${BASE_URL}/users/${id}`, {
+            const passwordResponse = await fetch(`${BASE_URL}/api/admin/users/${userId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(password.value)
             });
-            if (!passwordResponse.ok) throw new Error("Failed to update password");
+            if (!passwordResponse.ok) {
+                const responseData = await passwordResponse.json();
+                return {
+                    success: false,
+                    message: responseData.message
+                }
+            }
         }
 
         if (!isUpdateMode) {
-            obj.password = password.value;
+            userObj.password = password.value;
         }
         const response = await fetch(url, {
             method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(userObj)
         })
-
+        const responseData = await response.json();
+        
         if (response.ok) {
-            const message = isUpdateMode ? "User updated successfully!" : "User created successfully!";
-            updateAlert(alert, message, "green");
-
-            if (isUpdateMode) {
-                const user = await fetchData(`${BASE_URL}/users/${id}`);
-                updateUserForm(form, user);
-            } else {
-                form.reset();
+            return {
+                success: true,
+                message: isUpdateMode ? "User updated successfully!" : "User created successfully!"
             }
 
         } else {
-            throw new Error(isUpdateMode ? "Failed to update" : "Failed to create");
+            return {
+                success: false,
+                message: responseData.message
+            }
         }
     } catch (error) {
-        updateAlert(alert, error.message, "red");
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
 
@@ -300,17 +327,17 @@ export async function findProductByName(productName) {
     try {
         const response = await fetch(`${BASE_URL}/clothes/name?name=${encodeURIComponent(productName)}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
         });
 
-        if(!response.ok) {
+        if (!response.ok) {
             const responseText = await response.text();
             return {
                 success: false,
                 message: responseText
             }
         }
-        
+
         const data = await response.json();
         return {
             success: true,
@@ -318,8 +345,8 @@ export async function findProductByName(productName) {
         }
     } catch (error) {
         return {
-                success: false,
-                message: error.message
-            }
+            success: false,
+            message: error.message
+        }
     }
 }
