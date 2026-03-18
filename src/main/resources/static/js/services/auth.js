@@ -2,7 +2,7 @@ import { BASE_URL } from "../utils/util.js";
 
 export async function authenticateUser(obj) {
     try {
-        const response = await fetch(`${BASE_URL}/auth/login`, {
+        const response = await fetch(`${BASE_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -10,20 +10,28 @@ export async function authenticateUser(obj) {
             body: JSON.stringify(obj),
             credentials: "include"
         });
-        const message = await response.text();
+        const messageData = await response.json();
         if(response.ok) {
-            return { success: true, data: message }
+            return { 
+                success: true, 
+                message: messageData.message
+            }
         }
-        return { success: false, data: message }
+        return { 
+            success: false, 
+            message: messageData.message
+        }
     } catch (error) {
-        console.error("Error: ", error);
-        return null;
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
 
 export async function deauthenticateUser() {
     try {
-        const response = await fetch(`${BASE_URL}/auth/logout`, {
+        const response = await fetch(`${BASE_URL}/api/auth/logout`, {
             method: 'POST',
             credentials: "include"
         });
@@ -32,14 +40,13 @@ export async function deauthenticateUser() {
         }
         return false;
     } catch (error) {
-        console.error("Deauthentication error: ", error);
         return false;
     }
 }
 
 export async function checkAuth() {
     try {
-        const response = await fetch(`${BASE_URL}/auth/check`, {
+        const response = await fetch(`${BASE_URL}/api/auth/check`, {
             method: 'GET',
             credentials: "include"
         });
