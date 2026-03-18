@@ -163,169 +163,171 @@ export function updateProductForm(form, product, imagePreview) {
     imagePreview.src = `${BASE_URL}/image/${product.imageData.name}`;
 }
 
-export async function validateCategory(form, nameInput, alert, categoryId = null) {
+export async function validateCategory(categoryId = null) {
+    const form = document.querySelector('.category-form');
+    const nameInput = document.querySelector('.category-input');
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
 
-        // Reset the label and error
-        alert.textContent = "";
-        let error = "";
+        // Allow normal characters, accented characters and whitespace
+        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/;
 
         if (nameInput.value === "") {
-            error = "Name is required!";
-        } else if (nameInput.value.length < 3) {
-            error = "Name is too short!";
-        } else if (!nameRegex.test(nameInput.value)) {
-            error = "Name must not have numbers";
+            updateAlert("Name is required", "red");
         }
-
-        if (error !== "") {
-            updateAlert(alert, error, "red");
-        } else {
-            const obj = {
+        else if (nameInput.value.length < 3) {
+            updateAlert("Name is too short", "red");
+        }
+        else if (!nameRegex.test(nameInput.value)) {
+            updateAlert("Name must not have numbers", "red");
+        }
+        else {
+            const categoryObj = {
                 name: nameInput.value,
             };
-            await API.sendCategoryData(obj, alert, form, categoryId);
+            const response = await API.sendCategoryData(categoryObj, categoryId);
+            if (response.success === true) {
+                updateAlert(response.message, "green");
+                setTimeout(() => {
+                    navigateTo('/admin/categories');
+                }, 2000);
+            } else {
+                updateAlert(response.message, "red");
+            }
         }
     });
 }
 
-export async function validateUser(form, alert, userId = null) {
+export async function validateUser(userId = null) {
+    const form = document.querySelector('.users-form');
+
     const { name, cpf, email, phone, password, confPassword, role } = form.elements;
 
     const isUpdateMode = userId ? true : false;
 
     if (isUpdateMode) {
-        const user = await API.fetchData(`${BASE_URL}/users/${userId}`);
+        // Show user data in form
+        const user = await API.fetchData(`${BASE_URL}/api/admin/users/${userId}`);
         updateUserForm(form, user);
     }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
-        const cpfRegex = /^[0-9]+$/; //allow only numbers
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
-        const phoneRegex = /^[0-9]+$/; //allow only numbers
-
-        // Reset the label and error
-        alert.textContent = "";
-        let error = "";
+        // Allow normal characters, accented characters and whitespace
+        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+        // Allow only numbers
+        const numberRegex = /^[0-9]+$/;
+        // Checks if string looks like a simple email: "text@text.text"
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (name.value === "") {
-            error = "Name is required!";
+            updateAlert("Name is required", "red");
         }
         else if (name.value.length < 3) {
-            error = "Name is too short!";
+            updateAlert("Name is too short", "red");
         }
         else if (!nameRegex.test(name.value)) {
-            error = "Name must not have numbers";
+            updateAlert("Name must not have numbers", "red");
         }
         else if (cpf.value === "") {
-            error = "Cpf is required!";
+            updateAlert("Cpf is required", "red");
         }
         else if (cpf.value.length !== 11) {
-            error = "Cpf must have 11 digits";
+            updateAlert("Cpf must have 11 digits", "red");
         }
-        else if (!cpfRegex.test(cpf.value)) {
-            error = "Cpf must have only numbers";
+        else if (!numberRegex.test(cpf.value)) {
+            updateAlert("Cpf must have only numbers", "red");
         }
         else if (email.value === "") {
-            error = "Email is required!";
+            updateAlert("Email is required", "red");
         }
         else if (!emailRegex.test(email.value)) {
-            error = "Email is not valid!";
+            updateAlert("Email is not valid", "red");
         }
         else if (phone.value === "") {
-            error = "Phone is required!";
+            updateAlert("Phone is required", "red");
         }
-        else if (phone.value.length < 11) {
-            error = "Phone is too short";
+        else if (phone.value.length !== 11) {
+            updateAlert("Phone is too short", "red");
         }
-        else if (!phoneRegex.test(phone.value)) {
-            error = "Phone must have only numbers";
+        else if (!numberRegex.test(phone.value)) {
+            updateAlert("Phone must have only numbers", "red");
         }
-        else if (password.value === "") {
-            error = "Password is required";
+        else if (!isUpdateMode && password.value === "") {
+            updateAlert("Password is required", "red");
         }
-        else if (password.value.length < 8) {
-            error = "Password is too short (Minimum 8 digits)";
+        else if ((isUpdateMode && password.value !== "" && password.value.trim().length < 8) || (!isUpdateMode && password.value.length < 8)) {
+            updateAlert("Password is too short (Minimum 8 digits)", "red");
         }
         else if (!isUpdateMode && confPassword.value === "") {
-            error = "The confirmation password is required!";
+            updateAlert("The confirmation password is required!", "red");
         }
         else if (!isUpdateMode && confPassword.value !== password.value) {
-            error = "The passwords don't match!";
+            updateAlert("The passwords don't match!", "red");
         }
         else if (role.value === "") {
-            error = "You must select a valid role!";
+            updateAlert("You must select a valid role", "red");
         }
-
-        if (error !== "") {
-            updateAlert(alert, error, "red");
-        } else {
-            const obj = {
+        else {
+            const userObj = {
                 name: name.value,
                 email: email.value,
                 cpf: cpf.value,
                 phone: phone.value,
                 role: role.value
             };
-            await API.sendUserData(obj, password, alert, form, userId);
+            
+            const response = await API.sendUserData(userObj, password, userId);
+            if (response.success === true) {
+                updateAlert(response.message, "green");
+                setTimeout(() => {
+                    navigateTo('/admin/users');
+                }, 1000);
+            } else {
+                updateAlert(response.message, "red");
+            }
         }
     });
 }
 
 export function updateUserForm(form, user) {
-    const { name, cpf, email, phone, password, role } = form.elements;
+    const { name, cpf, email, phone, role } = form.elements;
     name.value = user.name;
     cpf.value = user.cpf;
     email.value = user.email;
     phone.value = user.phone;
-    password.value = user.password;
     role.value = user.role;
 }
 
-export async function validateLogin(form, alert) {
+export async function validateLogin() {
+    const form = document.querySelector('.login-form');
     const { email, password } = form.elements;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Reset the label and error
-        alert.textContent = "";
-        let error = "";
-
         if (email.value === "") {
-            error = "Email is required!";
+            updateAlert("Email is required", "red");
         }
         else if (password.value === "") {
-            error = "Password is required";
+            updateAlert("Password is required", "red");
         }
-
-        if (error !== "") {
-            updateAlert(alert, error, "red");
-        } else {
-            const obj = {
+        else {
+            const loginObj = {
                 email: email.value,
                 password: password.value
             };
-            try {
-                const result = await authenticateUser(obj);
 
-                alert.scrollIntoView({ behavior: "smooth", block: "center" });
-                const text = result.data.toString();
-                if (result.success) {
-                    updateAlert(alert, text, "green");
-                    setTimeout(() => {
-                        navigateTo('/');
-                    }, 1000);
-                } else {
-                    updateAlert(alert, text, "red");
-                }
-            } catch (error) {
-                updateAlert(alert, error.message, "red");
+            const response = await authenticateUser(loginObj);
+            if (response.success === true) {
+                updateAlert(response.message, "green");
+                setTimeout(() => {
+                    navigateTo('/');
+                }, 1000);
+            } else {
+                updateAlert(response.message, "red");
             }
         }
     });
@@ -365,10 +367,10 @@ export async function validateAdminOrder(alert, form, id = null) {
                 payment: {}
             };
 
-            if(isUpdateMode) {
+            if (isUpdateMode) {
                 orderObj.id = Number(id);
             }
-            
+
             const success = isUpdateMode ? await API.putOrder(orderObj)
                 : await API.postOrder(orderObj);
 
