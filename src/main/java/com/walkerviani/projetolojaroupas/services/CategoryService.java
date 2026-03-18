@@ -3,12 +3,11 @@ package com.walkerviani.projetolojaroupas.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.walkerviani.projetolojaroupas.entities.Category;
 import com.walkerviani.projetolojaroupas.repositories.CategoryRepository;
+import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.CategoryNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 import com.walkerviani.projetolojaroupas.services.exceptions.ValidationException;
@@ -23,6 +22,8 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    private final ClothesRepository clothesRepository;
+
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
@@ -35,7 +36,7 @@ public class CategoryService {
     @Transactional
     public Category insert(Category obj) {
         validateCategory(obj);
-        
+
         if (categoryRepository.existsByNameIgnoreCase(obj.getName()))
             throw new ValidationException("A category with this name already exists");
         return categoryRepository.save(obj);
@@ -43,13 +44,13 @@ public class CategoryService {
 
     @Transactional
     public void delete(Long id) {
-        try {
-            categoryRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new CategoryNotFoundException("Category not found");
-        } catch (DataIntegrityViolationException e) {
+        Category entity = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+
+        if(clothesRepository.existsByCategoryId(id)) {
             throw new DatabaseException("Cannot delete category: it has associated products.");
         }
+        categoryRepository.delete(entity);
     }
 
     @Transactional

@@ -11,4 +11,6 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
     List<Clothes> findByNameContainingIgnoreCase(String name);
 
     List<Clothes> findByCategoryNameIgnoreCase(String name);
+
+    boolean existsByCategoryId(Long categoryId);
 }
