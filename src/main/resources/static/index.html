@@ -56,7 +56,7 @@
 <template id="template-create-account">
     <div class="form-background">
         <h1 class="form-title">Sign Up</h1>
-        <label id="alert-create-account"></label>
+        <div class="alert"></div>
 
         <form id="form-create-account" novalidate>
             <label>Name</label>
@@ -87,8 +87,8 @@
 <template id="template-login">
     <div class="form-background">
         <h1 class="form-title">Login</h1>
-        <label id="alert-login"></label>
-        <form id="form-login" novalidate>
+        <div class="alert"></div>
+        <form class="login-form" novalidate>
             <label>E-mail</label>
             <input type="email" id="email" name="email">
             <label>Password</label>
@@ -126,7 +126,7 @@
 <template id="template-create-product">
     <div class="form-background">
         <h1 class="form-title">Create Product</h1>
-        <label id="alert-create-product"></label>
+        <div class="alert"></div>
         <form id="form-create-product" novalidate>
             <label>Name</label>
             <input type="text" id="name-create-product" name="name" minlength="3" maxlength="80" required>
@@ -178,7 +178,7 @@
 <template id="template-update-product">
     <div class="form-background">
         <h1 class="form-title">Update Product</h1>
-        <label id="alert-update-product"></label>
+        <div class="alert"></div>
         <form id="form-update-product" novalidate>
             <label>Name</label>
             <input type="text" id="name-update-product" name="name" minlength="3" maxlength="80" required>
@@ -231,7 +231,7 @@
 <template id="template-delete-product">
     <div class="form-background">
         <h1 class="form-title">Delete a product</h1>
-        <label id="alert-delete-product"></label>
+        <div class="alert"></div>
         <label id="current-product-title">Do you really want to delete the product below?</label>
         <label id="current-product-name"></label>
         <button class="delete-option-button" id="delete-product">Delete</button>
@@ -256,10 +256,10 @@
 <template id="template-create-category">
     <div class="form-background">
         <h1 class="form-title">Create Category</h1>
-        <label id="alert-create-categ"></label>
-        <form id="form-create-category" novalidate>
+        <div class="alert"></div>
+        <form class="category-form" novalidate>
             <label>Name</label>
-            <input type="text" id="name-create-category" name="name" minlength="3" maxlength="80" required>
+            <input type="text" class="category-input" name="name" minlength="3" maxlength="80" required>
             <input type="submit" id="create-category-name" class="large-blue-button" value="Create a new category">
         </form>
     </div>
@@ -269,13 +269,13 @@
 <template id="template-update-category">
     <div class="form-background">
         <h1 class="form-title">Update a category</h1>
-        <label id="alert-update-category"></label>
+        <div class="alert"></div>
         <label id="current-update-title">Current name</label>
         <label id="current-update-name"></label>
-        <form id="form-update-category" novalidate>
+        <form class="category-form" novalidate>
 
             <label>Update name</label>
-            <input type="text" id="name-update-category" name="name" minlength="3" maxlength="80" required>
+            <input type="text" class="category-input" name="name" minlength="3" maxlength="80" required>
             <input type="submit" id="update-category-name" class="large-blue-button" value="Update category">
 
         </form>
@@ -286,7 +286,7 @@
 <template id="template-delete-category">
     <div class="form-background">
         <h1 class="form-title">Delete a category</h1>
-        <label id="alert-delete-category"></label>
+        <div class="alert"></div>
         <label id="current-category-title">Do you really want to delete the category below?</label>
         <label id="current-category-name"></label>
         <button class="delete-option-button" id="delete-category">Delete</button>
@@ -311,8 +311,8 @@
 <template id="template-create-user">
     <div class="form-background">
         <h1 class="form-title">Create User</h1>
-        <label id="alert-create-user"></label>
-        <form id="form-create-user" novalidate>
+        <div class="alert"></div>
+        <form class="users-form" novalidate>
             <label>Name</label>
             <input type="text" id="name-create-user" name="name" minlength="3" maxlength="80" required>
 
@@ -335,8 +335,8 @@
 
             <select name="role" id="role-select-create-user" required>
                 <option value="">Please choose an option</option>
-                <option value="1">User</option>
-                <option value="2">Admin</option>
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
             </select>
 
             <input type="submit" id="create-user-button" class="large-blue-button" value="Create a user">
@@ -348,8 +348,8 @@
 <template id="template-update-user">
     <div class="form-background">
         <h1 class="form-title">Update User</h1>
-        <label id="alert-update-user"></label>
-        <form id="form-update-user" novalidate>
+        <div class="alert"></div>
+        <form class="users-form" novalidate>
             <label>Name</label>
             <input type="text" id="name-update-user" name="name" minlength="3" maxlength="80" required>
 
@@ -368,8 +368,8 @@
 
             <select name="role" id="role-select-update-user" required>
                 <option value="">Please choose an option</option>
-                <option value="USER">User</option>
-                <option value="ADMIN">Admin</option>
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
             </select>
 
             <input type="submit" id="update-user-button" class="large-blue-button" value="Update user">
@@ -381,7 +381,7 @@
 <template id="template-delete-user">
     <div class="form-background">
         <h1 class="form-title">Delete a user</h1>
-        <label id="alert-delete-user"></label>
+        <div class="alert"></div>
         <label id="current-user-title">Do you really want to delete the user below?</label>
         <label id="current-user-name"></label>
         <button class="delete-option-button" id="delete-user">Delete</button>
@@ -406,7 +406,7 @@
 <template id="template-create-order">
     <div class="form-background">
         <h1 class="form-title">Create a new Order</h1>
-        <label class="alert" id="alert-create-order"></label>
+        <div class="alert"></div>
         <form id="form-create-order" novalidate>
 
             <label>User Id</label>
@@ -445,7 +445,7 @@
 <template id="template-update-order">
     <div class="form-background">
         <h1 class="form-title">Update Order</h1>
-        <label class="alert" id="alert-update-order"></label>
+        <div class="alert"></div>
         <form id="form-update-order" novalidate>
 
             <label>User Id</label>
@@ -484,7 +484,7 @@
 <template id="template-delete-order">
     <div class="form-background">
         <h1 class="form-title">Delete order</h1>
-        <label id="alert-delete-order"></label>
+        <div class="alert"></div>
         <label>Do you really want to delete this order?</label>
         <button class="delete-option-button" id="delete-order">Delete</button>
     </div>
@@ -552,7 +552,7 @@
     <div class="form-background">
         <div class="checkout-menu">
             <div class="form-title">Getting your order</div>
-            <label id="alert-checkout"></label>
+            <div class="alert"></div>
             <button id="confirm-checkout" class="large-green-button">Confirm Payment</button>
             <button id="cancel-checkout" class="large-red-button">Cancel checkout</button>
         </div>
