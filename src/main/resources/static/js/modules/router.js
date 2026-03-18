@@ -1,11 +1,12 @@
 import * as UI from '../components/ui.js';
+import * as AUTH from '../services/auth.js';
 
 const routes = {
     '/admin/products': UI.loadProductsPage,
     '/admin/products/create': UI.createProductPage,
     '/admin/products/update': UI.updateProductPage,
     '/admin/products/delete': UI.deleteProductPage,
-    
+
     '/admin/categories': UI.loadCategoriesPage,
     '/admin/categories/create': UI.createCategoryPage,
     '/admin/categories/update': UI.updateCategoryPage,
@@ -16,18 +17,18 @@ const routes = {
     '/admin/users/update': UI.updateUserPage,
     '/admin/users/delete': UI.deleteUserPage,
 
-    '/admin/orders' : UI.loadOrdersPage,
-    '/admin/orders/create' : UI.createOrdersPage,
-    '/admin/orders/update' : UI.updateOrdersPage,
-    '/admin/orders/delete' : UI.deleteOrdersPage,
-    '/admin/orders/detail' : UI.loadOrderDetail,
+    '/admin/orders': UI.loadOrdersPage,
+    '/admin/orders/create': UI.createOrdersPage,
+    '/admin/orders/update': UI.updateOrdersPage,
+    '/admin/orders/delete': UI.deleteOrdersPage,
+    '/admin/orders/detail': UI.loadOrderDetail,
 
     '/product': UI.showProductDetail,
     '/cart': UI.loadCartPage,
     '/checkout': UI.loadCheckout,
-    '/my-purchases' : UI.loadUserPurchases,
+    '/my-purchases': UI.loadUserPurchases,
     '/signup': UI.loadCreateAccountPage,
-    '/profile' : UI.loadUserProfilePage,
+    '/profile': UI.loadUserProfilePage,
     '/admin': UI.loadAdminPage,
     '/login': UI.loadLoginPage,
     '/': UI.loadIndex,
@@ -36,11 +37,24 @@ const routes = {
 
 export async function handleRoute() {
     const path = window.location.pathname;
-
     const container = document.getElementById('container');
     if (container) {
         container.className = 'container';
         container.innerHTML = "";
+    }
+
+    if (path.startsWith('/admin')) {
+        const user = await AUTH.checkAuth();
+
+        if (!user) {
+            navigateTo('/login');
+            return;
+        }
+
+        if(user.role === 'USER') {
+            navigateTo('/');
+            return;
+        }
     }
 
     const routeAction = routes[path];
