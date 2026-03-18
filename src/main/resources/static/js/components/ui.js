@@ -15,7 +15,7 @@ export function showProductsCard(products) {
     }
     products.forEach(product => {
         const imageUrl = product.imageData
-            ? `${UTIL.BASE_URL}/image/${product.imageData.name}`
+            ? `${UTIL.BASE_URL}/api/image/${product.imageData.name}`
             : 'https://placehold.co/400x400?text=No+Image';
 
         const card = document.createElement('div');
@@ -44,14 +44,17 @@ export async function loadIndex() {
 
     let products;
 
+    //if param is name (searchbar)
     if (name) {
-        products = await UTIL.getParams('name', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/name?name=${param}`));
+        products = await UTIL.getParams('name', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/name?name=${param}`));
     }
+    //if param is category (category dropdown)
     else if (category) {
-        products = await UTIL.getParams('category', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/category?category=${param}`));
+        products = await UTIL.getParams('category', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/category?category=${param}`));
     }
+    //if does not have a param = show products
     else {
-        products = await API.fetchData(`${UTIL.BASE_URL}/clothes`);
+        products = await API.fetchData(`${UTIL.BASE_URL}/api/clothes`);
     }
     showProductsCard(products);
 }
@@ -59,8 +62,8 @@ export async function loadIndex() {
 export async function showProductDetail() {
     loadContainer('template-detail', 'container detail-mode');
 
-    const product = await UTIL.getParams('id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
-    const imageUrl = product.imageData ? `${UTIL.BASE_URL}/image/${product.imageData.name}` : 'https://placehold.co/400x400?text=No+Image';
+    const product = await UTIL.getParams('id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/${param}`));
+    const imageUrl = product.imageData ? `${UTIL.BASE_URL}/api/image/${product.imageData.name}` : 'https://placehold.co/400x400?text=No+Image';
 
     let img = document.getElementById('product-img');
     img.src = imageUrl;
@@ -170,16 +173,13 @@ export function loadCheckout() {
 export function loadLoginPage() {
     loadContainer('template-login', 'container form');
 
-    const form = document.getElementById('form-login');
-    const alert = document.getElementById('alert-login');
-
     const createAccountButton = document.getElementById('create-account-button');
 
-    createAccountButton.addEventListener('click', (e) => {
+    createAccountButton.addEventListener('click', () => {
         navigateTo('/signup');
     });
 
-    VALIDATION.validateLogin(form, alert);
+    VALIDATION.validateLogin();
 }
 
 export function loadUserProfilePage() {
@@ -241,7 +241,7 @@ export async function loadProductsPage() {
             navigateTo(`/admin/products/delete?delete-id=${id}`);
         }
     });
-    UTIL.showProductTable(await API.fetchData(`${UTIL.BASE_URL}/clothes`));
+    UTIL.showProductTable(await API.fetchData(`${UTIL.BASE_URL}/api/clothes`));
 }
 
 export async function createProductPage() {
@@ -301,35 +301,29 @@ export async function loadCategoriesPage() {
         }
     });
 
-    UTIL.showCategoryTable(await API.fetchData(`${UTIL.BASE_URL}/category`));
+    UTIL.showCategoryTable(await API.fetchData(`${UTIL.BASE_URL}/api/category`));
 }
 
 export async function createCategoryPage() {
     loadContainer('template-create-category', 'container form');
-
-    const form = document.getElementById('form-create-category');
-    const alert = document.getElementById('alert-create-categ');
-    const input = document.getElementById('name-create-category');
-
-    await VALIDATION.validateCategory(form, input, alert);
+    await VALIDATION.validateCategory();
 }
 
 export async function updateCategoryPage() {
     loadContainer('template-update-category', 'container form');
 
-    const category = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/category/${param}`));
+    const category = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/category/${param}`));
 
+    const id = category.id;
+
+    // Show current category name
     const currentName = document.getElementById('current-update-name');
+    // "Current name" text
     const currentTitle = document.getElementById('current-update-title');
     currentName.style.color = "red";
     currentName.textContent = category.name;
 
-    const form = document.getElementById('form-update-category');
-    const alert = document.getElementById('alert-update-category');
-    const nameInput = document.getElementById('name-update-category');
-    const id = category.id;
-
-    await VALIDATION.validateCategory(form, nameInput, alert, id);
+    await VALIDATION.validateCategory(id);
     document.addEventListener('submit', () => {
         currentName.style.visibility = "hidden";
         currentTitle.style.visibility = "hidden";
@@ -339,21 +333,30 @@ export async function updateCategoryPage() {
 export async function deleteCategoryPage() {
     loadContainer('template-delete-category', 'container form');
 
-    const category = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/category/${param}`));
+    const category = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/category/${param}`));
 
+    // Show current category name
     const currentName = document.getElementById('current-category-name');
+    // "Current name" text
     const currentTitle = document.getElementById('current-category-title');
     currentName.style.color = "red";
     currentName.textContent = category.name;
 
     const button = document.getElementById('delete-category');
-    const alert = document.getElementById('alert-delete-category');
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await API.deleteData(`${UTIL.BASE_URL}/category/${category.id}`, alert);
+        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/categories/${category.id}`);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
+        if (response.success === true) {
+            UTIL.updateAlert(response.message, "green");
+            setTimeout(() => {
+                navigateTo('/admin/categories');
+            }, 2000);
+        } else {
+            UTIL.updateAlert(response.message, "red");
+        }
     });
 }
 
@@ -376,45 +379,46 @@ export async function loadUserPage() {
         }
     });
 
-    UTIL.showUserTable(await API.fetchData(`${UTIL.BASE_URL}/users`));
+    UTIL.showUserTable(await API.fetchData(`${UTIL.BASE_URL}/api/admin/users`));
 }
 
 export async function createUserPage() {
     loadContainer('template-create-user', 'container form');
-
-    const form = document.getElementById('form-create-user');
-    const alert = document.getElementById('alert-create-user');
-    await VALIDATION.validateUser(form, alert);
+    await VALIDATION.validateUser();
 }
 
 export async function updateUserPage() {
     loadContainer('template-update-user', 'container form');
 
-    const user = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
-    const form = document.getElementById('form-update-user');
-    const alert = document.getElementById('alert-update-user');
-    const id = user.id;
+    const user = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/users/${param}`));
+    const userId = user.id;
 
-    await VALIDATION.validateUser(form, alert, id);
+    await VALIDATION.validateUser(userId);
 }
 
 export async function deleteUserPage() {
     loadContainer('template-delete-user', 'container form');
 
-    const user = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/users/${param}`));
+    const user = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/users/${param}`));
     const currentName = document.getElementById('current-user-name');
     const currentTitle = document.getElementById('current-user-title');
     currentName.style.color = "red";
     currentName.textContent = user.name;
 
     const button = document.getElementById('delete-user');
-    const alert = document.getElementById('alert-delete-user');
-
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await API.deleteData(`${UTIL.BASE_URL}/users/${user.id}`, alert);
+        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/users/${user.id}`);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
+        if (response.success === true) {
+            UTIL.updateAlert(response.message, "green");
+            setTimeout(() => {
+                navigateTo('/admin/users');
+            }, 1000);
+        } else {
+            UTIL.updateAlert(response.message, "red");
+        }
     });
 }
 
@@ -514,7 +518,7 @@ export async function updateOrdersPage() {
         e.preventDefault();
         await UTIL.renderProductSearch();
     });
-    
+
     // Clear search products button
     const clearSearchButton = document.getElementById('clear-search-product-update-order');
     const display = document.getElementById('product-found-update-order');
