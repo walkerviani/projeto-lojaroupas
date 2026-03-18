@@ -67,7 +67,7 @@ public class UserService {
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if(orderRepository.existsByClientId(id)) {
+        if (orderRepository.existsByClientId(id)) {
             throw new DatabaseException("Cannot delete user: they have associated orders.");
         }
 
@@ -76,23 +76,22 @@ public class UserService {
 
     @Transactional
     public User update(Long id, User obj) {
-        try {
-            User entity = userRepository.getReferenceById(id);
-
-            validateUser(obj);
-
-            if (findByEmail(obj.getEmail()).isPresent() && !entity.getEmail().equals(obj.getEmail())) {
-                throw new ValidationException("Email is already in use");
-            }
-            if (findByCpf(obj.getCpf()).isPresent() && !entity.getCpf().equals(obj.getCpf())) {
-                throw new ValidationException("CPF is already in use");
-            }
-
-            updateData(entity, obj);
-            return userRepository.save(entity);
-        } catch (EntityNotFoundException e) {
-            throw new UserNotFoundException("User not found");
+        User entity = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        
+        if(obj.getRole() == null) {
+            obj.setRole(entity.getRole());
         }
+        validateUser(obj);
+
+        if (findByEmail(obj.getEmail()).isPresent() && !entity.getEmail().equals(obj.getEmail())) {
+            throw new ValidationException("Email is already in use");
+        }
+        if (findByCpf(obj.getCpf()).isPresent() && !entity.getCpf().equals(obj.getCpf())) {
+            throw new ValidationException("CPF is already in use");
+        }
+
+        updateData(entity, obj);
+        return userRepository.save(entity);
     }
 
     private void updateData(User entity, User obj) {
@@ -122,6 +121,9 @@ public class UserService {
     }
 
     public boolean checkCurrentPassword(Long id, String password) {
+        if (password == null || password.trim().isEmpty()) {
+            return false;
+        }
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
