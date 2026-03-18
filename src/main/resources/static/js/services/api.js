@@ -13,41 +13,36 @@ export async function fetchData(url) {
     }
 }
 
-export async function postOrder(orderObj) {
-    try {
-        const response = await fetch(`${BASE_URL}/orders`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(orderObj)
-        });
-        if (response.ok) {
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        return false;
-    }
-}
+export async function sendOrderData(orderObj, orderId = null) {
+    const isUpdateMode = orderId ? true : false;
+    const method = isUpdateMode ? 'PUT' : 'POST';
+    const url = isUpdateMode ? `${BASE_URL}/api/orders${orderId}` : `${BASE_URL}/api/orders`;
 
-export async function putOrder(orderObj) {
     try {
-        const response = await fetch(`${BASE_URL}/orders/${orderObj.id}`, {
-            method: 'PUT',
+        const response = await fetch(url, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(orderObj)
-        });
+        })
+        const responseData = await response.json();
         if (response.ok) {
-            return true;
+            return {
+                success: true,
+                message: isUpdateMode ? "Order updated successfully!" : "Order created successfully!"
+            }
         } else {
-            return false;
+            return {
+                success: false,
+                message: responseData.message
+            }
         }
     } catch (error) {
-        return false;
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
 
@@ -59,7 +54,10 @@ export async function deleteData(url) {
                 'Content-Type': 'application/json'
             },
         });
-        const responseData = await response.json();
+        let responseData = null;
+        if (response.status !== 204) {
+            responseData = await response.json();
+        }
         if (response.ok) {
             return {
                 success: true,
@@ -81,14 +79,14 @@ export async function deleteData(url) {
 
 export async function sendAccountData(userObj) {
     try {
-        const response = await fetch(`${BASE_URL}/api/admin/users`, {
+        const response = await fetch(`${BASE_URL}/api/users`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(userObj)
         });
-
+        const responseData = await response.json();
         if (response.ok) {
             return {
                 success: true,
@@ -97,7 +95,7 @@ export async function sendAccountData(userObj) {
         } else {
             return {
                 success: false,
-                message: "Error creating user"
+                message: responseData.message || "Error creating account"
             }
         }
     } catch (error) {
@@ -190,14 +188,14 @@ export async function sendCategoryData(categoryObj, categoryId) {
     }
 }
 
-export async function sendUserData(userObj, password, userId) {
+export async function sendUserData(userObj, password, userId = null) {
     const isUpdateMode = userId ? true : false;
     const method = isUpdateMode ? 'PUT' : 'POST';
     const url = isUpdateMode ? `${BASE_URL}/api/admin/users/${userId}` : `${BASE_URL}/api/admin/users`;
 
     try {
         // Update password
-        if (isUpdateMode && password.value !== "") {
+        if (isUpdateMode && password != null && password.value.trim() !== "") {
             const passwordResponse = await fetch(`${BASE_URL}/api/admin/users/${userId}`, {
                 method: 'PATCH',
                 headers: {
@@ -225,7 +223,7 @@ export async function sendUserData(userObj, password, userId) {
             body: JSON.stringify(userObj)
         })
         const responseData = await response.json();
-        
+
         if (response.ok) {
             return {
                 success: true,
@@ -246,47 +244,23 @@ export async function sendUserData(userObj, password, userId) {
     }
 }
 
-export async function putUser(obj, userId) {
+export async function checkUserPassword(userId, password) {
     try {
-        const response = await fetch(`${BASE_URL}/users/${userId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(obj)
-        });
-        if (!response.ok) {
-            const errorText = await response.text();
-            return {
-                message: errorText || "Update failed!",
-                result: false
-            };
-        } else {
-            return true;
-        }
-    } catch (error) {
-        return {
-            message: error.message,
-            result: false
-        };
-    }
-}
-
-export async function checkUserPassword(userId, currentPassword) {
-    try {
-        const response = await fetch(`${BASE_URL}/users/${userId}/check-password?password=${currentPassword}`, {
+        const response = await fetch(`${BASE_URL}/api/users/${userId}/check-password`, {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(password)
         });
-        if (!response.ok) {
+        if(!response.ok) {
             return {
                 success: false,
-                message: "current password is incorrect"
+                message: "Something went wrong. Try again"
             }
         }
         const isValid = await response.json();
         return {
             success: isValid,
-            message: ""
+            message: isValid ? "" : "Current password is incorrect"
         }
     } catch (error) {
         return {
@@ -298,7 +272,7 @@ export async function checkUserPassword(userId, currentPassword) {
 
 export async function sendUserPassword(userId, password) {
     try {
-        const response = await fetch(`${BASE_URL}/users/${userId}`, {
+        const response = await fetch(`${BASE_URL}/api/users/${userId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(password)
