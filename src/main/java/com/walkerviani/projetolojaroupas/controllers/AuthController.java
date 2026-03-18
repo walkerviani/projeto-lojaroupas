@@ -1,5 +1,7 @@
 package com.walkerviani.projetolojaroupas.controllers;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +32,9 @@ public class AuthController {
             User user = authService.authUser(input.email(), input.password());
             session.setAttribute("LoggedUser", user.getId());
             session.setAttribute("UserRole", user.getRole().name());
-            return ResponseEntity.ok("Login successful");
+            return ResponseEntity.ok(Map.of("message", "Login successful"));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", e.getMessage()));
         }
     }
 
