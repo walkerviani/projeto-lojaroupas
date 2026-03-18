@@ -6,65 +6,60 @@ import * as API from "../services/api.js";
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');
     const { name, cpf, email, phone, password, confPassword } = form.elements;
-    const alert = document.getElementById('alert-create-account');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
-        const phoneRegex = /^\d{11}$/; //numeric number with 11 digits long
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
-        const cpfRegex = /^[0-9]+$/; //allow only numbers
 
-        // Reset the label and error
-        alert.textContent = "";
-        let error = "";
+        // Allow normal characters, accented characters and whitespace
+        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+        // Allow only numbers
+        const numberRegex = /^[0-9]+$/;
+        // Checks if string looks like a simple email: "text@text.text"
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (name.value === "") {
-            error = "Name is required!";
+            updateAlert("Name is required", "red");
         }
         else if (name.value.length < 3) {
-            error = "Name is too short!";
+            updateAlert("Name is too short", "red");
         }
         else if (!nameRegex.test(name.value)) {
-            error = "Name must not have numbers";
+            updateAlert("Name must not have numbers", "red");
         }
         else if (cpf.value === "") {
-            error = "CPF is required!";
+            updateAlert("CPF is required", "red");
         }
         else if (cpf.value.length !== 11) {
-            error = "CPF must have 11 digits";
+            updateAlert("CPF must have 11 digits", "red");
         }
-        else if (!cpfRegex.test(cpf.value)) {
-            error = "CPF cannot have letters!";
+        else if (!numberRegex.test(cpf.value)) {
+            updateAlert("CPF cannot have letters", "red");
         }
         else if (email.value === "") {
-            error = "Email is required!";
+            updateAlert("Email is required", "red");
         }
         else if (!emailRegex.test(email.value)) {
-            error = "Please enter a valid email!";
+            updateAlert("Please enter a valid email", "red");
         }
         else if (phone.value === "") {
-            error = "Phone is required!";
+            updateAlert("Phone is required", "red");
         }
-        else if (!phoneRegex.test(phone.value)) {
-            error = "Please enter a valid phone with DDD (11 digits)!";
+        else if (!numberRegex.test(phone.value)) {
+            updateAlert("Please enter a valid phone with DDD (11 digits)", "red");
         }
         else if (password.value === "") {
-            error = "Password is required!";
+            updateAlert("Password is required", "red");
         }
         else if (password.value.length < 8) {
-            error = "Password minimum size is 8";
+            updateAlert("Password minimum size is 8", "red");
         }
         else if (confPassword.value === "") {
-            error = "Confirmation password is required!";
+            updateAlert("Confirmation password is required", "red");
         }
         else if (confPassword.value !== password.value) {
-            error = "Passwords don't match";
+            updateAlert("Passwords don't match", "red");
         }
-
-        if (error !== "") {
-            updateAlert(alert, error, "red");
-        } else {
+        else {
             const userData = {
                 name: name.value,
                 cpf: cpf.value,
@@ -73,7 +68,15 @@ export function validateCreateAccount() {
                 password: password.value,
                 role: "USER"
             }
-            await API.sendAccountData(userData, alert, form);
+            const response = await API.sendAccountData(userData);
+            if (response.success) {
+                updateAlert(response.message, "green");
+                setTimeout(() => {
+                    navigateTo('/');
+                }, 1000);
+            } else {
+                updateAlert(response.message, "red");
+            }
         }
     });
 }
@@ -187,7 +190,7 @@ export async function validateCategory(categoryId = null) {
                 name: nameInput.value,
             };
             const response = await API.sendCategoryData(categoryObj, categoryId);
-            if (response.success === true) {
+            if (response.success) {
                 updateAlert(response.message, "green");
                 setTimeout(() => {
                     navigateTo('/admin/categories');
@@ -278,9 +281,9 @@ export async function validateUser(userId = null) {
                 phone: phone.value,
                 role: role.value
             };
-            
+
             const response = await API.sendUserData(userObj, password, userId);
-            if (response.success === true) {
+            if (response.success) {
                 updateAlert(response.message, "green");
                 setTimeout(() => {
                     navigateTo('/admin/users');
@@ -321,7 +324,7 @@ export async function validateLogin() {
             };
 
             const response = await authenticateUser(loginObj);
-            if (response.success === true) {
+            if (response.success) {
                 updateAlert(response.message, "green");
                 setTimeout(() => {
                     navigateTo('/');
@@ -406,10 +409,10 @@ export async function updateOrderForm(form, order) {
     sessionStorage.setItem('orderItems', JSON.stringify(allItems));
 }
 
-export async function validateUserOrder(alert) {
+export async function validateUserOrder() {
     const user = await checkAuth();
     if (!user) {
-        updateAlert(alert, "You're not logged in! Redirecting to login...", "red");
+        updateAlert("You're not logged in! Redirecting to login...", "red");
         setTimeout(() => {
             navigateTo('/login');
         }, 3000);
@@ -418,7 +421,7 @@ export async function validateUserOrder(alert) {
 
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     if (cart.length === 0) {
-        return updateAlert(alert, "Your cart is empty!", "red");
+        return updateAlert("Your cart is empty!", "red");
     }
 
     try {
@@ -433,164 +436,167 @@ export async function validateUserOrder(alert) {
             items: allItems,
             payment: {}
         };
-        const success = await API.postOrder(orderObj);
-        if (success) {
-            updateAlert(alert, "Your order has been created successfully!", "green");
+        const response = await API.sendOrderData(orderObj);
+        if (response.success) {
+            updateAlert("Your order has been created successfully!", "green");
             localStorage.removeItem('cart');
             setTimeout(() => {
                 navigateTo('/');
             }, 3000);
-
         } else {
-            updateAlert(alert, "Failed to create your order!", "red");
+            updateAlert("Failed to create your order!", "red");
         }
     } catch (error) {
-        updateAlert(alert, "An error occurred while processing your items", "red");
+        updateAlert("An error occurred while processing your items", "red");
     }
 }
 
-export async function validateProfileData(form, alert, userId) {
+// Validate user account data
+export async function validateProfileData(userId) {
+    const form = document.getElementById('form-update-profile');
     const { name, cpf, email, phone } = form.elements;
 
-    const user = await API.fetchData(`${BASE_URL}/users/${userId}`);
-    const role = user.role;
+    // Allow normal and accented characters and whitespace
+    const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+    // Allow only numbers
+    const numberRegex = /^[0-9]+$/;
+    // Checks if string looks like a simple email: "text@text.text"
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
-    const cpfRegex = /^[0-9]+$/; //allow only numbers
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //checks if string looks like a simple email: "text@text.text"
-    const phoneRegex = /^[0-9]+$/; //allow only numbers
-
-    // Reset the label and error
-    alert.textContent = "";
-    let error = "";
-
-    if (name.value === "") {
-        error = "Name is required!";
+    if (name.value.trim() === "") {
+        updateAlert("Name is required", "red");
     }
     else if (name.value.length < 3) {
-        error = "Name is too short!";
+        updateAlert("Name is too short", "red");
     }
     else if (!nameRegex.test(name.value)) {
-        error = "Name must not have numbers";
+        updateAlert("Name must not have numbers", "red");
     }
     else if (cpf.value === "") {
-        error = "Cpf is required!";
+        updateAlert("Cpf is required", "red");
     }
     else if (cpf.value.length !== 11) {
-        error = "Cpf must have 11 digits";
+        updateAlert("Cpf must have 11 digits", "red");
     }
-    else if (!cpfRegex.test(cpf.value)) {
-        error = "Cpf must have only numbers";
+    else if (!numberRegex.test(cpf.value)) {
+        updateAlert("Cpf must have only numbers", "red");
     }
     else if (email.value === "") {
-        error = "Email is required!";
+        updateAlert("Email is required", "red");
     }
     else if (!emailRegex.test(email.value)) {
-        error = "Email is not valid!";
+        updateAlert("Email is not valid", "red");
     }
     else if (phone.value === "") {
-        error = "Phone is required!";
+        updateAlert("Phone is required", "red");
     }
     else if (phone.value.length < 11) {
-        error = "Phone is too short";
+        updateAlert("Phone is too short", "red");
     }
-    else if (!phoneRegex.test(phone.value)) {
-        error = "Phone must have only numbers";
+    else if (!numberRegex.test(phone.value)) {
+        updateAlert("Phone must have only numbers", "red");
     }
+    else {
+        const userObj = {
+            name: name.value,
+            email: email.value,
+            cpf: cpf.value,
+            phone: phone.value
+        };
 
-    if (error !== "") {
-        updateAlert(alert, error, "red");
-        return;
-    }
+        const response = await API.sendUserData(userObj, null, userId);
 
-    const obj = {
-        name: name.value,
-        email: email.value,
-        cpf: cpf.value,
-        phone: phone.value,
-        role: role
-    };
+        if (response.success) {
+            updateAlert("Updated successfully!", "green");
+            // Close 'Account Settings' page
+            setTimeout(() => {
+                const configElement = document.getElementById('profile-option');
+                configElement.innerHTML = `<h1>Select an option</h1>`;
+            }, 2000);
 
-    const response = await API.putUser(obj, userId);
+            // Disable the inputs
+            const inputs = form.querySelectorAll('.profile-box-input');
+            inputs.forEach(input => input.disabled = true);
 
-    if (response === true) {
-        updateAlert(alert, "Updated successfully!", "green");
-        setTimeout(() => {
-            const configElement = document.getElementById('profile-option');
-            configElement.innerHTML = `<h1>Select an option</h1>`;
-        }, 2000);
-
-        // disable the inputs
-        const inputs = form.querySelectorAll('.profile-box-input');
-        inputs.forEach(input => input.disabled = true);
-
-        // buttons back to original state
-        document.getElementById('update-profile').style.display = "block";
-        document.getElementById('cancel-update-profile').style.display = "none";
-        document.getElementById('update-profile-button').style.display = "none";
-    } else {
-        updateAlert(alert, response.message, "red");
+            // Set buttons back to original state
+            document.getElementById('update-profile').style.display = "block";
+            document.getElementById('cancel-update-profile').style.display = "none";
+            document.getElementById('update-profile-button').style.display = "none";
+        } else {
+            updateAlert(response.message, "red");
+        }
     }
 }
 
+// Handle "Change Password" in the user profile
 export function validateProfilePassword(userId) {
+    // Button to verify the current password
     const currentPasswordButton = document.getElementById('profile-current-password-button');
-
-    const alert = document.getElementById('profile-password-alert');
-    const form = document.getElementById('profile-update-password-form');
-
+    // Container for updating the password
     const updatePasswordElement = document.getElementById("profile-update-password-div");
+    // Container for entering the current password
     const currentPasswordElement = document.getElementById("profile-current-password-div");
-
+    // Current password input
     const currentPasswordInput = document.getElementById('profile-current-password-input');
-    const newPasswordInput = document.getElementById('profile-new-password-input');
-    const confirmPasswordInput = document.getElementById('profile-confirm-password-input');
 
     currentPasswordButton.addEventListener('click', async () => {
-        const passwordValue = currentPasswordInput.value;
+        const passwordValue = currentPasswordInput.value.trim();
 
         if (!passwordValue) {
-            updateAlert(alert, "Enter your current password", "red");
+            updateAlert("Enter your current password", "red");
         } else {
             const response = await API.checkUserPassword(userId, passwordValue);
-            if (response.success === true) {
-                updateAlert(alert, response.message, "green");
+            if (response.success) {
+                updateAlert(response.message, "green");
+
+                // Hide current password step and show update password form
                 currentPasswordElement.style.display = "none";
                 updatePasswordElement.style.display = "flex";
             } else {
-                updateAlert(alert, response.message, "red");
+                updateAlert(response.message, "red");
             }
         }
     });
+    validateUserUpdatePassword(userId);
+}
+
+function validateUserUpdatePassword(userId) {
+    const form = document.getElementById('profile-update-password-form');
+    // Input field used to confirm the new password
+    const confirmPasswordInput = document.getElementById('profile-confirm-password-input');
+    // Input field used to enter the new password
+    const newPasswordInput = document.getElementById('profile-new-password-input');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const passwordValue = newPasswordInput.value;
-        const confirmPasswordValue = confirmPasswordInput.value;
+        const passwordValue = newPasswordInput.value.trim();
+        const confirmPasswordValue = confirmPasswordInput.value.trim();
 
         if (!passwordValue) {
-            updateAlert(alert, "Password is required", "red");
+            updateAlert("Password is required", "red");
         }
         else if (passwordValue.length < 8) {
-            updateAlert(alert, "Password is too short (Minimum 8 digits)", "red");
+            updateAlert("Password is too short (Minimum 8 characters)", "red");
         }
         else if (!confirmPasswordValue) {
-            updateAlert(alert, "The confirmation password is required!", "red");
+            updateAlert("The confirmation password is required!", "red");
         }
         else if (confirmPasswordValue !== passwordValue) {
-            updateAlert(alert, "The passwords don't match!", "red");
+            updateAlert("The passwords don't match!", "red");
         } else {
             const response = await API.sendUserPassword(userId, passwordValue);
 
-            if (response.success === true) {
-                updateAlert(alert, response.message, "green");
+            if (response.success) {
+                updateAlert(response.message, "green");
+
                 setTimeout(() => {
                     const configElement = document.getElementById('profile-option');
                     configElement.innerHTML = `<h1>Select an option</h1>`;
                 }, 2000);
+
             } else {
-                updateAlert(alert, response.message, "red");
+                updateAlert(response.message, "red");
             }
         }
     });
