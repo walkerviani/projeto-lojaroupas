@@ -162,11 +162,10 @@ export function loadCheckout() {
         navigateTo('/cart');
     });
 
-    const alert = document.getElementById('alert-checkout');
     const confirmCheckoutButton = document.getElementById('confirm-checkout');
     confirmCheckoutButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        await VALIDATION.validateUserOrder(alert);
+        await VALIDATION.validateUserOrder();
     });
 }
 
@@ -185,12 +184,14 @@ export function loadLoginPage() {
 export function loadUserProfilePage() {
     loadContainer('template-profile', 'container profile');
 
+    // 'Account Settings' button
     const accountSettings = document.getElementById('profile-settings');
     accountSettings.addEventListener('click', async (e) => {
         e.preventDefault();
         await loadAccountSettings();
     });
 
+    // 'Change your password' button
     const passwordSettings = document.getElementById('profile-password');
     passwordSettings.addEventListener('click', async (e) => {
         e.preventDefault();
@@ -445,7 +446,7 @@ export async function loadOrdersPage() {
         }
     });
 
-    UTIL.showOrdersTable(await API.fetchData(`${UTIL.BASE_URL}/orders`));
+    UTIL.showOrdersTable(await API.fetchData(`${UTIL.BASE_URL}/api/admin/orders`));
 }
 
 // Create an order in '/admin'
@@ -571,6 +572,7 @@ async function loadAccountSettings() {
     const user = await AUTH.checkAuth();
     if (!user) {
         navigateTo('/');
+        return;
     }
 
     const accountElement = document.createElement('div');
@@ -601,7 +603,7 @@ async function loadAccountSettings() {
                 </div>
 
                 <div>
-                    <label class="alert-message alert" id="account-alert"></label>
+                    <div class="alert-message alert"></div>
                 </div>
 
                 <div class="profile-box-buttons">
@@ -624,6 +626,7 @@ async function loadPasswordSettings() {
     const user = await AUTH.checkAuth();
     if (!user) {
         navigateTo('/');
+        return;
     }
 
     const accountElement = document.createElement('div');
@@ -634,7 +637,7 @@ async function loadPasswordSettings() {
                     
                     <label class="bold-title">Update password</label>
                     
-                    <label class="alert-message alert" id="profile-password-alert"></label>
+                    <label class="alert-message alert"></label>
                     
                     <div class="flex-column" id="profile-current-password-div">
                         <label class="bold-title">Enter your current password</label>
