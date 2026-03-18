@@ -127,7 +127,7 @@ public class UserService {
         return passwordEncoder.matches(password, entity.getPassword());
     }
 
-    public void validateUser(User obj) {
+    private void validateUser(User obj) {
         // Name verification
         if (obj.getName() == null || obj.getName().trim().isEmpty())
             throw new ValidationException("Name is required");
