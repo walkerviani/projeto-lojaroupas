@@ -199,10 +199,11 @@ export function updateCheckoutButton() {
     }
 }
 
-export function updateAlert(alertElement, message, color) {
-    alertElement.style.color = color;
-    alertElement.textContent = message;
-    alertElement.scrollIntoView({ behavior: "smooth", block: "center" });
+export function updateAlert(message, color) {
+    const alert = document.querySelector('.alert');
+    alert.style.color = color;
+    alert.textContent = message;
+    alert.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 export async function showUserPurchases() {
