@@ -2,7 +2,6 @@ import { handleRoute, navigateTo } from './modules/router.js';
 import { BASE_URL, getCategoriesMenu } from './utils/util.js';
 import { fetchData } from "./services/api.js";
 import { checkAuth } from "./services/auth.js";
-import { updateAuthUI } from "./components/ui.js";
 
 async function setupNavigation() {
 
@@ -25,7 +24,7 @@ async function setupNavigation() {
     });
 
     // Category options
-    const categoriesRequest = await fetchData(`${BASE_URL}/category`);
+    const categoriesRequest = await fetchData(`${BASE_URL}/api/category`);
     const categories = getCategoriesMenu(categoriesRequest);
 
     for (let category of categories) {
