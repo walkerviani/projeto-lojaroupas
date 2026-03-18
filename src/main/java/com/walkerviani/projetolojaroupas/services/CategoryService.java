@@ -11,8 +11,10 @@ import com.walkerviani.projetolojaroupas.entities.Category;
 import com.walkerviani.projetolojaroupas.repositories.CategoryRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.CategoryNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
+import com.walkerviani.projetolojaroupas.services.exceptions.ValidationException;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -30,13 +32,16 @@ public class CategoryService {
         return obj.orElseThrow(() -> new CategoryNotFoundException("Category not found"));
     }
 
+    @Transactional
     public Category insert(Category obj) {
-        if (categoryRepository.existsByNameIgnoreCase(obj.getName())) {
-            throw new DatabaseException("A category with this name already exists");
-        }
+        validateCategory(obj);
+        
+        if (categoryRepository.existsByNameIgnoreCase(obj.getName()))
+            throw new ValidationException("A category with this name already exists");
         return categoryRepository.save(obj);
     }
 
+    @Transactional
     public void delete(Long id) {
         try {
             categoryRepository.deleteById(id);
@@ -47,9 +52,17 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public Category update(Long id, Category obj) {
         try {
             Category entity = categoryRepository.getReferenceById(id);
+
+            validateCategory(obj);
+
+            if (!entity.getName().equalsIgnoreCase(obj.getName())
+                    && categoryRepository.existsByNameIgnoreCase(obj.getName()))
+                throw new ValidationException("A category with this name already exists");
+
             updateData(entity, obj);
             return categoryRepository.save(entity);
         } catch (EntityNotFoundException e) {
@@ -61,4 +74,12 @@ public class CategoryService {
         entity.setName(obj.getName());
     }
 
+    private void validateCategory(Category obj) {
+        if (obj.getName() == null || obj.getName().trim().isEmpty())
+            throw new ValidationException("Name is required");
+        if (obj.getName().trim().length() < 3)
+            throw new ValidationException("Name is too short");
+        if (!obj.getName().matches("^[A-Za-zÀ-ÿ\\s]+$"))
+            throw new ValidationException("Name must not have numbers");
+    }
 }
