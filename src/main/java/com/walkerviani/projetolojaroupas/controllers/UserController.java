@@ -31,8 +31,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id, HttpSession session) {
-        User loggedUser = (User) session.getAttribute("LoggedUser");
-        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+        Long loggedUserId = (Long) session.getAttribute("LoggedUser");
+        if(loggedUserId == null || !loggedUserId.equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         User obj = userService.findById(id);
@@ -48,8 +48,8 @@ public class UserController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id, HttpSession session) {
-        User loggedUser = (User) session.getAttribute("LoggedUser");
-        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+        Long loggedUserId = (Long) session.getAttribute("LoggedUser");
+        if(loggedUserId == null || !loggedUserId.equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         userService.delete(id);
@@ -58,8 +58,8 @@ public class UserController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj, HttpSession session) {
-        User loggedUser = (User) session.getAttribute("LoggedUser");
-        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+        Long loggedUserId = (Long) session.getAttribute("LoggedUser");
+        if(loggedUserId == null || !loggedUserId.equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         obj.setRole(null);
@@ -69,8 +69,8 @@ public class UserController {
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody String newPassword, HttpSession session) {
-        User loggedUser = (User) session.getAttribute("LoggedUser");
-        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+        Long loggedUserId = (Long) session.getAttribute("LoggedUser");
+        if(loggedUserId == null || !loggedUserId.equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         String removeQuotes = newPassword.replaceAll("^\"|\"$", "").trim();
@@ -80,8 +80,8 @@ public class UserController {
 
     @PostMapping(value = "/{id}/check-password")
     public ResponseEntity<Boolean> checkCurrentPassword(@PathVariable Long id, @RequestParam String password, HttpSession session) {
-        User loggedUser = (User) session.getAttribute("LoggedUser");
-        if(loggedUser == null || !loggedUser.getId().equals(id)) {
+        Long loggedUserId = (Long) session.getAttribute("LoggedUser");
+        if(loggedUserId == null || !loggedUserId.equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         boolean isValid = userService.checkCurrentPassword(id, password);
