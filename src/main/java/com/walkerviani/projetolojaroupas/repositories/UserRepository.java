@@ -8,4 +8,5 @@ import com.walkerviani.projetolojaroupas.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+    Optional<User> findByCpf(String cpf);
 }
