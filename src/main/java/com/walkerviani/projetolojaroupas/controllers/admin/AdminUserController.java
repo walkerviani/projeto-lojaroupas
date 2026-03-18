@@ -20,7 +20,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.walkerviani.projetolojaroupas.entities.User;
 import com.walkerviani.projetolojaroupas.services.UserService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -60,7 +59,6 @@ public class AdminUserController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @Transactional
     @PatchMapping(value = "/{id}")
     public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody String newPassword) {
         String removeQuotes = newPassword.replaceAll("^\"|\"$", "").trim();
