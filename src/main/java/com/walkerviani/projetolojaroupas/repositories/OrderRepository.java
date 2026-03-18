@@ -9,5 +9,5 @@ import com.walkerviani.projetolojaroupas.entities.Order;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByClientId(Long clientId);
 
-    boolean existsByUserId(Long userId);
+    boolean existsByClientId(Long userId);
 }

@@ -67,7 +67,7 @@ public class UserService {
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if(orderRepository.existsByUserId(id)) {
+        if(orderRepository.existsByClientId(id)) {
             throw new DatabaseException("Cannot delete user: they have associated orders.");
         }
 
