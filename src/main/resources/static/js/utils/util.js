@@ -371,7 +371,7 @@ export function bindOrderEvents() {
             if (currentValue > 0) qntSpan.textContent = currentValue - 1;
         }
 
-        // Handle "add to cart" button click
+        // Handle "add to order" button click
         if (click.classList.contains('small-green-button')) {
             const quantity = parseInt(qntSpan.textContent);
             if (!quantity <= 0) {
@@ -388,8 +388,7 @@ export function bindOrderEvents() {
                 // Reset product quantity after adding to session storage
                 qntSpan.textContent = "0";
             } else {
-                const alert = document.querySelector(".alert");
-                updateAlert(alert, "Product quantity must be greater than 0 to add", "red");
+                updateAlert("Product quantity must be greater than 0 to add", "red");
             }
         }
     });
