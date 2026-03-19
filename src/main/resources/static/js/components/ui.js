@@ -255,11 +255,10 @@ export async function createProductPage() {
 export async function updateProductPage() {
     loadContainer('template-update-product', 'container form');
 
-    const product = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
-    await UTIL.createSelectCategories('category-select-update-product');
-    const form = document.getElementById('form-update-product');
-    const alert = document.getElementById('alert-update-product');
-    await VALIDATION.validateProduct(form, alert, product.id);
+    const product = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/${param}`));
+    // Fetch categories and populate a select element with options
+    await UTIL.createSelectCategories();
+    await VALIDATION.validateProduct(product.id);
 }
 
 export async function deleteProductPage() {
