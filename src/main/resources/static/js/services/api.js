@@ -16,7 +16,7 @@ export async function fetchData(url) {
 export async function sendOrderData(orderObj, orderId = null) {
     const isUpdateMode = orderId != null;
     const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/api/orders/${orderId}` : `${BASE_URL}/api/orders`;
+    const url = isUpdateMode ? `${BASE_URL}/api/admin/orders/${orderId}` : `${BASE_URL}/api/admin/orders`;
 
     try {
         const response = await fetch(url, {
