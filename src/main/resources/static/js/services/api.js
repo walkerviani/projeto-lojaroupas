@@ -1,5 +1,4 @@
-import { BASE_URL, updateAlert } from "../utils/util.js";
-import { updateProductForm } from "../modules/validations.js";
+import { BASE_URL } from "../utils/util.js";
 
 export async function fetchData(url) {
     try {

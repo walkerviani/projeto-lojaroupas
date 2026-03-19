@@ -1,5 +1,5 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, updateAlert, renderSelectedItems, bindOrderEvents, bindSelectedItemsEvent } from "../utils/util.js";
+import { BASE_URL, updateAlert } from "../utils/util.js";
 import { authenticateUser, checkAuth } from "../services/auth.js";
 import * as API from "../services/api.js";
 

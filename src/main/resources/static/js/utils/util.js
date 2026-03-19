@@ -1,4 +1,3 @@
-import { navigateTo } from "../modules/router.js";
 import { checkAuth } from "../services/auth.js";
 import { fetchData, findProductByName } from "../services/api.js";
 import { validateProfileData } from "../modules/validations.js";
