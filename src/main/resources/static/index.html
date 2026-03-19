@@ -127,7 +127,7 @@
     <div class="form-background">
         <h1 class="form-title">Create Product</h1>
         <div class="alert"></div>
-        <form id="form-create-product" novalidate>
+        <form class="products-form" novalidate>
             <label>Name</label>
             <input type="text" id="name-create-product" name="name" minlength="3" maxlength="80" required>
 
@@ -162,7 +162,7 @@
             </select>
 
             <label for="category">Category</label>
-            <select name="category" id="category-select-create-product" required>
+            <select name="category" class="category-select" required>
                 <option value="">Please choose an option</option>
             </select>
 
@@ -179,7 +179,7 @@
     <div class="form-background">
         <h1 class="form-title">Update Product</h1>
         <div class="alert"></div>
-        <form id="form-update-product" novalidate>
+        <form class="products-form" novalidate>
             <label>Name</label>
             <input type="text" id="name-update-product" name="name" minlength="3" maxlength="80" required>
 
@@ -214,7 +214,7 @@
             </select>
 
             <label for="category">Category</label>
-            <select name="category" id="category-select-update-product" required>
+            <select name="category" class="category-select" required>
                 <option value="">Please choose an option</option>
             </select>
 
@@ -233,7 +233,7 @@
         <h1 class="form-title">Delete a product</h1>
         <div class="alert"></div>
         <label id="current-product-title">Do you really want to delete the product below?</label>
-        <label id="current-product-name"></label>
+        <label id="current-product-name" style="color: red"></label>
         <button class="delete-option-button" id="delete-product">Delete</button>
     </div>
 </template>
