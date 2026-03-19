@@ -19,6 +19,7 @@ export function currencyFormatterToBRL(number) {
     });
 }
 
+// Render categories list into the navigation dropdown menu
 export function getCategoriesMenu(categories) {
     let list = "";
     for (let category of categories) {
@@ -28,19 +29,20 @@ export function getCategoriesMenu(categories) {
     return categories;
 }
 
-export async function createSelectCategories(selectName) {
-    const categories = await fetchData(`${BASE_URL}/category`);
+// Fetch categories and populate a select element with options
+export async function createSelectCategories() {
+    const selectElement = document.querySelector('.category-select');
+    const categories = await fetchData(`${BASE_URL}/api/category`);
 
-    const select = document.getElementById(selectName);
     for (let category of categories) {
         const option = document.createElement('option');
         option.value = category.id;
         option.textContent = category.name;
-        select.appendChild(option);
+        selectElement.appendChild(option);
     };
 }
 
-//Admin route product menu table
+// Product menu table in '/admin' route
 export function showProductTable(products) {
     let table = `
     <tr>
@@ -71,7 +73,7 @@ export function showProductTable(products) {
     document.getElementById('product-table').innerHTML = table;
 }
 
-//Admin route category menu table
+// Category menu table in '/admin' route
 export function showCategoryTable(categories) {
     let table = `
     <tr>
@@ -94,7 +96,7 @@ export function showCategoryTable(categories) {
     document.getElementById('category-table').innerHTML = table;
 }
 
-//Admin route user menu table
+// User menu table in '/admin' route
 export function showUserTable(users) {
     let table = `
     <tr>
@@ -125,7 +127,7 @@ export function showUserTable(users) {
     document.getElementById('user-table').innerHTML = table;
 }
 
-//Admin route orders menu table
+// Orders menu table in '/admin' route
 export function showOrdersTable(orders) {
     let table = `
     <tr>
