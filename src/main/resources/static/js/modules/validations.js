@@ -81,81 +81,85 @@ export function validateCreateAccount() {
     });
 }
 
-export async function validateProduct(form, alert, productId = null) {
+export async function validateProduct(productId = null) {
+    const form = document.querySelector('.products-form');
     const { name, price, description, size, color, category, image } = form.elements;
-
-    const isUpdateMode = productId ? true : false;
+    const isUpdateMode = productId != null;
 
     if (isUpdateMode) {
-        const imagePreview = document.getElementById('image-preview');
-        const product = await API.fetchData(`${BASE_URL}/clothes/${productId}`)
-        updateProductForm(form, product, imagePreview);
+        const product = await API.fetchData(`${BASE_URL}/api/admin/clothes/${productId}`)
+        updateProductForm(form, product);
     }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; //allow normal and accented characters and whitespace
+        // Allow normal and accented characters and whitespace
+        const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+        // Replace commas with dots in price value
         const formattedPrice = price.value.replace(/,/g, ".");
+        // Get the selected file from input
         const file = image.files[0];
 
-        // Reset the label and error
-        alert.textContent = "";
-        let error = "";
-
-        if (name.value === "") {
-            error = "Name is required!";
+        if (name.value.trim() === "") {
+            updateAlert("Name is required", "red");
         }
         else if (name.value.length < 3) {
-            error = "Name is too short!";
+            updateAlert("Name is too short", "red");
         }
         else if (!nameRegex.test(name.value)) {
-            error = "Name must not have numbers";
+            updateAlert("Name must not have numbers", "red");
         }
-        else if (price.value === "") {
-            error = "Price is required!";
+        else if (formattedPrice.trim() === "") {
+            updateAlert("Price is required", "red");
         }
-        else if (isNaN(price.value)) {
-            error = "Enter a valid price!";
+        else if (isNaN(formattedPrice)) {
+            updateAlert("Enter a valid price", "red");
         }
-        else if (description.value === "") {
-            error = "Description is required!";
+        else if (description.value.trim() === "") {
+            updateAlert("Description is required", "red");
         }
         else if (size.value === "") {
-            error = "You must select a valid size!";
+            updateAlert("You must select a valid size", "red");
         }
         else if (color.value === "") {
-            error = "You must select a valid color!";
+            updateAlert("You must select a valid color", "red");
         }
         else if (category.value === "") {
-            error = "You must select a valid category!";
+            updateAlert("You must select a valid category", "red");
         }
-        else if (isUpdateMode === false && image.files.length === 0) {
-            error = "You must select an image";
+        else if (!isUpdateMode && image.files.length === 0) {
+            updateAlert("You must select an image", "red");
         }
         else if (file && file.type !== "image/png") {
-            error = "Only PNG images are allowed!";
+            updateAlert("Only PNG images are allowed", "red");
         }
-
-        if (error !== "") {
-            updateAlert(alert, error, "red");
-        } else {
-            const productData = {
+        else {
+            const productObj = {
                 name: name.value,
-                price: formattedPrice,
+                price: Number(formattedPrice),
                 description: description.value,
                 size: size.value,
                 color: color.value,
                 category: {
-                    id: category.value
+                    id: Number(category.value)
                 }
             };
-            await API.sendProductData(isUpdateMode, productData, file, alert, form, productId);
+            const response = await API.sendProductData(productObj, file, productId);
+            if (response.success) {
+                updateAlert(response.message, "green");
+                setTimeout(() => {
+                    navigateTo('/admin/products');
+                }, 2000);
+            } else {
+                updateAlert(response.message, "red");
+            }
         }
     });
 }
 
-export function updateProductForm(form, product, imagePreview) {
+export function updateProductForm(form, product) {
+    const imagePreview = document.getElementById('image-preview');
     const { name, price, description, size, color, category } = form.elements;
     name.value = product.name;
     price.value = product.price;
@@ -163,7 +167,7 @@ export function updateProductForm(form, product, imagePreview) {
     size.value = product.size;
     color.value = product.color;
     category.value = product.category.id;
-    imagePreview.src = `${BASE_URL}/image/${product.imageData.name}`;
+    imagePreview.src = `${BASE_URL}/api/image/${product.imageData.name}`;
 }
 
 export async function validateCategory(categoryId = null) {
