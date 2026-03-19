@@ -105,7 +105,7 @@ export async function validateProduct(productId = null) {
             updateAlert("Name is required", "red");
         }
         else if (name.value.length < 3) {
-            updateAlert("Name is too short", "red");
+            updateAlert("Name is too short (Min. 3 characters)", "red");
         }
         else if (!nameRegex.test(name.value)) {
             updateAlert("Name must not have numbers", "red");
