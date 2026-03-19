@@ -668,7 +668,7 @@ export async function loadOrderDetail() {
     const templateElement = document.getElementById('order-detail');
     templateElement.innerHTML = '';
 
-    const order = await UTIL.getParams('detail-id', (param) => API.fetchData(`${UTIL.BASE_URL}/orders/${param}`));
+    const order = await UTIL.getParams('detail-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/orders/${param}`));
 
     const purchaseDate = new Date(order.moment).toLocaleDateString('pt-BR');
 
@@ -687,12 +687,12 @@ export async function loadOrderDetail() {
     </div>
     `;
 
-    orderInfo += `<b>Itens:</b>`;
+    orderInfo += `<b>Items:</b>`;
     order.items.forEach(item => {
         const clothes = item.clothes;
         const imageName = clothes.imageData?.name;
         const imageUrl = imageName
-            ? `${UTIL.BASE_URL}/image/${imageName}`
+            ? `${UTIL.BASE_URL}/api/image/${imageName}`
             : 'https://placehold.co/400x400?text=No+Image';
 
         orderInfo += `
