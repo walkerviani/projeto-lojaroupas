@@ -247,10 +247,9 @@ export async function loadProductsPage() {
 
 export async function createProductPage() {
     loadContainer('template-create-product', 'container form');
-    await UTIL.createSelectCategories('category-select-create-product');
-    const form = document.getElementById('form-create-product');
-    const alert = document.getElementById('alert-create-product');
-    await VALIDATION.validateProduct(form, alert);
+    // Fetch categories and populate a select element with options
+    await UTIL.createSelectCategories();
+    await VALIDATION.validateProduct();
 }
 
 export async function updateProductPage() {
