@@ -300,13 +300,12 @@ export function bindProfileEvents(userId) {
 
 // Render product search in '/admin' create order
 export async function renderProductSearch() {
-    const alert = document.querySelector(".alert");
     const input = document.querySelector(".renderProductSearch-input");
     const display = document.querySelector(".product-found");
-    const query = input.value;
+    const query = input.value.trim();
 
     if (!query) {
-        return updateAlert(alert, "Type a product name", "red");
+        return updateAlert("Type a product name", "red");
     }
 
     display.innerHTML = "";
@@ -317,7 +316,7 @@ export async function renderProductSearch() {
         const product = result.data;
 
         if (!product || product.length === 0) {
-            return updateAlert(alert, "No products found", "red");
+            return updateAlert("No products found", "red");
         }
 
         display.innerHTML = "Products: ";
@@ -341,7 +340,7 @@ export async function renderProductSearch() {
             display.appendChild(itemElement);
         });
     } else {
-        return updateAlert(alert, `${result.message} `, "red");
+        return updateAlert(result.message, "red");
     }
 }
 
@@ -510,15 +509,15 @@ export async function renderUserData() {
     const alert = document.querySelector(".alert");
     const input = document.querySelector(".renderUserData-input");
     const display = document.querySelector(".renderUserData-display");
-    const query = input.value;
+    const query = input.value.trim();
 
     if (!query) {
-        return updateAlert(alert, "Type an user id", "red");
+        return updateAlert("Type an user id", "red");
     }
 
     display.innerHTML = "";
 
-    const user = await fetchData(`${BASE_URL}/users/${query}`);
+    const user = await fetchData(`${BASE_URL}/api/admin/users/${query}`);
 
     if(user) {
         display.innerHTML = `
@@ -530,6 +529,6 @@ export async function renderUserData() {
             </div>
         `;
     } else {
-        return updateAlert(alert, "User not found", "red");
+        return updateAlert("User not found", "red");
     }
 }
