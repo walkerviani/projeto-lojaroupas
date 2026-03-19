@@ -494,19 +494,20 @@ export function createOrdersPage() {
 export async function updateOrdersPage() {
     loadContainer('template-update-order', 'container form');
 
-    sessionStorage.removeItem('orderItems'); // Reset session storage when loading the page
+    // Reset session storage when loading the page
+    sessionStorage.removeItem('orderItems');
 
-    const order = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/orders/${param}`));
+    const order = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/orders/${param}`));
     const form = document.getElementById('form-update-order');
-    const alert = document.getElementById('alert-update-order');
     const id = order.Id;
 
+    // Show user items
     VALIDATION.updateOrderForm(form, order);
     UTIL.renderSelectedItems();
     UTIL.bindOrderEvents();
     UTIL.bindSelectedItemsEvent();
 
-    // Find user by id button
+    // Find user by Id button
     const clientIdButton = document.getElementById('find-user-by-id-update-order');
     clientIdButton.addEventListener('click', async (e) => {
         e.preventDefault();
@@ -522,7 +523,7 @@ export async function updateOrdersPage() {
 
     // Clear search products button
     const clearSearchButton = document.getElementById('clear-search-product-update-order');
-    const display = document.getElementById('product-found-update-order');
+    const display = document.querySelector('.product-found');
     clearSearchButton.addEventListener('click', (e) => {
         e.preventDefault();
         display.innerHTML = "";
@@ -531,7 +532,7 @@ export async function updateOrdersPage() {
     // Validate the form
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        await VALIDATION.validateAdminOrder(alert, form, id);
+        await VALIDATION.validateAdminOrder(form, id);
     });
 }
 
