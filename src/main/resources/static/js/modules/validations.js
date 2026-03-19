@@ -365,7 +365,6 @@ export async function validateAdminOrder(form, orderId = null) {
                 orderStatus: orderStatus.value,
                 client: { id: Number(userId.value) },
                 items: allItems,
-                payment: {}
             };
 
             const response = isUpdateMode ? await API.sendOrderData(orderObj, Number(orderId))
@@ -387,6 +386,7 @@ export async function validateAdminOrder(form, orderId = null) {
     }
 }
 
+// Show user items
 export async function updateOrderForm(form, order) {
     const { userId, orderStatus } = form.elements;
 
@@ -396,7 +396,7 @@ export async function updateOrderForm(form, order) {
     const allItems = order.items.map((item) => ({
         id: item.clothes.id,
         name: item.clothes.name,
-        price: item.price * 100, //price is multiplied by 100 because it will be divided by 100 when rendered
+        price: item.price * 100, // Price is multiplied by 100 because will be divided by 100 when rendered
         quantity: item.quantity,
     }));
 
@@ -428,7 +428,6 @@ export async function validateUserOrder() {
             orderStatus: "PAID",
             client: { id: Number(user.id) },
             items: allItems,
-            payment: {}
         };
         const response = await API.sendOrderData(orderObj);
         if (response.success) {
