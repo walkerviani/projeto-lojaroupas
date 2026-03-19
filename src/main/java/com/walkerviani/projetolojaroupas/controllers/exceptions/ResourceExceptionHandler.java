@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.walkerviani.projetolojaroupas.services.exceptions.CategoryNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
+import com.walkerviani.projetolojaroupas.services.exceptions.ImageNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.OrderNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.UserNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.ValidationException;
@@ -28,7 +29,7 @@ public class ResourceExceptionHandler {
     }
 
     @ExceptionHandler({ OrderNotFoundException.class, CategoryNotFoundException.class, ClothesNotFoundException.class,
-            UserNotFoundException.class })
+            UserNotFoundException.class, ImageNotFoundException.class })
     public ResponseEntity<StandardError> resourceNotFound(RuntimeException e, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
