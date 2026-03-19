@@ -336,25 +336,23 @@ export async function validateLogin() {
     });
 }
 
-export async function validateAdminOrder(alert, form, id = null) {
+export async function validateAdminOrder(form, orderId = null) {
     const { userId, orderStatus } = form.elements;
     const orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
 
-    const isUpdateMode = id ? true : false;
+    const isUpdateMode = orderId != null;
 
-    const userRegex = /^[0-9]+$/; //allow only numbers
+    // Allow only numbers
+    const numberRegex = /^[0-9]+$/;
 
-    if (userId.value === "" || !userRegex.test(userId.value)) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        updateAlert(alert, "Provide a valid user ID!", "red");
+    if (userId.value.trim() === "" || !numberRegex.test(userId.value)) {
+        updateAlert("Provide a valid user ID", "red");
     }
     else if (orderItems.length === 0) {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        updateAlert(alert, "Order cannot have empty products!", "red")
+        updateAlert("Order cannot have empty products", "red")
     }
-    else if (orderStatus.value === "") {
-        alert.scrollIntoView({ behavior: "smooth", block: "center" });
-        updateAlert(alert, "You must select a valid order status!", "red");
+    else if (orderStatus.value.trim() === "") {
+        updateAlert("You must select a valid order status", "red");
     }
     else {
         try {
@@ -370,25 +368,21 @@ export async function validateAdminOrder(alert, form, id = null) {
                 payment: {}
             };
 
-            if (isUpdateMode) {
-                orderObj.id = Number(id);
-            }
+            const response = isUpdateMode ? await API.sendOrderData(orderObj, Number(orderId))
+                : await API.sendOrderData(orderObj);
 
-            const success = isUpdateMode ? await API.putOrder(orderObj)
-                : await API.postOrder(orderObj);
-
-            if (success) {
-                updateAlert(alert, "Your order has been created successfully!", "green");
+            if (response.success) {
+                updateAlert(response.message, "green");
                 sessionStorage.removeItem('orderItems');
                 setTimeout(() => {
                     navigateTo('/admin/orders');
                 }, 3000);
 
             } else {
-                updateAlert(alert, "Failed to create your order!", "red");
+                updateAlert(response.message, "red");
             }
         } catch (error) {
-            updateAlert(alert, "An error ocurred while processing your items", "red");
+            updateAlert(error.message, "red");
         }
     }
 }
