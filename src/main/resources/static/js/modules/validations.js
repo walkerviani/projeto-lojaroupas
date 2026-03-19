@@ -87,7 +87,7 @@ export async function validateProduct(productId = null) {
     const isUpdateMode = productId != null;
 
     if (isUpdateMode) {
-        const product = await API.fetchData(`${BASE_URL}/api/admin/clothes/${productId}`)
+        const product = await API.fetchData(`${BASE_URL}/api/clothes/${productId}`)
         updateProductForm(form, product);
     }
 
