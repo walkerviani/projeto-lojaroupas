@@ -18,12 +18,13 @@ import lombok.RequiredArgsConstructor;
 public class StorageController {
 
     private final StorageService storageService;
-    
+
     @GetMapping("/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+    public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) {
         byte[] imageData = storageService.downloadImage(fileName);
+
         return ResponseEntity.status(HttpStatus.OK)
-        .contentType(MediaType.valueOf("image/png"))
-        .body(imageData);
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
     }
 }
