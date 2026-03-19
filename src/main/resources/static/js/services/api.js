@@ -13,7 +13,7 @@ export async function fetchData(url) {
     }
 }
 
-export async function sendOrderData(orderObj, orderId = null) {
+export async function sendOrderData(orderObj, orderId) {
     const isUpdateMode = orderId != null;
     const method = isUpdateMode ? 'PUT' : 'POST';
     const url = isUpdateMode ? `${BASE_URL}/api/admin/orders/${orderId}` : `${BASE_URL}/api/admin/orders`;
@@ -106,57 +106,62 @@ export async function sendAccountData(userObj) {
     }
 }
 
-export async function sendProductData(isUpdateMode, product, file, alert, form, productId) {
+export async function sendProductData(productObj, file, productId) {
+    const isUpdateMode = productId != null;
     try {
-        //image upload
+        // Image upload
         if (file) {
             const imageFormData = new FormData();
             imageFormData.append('image', file);
 
-            const imageResponse = await fetch(`${BASE_URL}/image`, {
+            const imageResponse = await fetch(`${BASE_URL}/api/admin/image`, {
                 method: 'POST',
                 body: imageFormData
             });
-            if (!imageResponse.ok) throw new Error("Failed to upload image");
-
             const fileName = await imageResponse.text();
-
-            product.imageData = {
+            if (!imageResponse.ok) {
+                return {
+                    success: false,
+                    message: "Failed to upload image"
+                }
+            }
+            // Set product image name 
+            productObj.imageData = {
                 name: fileName.trim()
             }
         }
         const method = isUpdateMode ? 'PUT' : 'POST';
-        const url = isUpdateMode ? `${BASE_URL}/clothes/${productId}` : `${BASE_URL}/clothes`;
+        const url = isUpdateMode ? `${BASE_URL}/api/admin/products/${productId}` : `${BASE_URL}/api/admin/products`;
         const productResponse = await fetch(url, {
             method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(product)
+            body: JSON.stringify(productObj)
         });
-
+        const responseData = await productResponse.json();
         if (productResponse.ok) {
-            const message = isUpdateMode ? "Product updated successfully!" : "Product created successfully!";
-            updateAlert(alert, message, "green");
-
-            if (isUpdateMode) {
-                const imagePreview = document.getElementById('image-preview');
-                const productInput = await fetchData(`${BASE_URL}/clothes/${productId}`)
-                updateProductForm(form, productInput, imagePreview);
-            } else {
-                form.reset();
+            return {
+                success: true,
+                message: isUpdateMode ? "Product updated successfully!" : "Product created successfully!"
             }
 
         } else {
-            throw new Error(isUpdateMode ? "Failed to upload" : "Failed to create");
+            return {
+                success: false,
+                message: responseData.message || (isUpdateMode ? "Failed to update" : "Failed to create")
+            }
         }
     } catch (error) {
-        updateAlert(alert, error.message, "red");
+        return {
+            success: false,
+            message: error.message
+        }
     }
 }
 
 export async function sendCategoryData(categoryObj, categoryId) {
-    const isUpdateMode = categoryId ? true : false;
+    const isUpdateMode = categoryId != null;
     const method = isUpdateMode ? 'PUT' : 'POST';
     const url = isUpdateMode ? `${BASE_URL}/api/admin/categories/${categoryId}` : `${BASE_URL}/api/admin/categories`;
 
@@ -188,8 +193,8 @@ export async function sendCategoryData(categoryObj, categoryId) {
     }
 }
 
-export async function sendUserData(userObj, password, userId = null) {
-    const isUpdateMode = userId ? true : false;
+export async function sendUserData(userObj, password, userId) {
+    const isUpdateMode = userId != null;
     const method = isUpdateMode ? 'PUT' : 'POST';
     const url = isUpdateMode ? `${BASE_URL}/api/admin/users/${userId}` : `${BASE_URL}/api/admin/users`;
 
