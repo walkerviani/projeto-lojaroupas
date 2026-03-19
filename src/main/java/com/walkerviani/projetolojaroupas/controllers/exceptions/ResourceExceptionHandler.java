@@ -19,48 +19,45 @@ import jakarta.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
-    @ExceptionHandler({OrderNotFoundException.class, CategoryNotFoundException.class, ClothesNotFoundException.class, UserNotFoundException.class})
-    public ResponseEntity <StandardError> resourceNotFound(RuntimeException e, HttpServletRequest request) {
-        String string = "Resource not found";
-        HttpStatus status = HttpStatus.NOT_FOUND;
-
-        StandardError error = new StandardError(
-            Instant.now(), 
-            status.value(), 
-            string, 
-            e.getMessage(), 
-            request.getRequestURI());
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<StandardError> handleGeneric(Exception e, HttpServletRequest request) {
         
-        return ResponseEntity.status(status).body(error);
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        return ResponseEntity.status(status)
+        .body(buildError(status, "Unexpected error", e.getMessage(), request));
+    }
+
+    @ExceptionHandler({ OrderNotFoundException.class, CategoryNotFoundException.class, ClothesNotFoundException.class,
+            UserNotFoundException.class })
+    public ResponseEntity<StandardError> resourceNotFound(RuntimeException e, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status)
+                .body(buildError(status, "Resource not found", e.getMessage(), request));
     }
 
     @ExceptionHandler(DatabaseException.class)
-    public ResponseEntity <StandardError> databaseError(DatabaseException e, HttpServletRequest request) {
-        String string = "Database error";
-        HttpStatus status = HttpStatus.BAD_REQUEST;
+    public ResponseEntity<StandardError> databaseError(DatabaseException e, HttpServletRequest request) {
 
-        StandardError error = new StandardError(
-            Instant.now(), 
-            status.value(), 
-            string, 
-            e.getMessage(), 
-            request.getRequestURI());
-        
-        return ResponseEntity.status(status).body(error);
+        HttpStatus status = HttpStatus.CONFLICT;
+        return ResponseEntity.status(status)
+                .body(buildError(status, "Database error", e.getMessage(), request));
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<StandardError> validationError(RuntimeException e, HttpServletRequest request) {
-        String string = "Validation error";
-        HttpStatus status = HttpStatus.BAD_REQUEST;
+    public ResponseEntity<StandardError> validationError(ValidationException e, HttpServletRequest request) {
 
-        StandardError error = new StandardError(
-            Instant.now(), 
-            status.value(), 
-            string, 
-            e.getMessage(), 
-            request.getRequestURI());
-        
-        return ResponseEntity.status(status).body(error);
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status)
+                .body(buildError(status, "Validation error", e.getMessage(), request));
+    }
+
+    private StandardError buildError(HttpStatus status, String error, String message, HttpServletRequest request) {
+        return new StandardError(
+                Instant.now(),
+                status.value(),
+                error,
+                message,
+                request.getRequestURI());
     }
 }
