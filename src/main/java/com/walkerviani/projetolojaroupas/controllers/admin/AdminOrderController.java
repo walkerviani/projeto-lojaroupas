@@ -31,6 +31,12 @@ public class AdminOrderController {
         return ResponseEntity.ok().body(orderService.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Order> findById(@PathVariable Long id) {
+        Order obj = orderService.findById(id);
+        return ResponseEntity.ok(obj);
+    }
+
     @PostMapping
     public ResponseEntity<Order> insert(@RequestBody Order obj) {
 
