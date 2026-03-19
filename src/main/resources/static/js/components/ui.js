@@ -540,14 +540,21 @@ export async function updateOrdersPage() {
 export async function deleteOrdersPage() {
     loadContainer('template-delete-order', 'container form');
 
-    const order = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/orders/${param}`));
+    const order = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/orders/${param}`));
 
     const button = document.getElementById('delete-order');
-    const alert = document.getElementById('alert-delete-order');
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await API.deleteData(`${UTIL.BASE_URL}/orders/${order.Id}`, alert);
+        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/orders/${order.Id}`);
+        if (response.success === true) {
+            UTIL.updateAlert(response.message, "green");
+            setTimeout(() => {
+                navigateTo('/admin/orders');
+            }, 1000);
+        } else {
+            UTIL.updateAlert(response.message, "red");
+        }
     });
 }
 
