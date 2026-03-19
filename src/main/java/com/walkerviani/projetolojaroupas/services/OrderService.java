@@ -11,11 +11,16 @@ import org.springframework.stereotype.Service;
 import com.walkerviani.projetolojaroupas.entities.Clothes;
 import com.walkerviani.projetolojaroupas.entities.Order;
 import com.walkerviani.projetolojaroupas.entities.OrderItem;
+import com.walkerviani.projetolojaroupas.entities.Payment;
+import com.walkerviani.projetolojaroupas.entities.User;
 import com.walkerviani.projetolojaroupas.repositories.ClothesRepository;
 import com.walkerviani.projetolojaroupas.repositories.OrderRepository;
+import com.walkerviani.projetolojaroupas.repositories.UserRepository;
 import com.walkerviani.projetolojaroupas.services.exceptions.ClothesNotFoundException;
 import com.walkerviani.projetolojaroupas.services.exceptions.DatabaseException;
 import com.walkerviani.projetolojaroupas.services.exceptions.OrderNotFoundException;
+import com.walkerviani.projetolojaroupas.services.exceptions.UserNotFoundException;
+import com.walkerviani.projetolojaroupas.services.exceptions.ValidationException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -27,6 +32,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ClothesRepository clothesRepository;
+    private final UserRepository userRepository;
 
     public List<Order> findAll() {
         return orderRepository.findAll();
@@ -38,27 +44,43 @@ public class OrderService {
     }
 
     public List<Order> findByClientId(Long clientId) {
+        if (clientId == null || clientId <= 0) {
+            throw new ValidationException("Provide a valid user ID");
+        }
         return orderRepository.findByClientId(clientId);
     }
 
     @Transactional
     public Order insert(Order obj) {
+        validateOrder(obj);
+
         Instant moment = Instant.now();
         obj.setMoment(moment);
+
         if (obj.getPayment() != null) {
-            obj.getPayment().setOrder(obj);
-            obj.getPayment().setMoment(moment);
+            throw new ValidationException("Payment must be empty");
         }
+
+        User client = userRepository.findById(obj.getClient().getId())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        obj.setClient(client);
+
+        obj.setPayment(new Payment());
+        obj.getPayment().setOrder(obj);
+        obj.getPayment().setMoment(moment);
+
         for (OrderItem item : obj.getItems()) {
             Clothes clothes = clothesRepository.findById(item.getClothes().getId())
                     .orElseThrow(() -> new ClothesNotFoundException("Product not found"));
-
+            validateItem(item);
             item.setPrice(clothes.getPrice());
             item.setOrder(obj);
         }
         return orderRepository.save(obj);
     }
 
+    @Transactional
     public void delete(Long id) {
         try {
             orderRepository.deleteById(id);
@@ -81,19 +103,44 @@ public class OrderService {
     }
 
     private void updateData(Order entity, Order obj) {
+        validateOrder(obj);
         entity.setOrderStatus(obj.getOrderStatus());
 
-        if (obj.getItems() != null) {
+        User client = userRepository.findById(obj.getClient().getId())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-            entity.getItems().clear();
+        entity.setClient(client);
 
-            obj.getItems().forEach(item -> {
-                Clothes clothes = clothesRepository.findById(item.getClothes().getId())
-                        .orElseThrow(() -> new ClothesNotFoundException("Product not found"));
+        entity.getItems().clear();
 
-                OrderItem newItem = new OrderItem(entity, clothes, item.getQuantity(), clothes.getPrice());
-                entity.getItems().add(newItem);
-            });
+        obj.getItems().forEach(item -> {
+            Clothes clothes = clothesRepository.findById(item.getClothes().getId())
+                    .orElseThrow(() -> new ClothesNotFoundException("Product not found"));
+            validateItem(item);
+            OrderItem newItem = new OrderItem(entity, clothes, item.getQuantity(), clothes.getPrice());
+            entity.getItems().add(newItem);
+        });
+
+    }
+
+    private void validateOrder(Order obj) {
+        if (obj == null) {
+            throw new ValidationException("Order cannot be null");
+        }
+        if (obj.getClient() == null || obj.getClient().getId() == null) {
+            throw new ValidationException("Order must have a valid client");
+        }
+        if (obj.getItems() == null || obj.getItems().isEmpty()) {
+            throw new ValidationException("Order must have at least one item");
+        }
+        if (obj.getOrderStatus() == null) {
+            throw new ValidationException("You must select a valid order status");
+        }
+    }
+
+    private void validateItem(OrderItem item) {
+        if (item.getQuantity() <= 0) {
+            throw new ValidationException("Quantity must be greater than 0");
         }
     }
 }
