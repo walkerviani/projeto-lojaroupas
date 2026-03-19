@@ -14,9 +14,9 @@ export async function fetchData(url) {
 }
 
 export async function sendOrderData(orderObj, orderId = null) {
-    const isUpdateMode = orderId ? true : false;
+    const isUpdateMode = orderId != null;
     const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/api/orders${orderId}` : `${BASE_URL}/api/orders`;
+    const url = isUpdateMode ? `${BASE_URL}/api/orders/${orderId}` : `${BASE_URL}/api/orders`;
 
     try {
         const response = await fetch(url, {
@@ -299,23 +299,20 @@ export async function sendUserPassword(userId, password) {
 
 export async function findProductByName(productName) {
     try {
-        const response = await fetch(`${BASE_URL}/clothes/name?name=${encodeURIComponent(productName)}`, {
+        const response = await fetch(`${BASE_URL}/api/clothes/name?name=${encodeURIComponent(productName)}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
-
+        const responseData = await response.json();
         if (!response.ok) {
-            const responseText = await response.text();
             return {
                 success: false,
-                message: responseText
+                message: responseData.message
             }
         }
-
-        const data = await response.json();
         return {
             success: true,
-            data: data
+            data: responseData
         }
     } catch (error) {
         return {
