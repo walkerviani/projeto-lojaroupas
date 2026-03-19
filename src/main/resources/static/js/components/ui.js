@@ -265,20 +265,28 @@ export async function updateProductPage() {
 export async function deleteProductPage() {
     loadContainer('template-delete-product', 'container form');
 
-    const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/clothes/${param}`));
-    const currentName = document.getElementById('current-product-name');
+    const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/${param}`));
+    
+    // 'Do you really want to delete the product below?' message
     const currentTitle = document.getElementById('current-product-title');
-    currentName.style.color = "red";
+    // Selected product name
+    const currentName = document.getElementById('current-product-name');
     currentName.textContent = product.name;
 
     const button = document.getElementById('delete-product');
-    const alert = document.getElementById('alert-delete-product');
-
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        await API.deleteData(`${UTIL.BASE_URL}/clothes/${product.id}`, alert);
+        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/products/${product.id}`);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
+        if (response.success === true) {
+            UTIL.updateAlert(response.message, "green");
+            setTimeout(() => {
+                navigateTo('/admin/products');
+            }, 2000);
+        } else {
+            UTIL.updateAlert(response.message, "red");
+        }
     });
 }
 
