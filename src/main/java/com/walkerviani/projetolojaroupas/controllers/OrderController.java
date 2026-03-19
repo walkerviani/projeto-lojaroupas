@@ -36,9 +36,6 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         Order obj = orderService.findById(id);
-        if(obj == null) {
-            return ResponseEntity.notFound().build();
-        }
         if(obj.getClient() == null || !obj.getClient().getId().equals(loggedUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
