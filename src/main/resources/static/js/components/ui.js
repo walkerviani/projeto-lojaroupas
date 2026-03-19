@@ -453,13 +453,13 @@ export async function loadOrdersPage() {
 export function createOrdersPage() {
     loadContainer('template-create-order', 'container form');
 
-    sessionStorage.removeItem('orderItems'); // Reset session storage when loading the page
+    // Reset session storage when loading the page
+    sessionStorage.removeItem('orderItems'); 
 
     const form = document.getElementById('form-create-order');
-    const alert = document.getElementById('alert-create-order');
 
     UTIL.renderSelectedItems();
-    UTIL.bindOrderEvents('product-found-create-order');
+    UTIL.bindOrderEvents();
     UTIL.bindSelectedItemsEvent();
 
     // Find user by id button
@@ -478,7 +478,7 @@ export function createOrdersPage() {
 
     // Clear search products button
     const clearSearchButton = document.getElementById('clear-search-product');
-    const display = document.getElementById('product-found-create-order');
+    const display = document.querySelector('.product-found');
     clearSearchButton.addEventListener('click', (e) => {
         e.preventDefault();
         display.innerHTML = "";
@@ -487,7 +487,7 @@ export function createOrdersPage() {
     // Validate the form
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        await VALIDATION.validateAdminOrder(alert, form);
+        await VALIDATION.validateAdminOrder(form);
     });
 }
 
