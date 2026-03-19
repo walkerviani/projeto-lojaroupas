@@ -212,7 +212,7 @@ export async function showUserPurchases() {
     templateElement.innerHTML = '';
 
     const user = await checkAuth();
-    if (!user) return null;
+    if (!user) return;
 
     const orders = await fetchData(`${BASE_URL}/api/orders/client/${user.id}`);
     const ordersArray = Array.isArray(orders) ? orders : [orders];
@@ -236,7 +236,7 @@ export async function showUserPurchases() {
             const clothes = item.clothes;
             const imageName = clothes.imageData?.name;
             const imageUrl = imageName
-                ? `${BASE_URL}/image/${imageName}`
+                ? `${BASE_URL}/api/image/${imageName}`
                 : 'https://placehold.co/400x400?text=No+Image';
 
             orderInfo += `
