@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -51,6 +52,14 @@ public class ResourceExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status)
                 .body(buildError(status, "Validation error", e.getMessage(), request));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<StandardError> handlerNotReadable(HttpMessageNotReadableException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String errorMessage = "Invalid input or malformed JSON. Please check your fields and enum values.";
+        return ResponseEntity.status(status)
+        .body(buildError(status, "Invalid request payload", errorMessage, request));
     }
 
     private StandardError buildError(HttpStatus status, String error, String message, HttpServletRequest request) {
