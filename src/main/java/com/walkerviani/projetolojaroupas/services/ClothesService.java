@@ -68,7 +68,7 @@ public class ClothesService {
         Clothes clothes = clothesRepository.findById(id)
                 .orElseThrow(() -> new ClothesNotFoundException("Clothes not found"));
 
-        if (orderItemRepository.existsByClothesId(id)) {
+        if (orderItemRepository.existsByIdClothesId(id)) {
             throw new DatabaseException("Cannot delete clothes: it have associated orders.");
         }
 

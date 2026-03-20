@@ -6,5 +6,5 @@ import com.walkerviani.projetolojaroupas.entities.OrderItem;
 import com.walkerviani.projetolojaroupas.entities.pk.OrderItemPK;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, OrderItemPK> {
-    boolean existsByClothesId(Long clothesId);
+    boolean existsByIdClothesId(Long Id);
 }
