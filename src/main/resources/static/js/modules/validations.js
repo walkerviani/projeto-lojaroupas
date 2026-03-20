@@ -211,7 +211,7 @@ export async function validateUser(userId = null) {
 
     const { name, cpf, email, phone, password, confPassword, role } = form.elements;
 
-    const isUpdateMode = userId ? true : false;
+    const isUpdateMode = userId != null;
 
     if (isUpdateMode) {
         // Show user data in form
@@ -285,8 +285,8 @@ export async function validateUser(userId = null) {
                 phone: phone.value,
                 role: role.value
             };
-
-            const response = await API.sendUserData(userObj, password, userId);
+            const url = isUpdateMode ? `${BASE_URL}/api/admin/users/${userId}` : `${BASE_URL}/api/admin/users`;
+            const response = await API.sendUserData(userObj, url, password, userId);
             if (response.success) {
                 updateAlert(response.message, "green");
                 setTimeout(() => {
@@ -371,8 +371,8 @@ export async function validateAdminOrder(form, orderId = null) {
                 items: allItems,
             };
 
-            const response = isUpdateMode ? await API.sendOrderData(orderObj, Number(orderId))
-                : await API.sendOrderData(orderObj);
+            const response = isUpdateMode ? await API.sendOrderData(orderObj, `${BASE_URL}/api/admin/orders/${orderId}`, Number(orderId))
+                : await API.sendOrderData(orderObj, `${BASE_URL}/api/admin/orders`);
 
             if (response.success) {
                 updateAlert(response.message, "green");
@@ -433,7 +433,7 @@ export async function validateUserOrder() {
             client: { id: Number(user.id) },
             items: allItems,
         };
-        const response = await API.sendOrderData(orderObj);
+        const response = await API.sendOrderData(orderObj, `${BASE_URL}/api/orders`);
         if (response.success) {
             updateAlert("Your order has been created successfully!", "green");
             localStorage.removeItem('cart');
@@ -501,14 +501,12 @@ export async function validateProfileData(userId) {
             phone: phone.value
         };
 
-        const response = await API.sendUserData(userObj, null, userId);
+        const response = await API.sendUserData(userObj, `${BASE_URL}/api/users/${userId}`, null, userId);
 
         if (response.success) {
             updateAlert("Updated successfully!", "green");
-            // Close 'Account Settings' page
             setTimeout(() => {
-                const configElement = document.getElementById('profile-option');
-                configElement.innerHTML = `<h1>Select an option</h1>`;
+                updateAlert("", "red");
             }, 2000);
 
             // Disable the inputs
