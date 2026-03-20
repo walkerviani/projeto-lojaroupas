@@ -359,7 +359,7 @@ function addToOrderStorage(product) {
     // Check if there are saved items, otherwise create an empty array
     let orderItems = JSON.parse(sessionStorage.getItem('orderItems')) || [];
 
-    const existingItem = orderItems.find(item => item.id === product.id);
+    const existingItem = orderItems.find(item => String(item.id) === String(product.id));
 
     // If the item already exists in the cart, just update the quantity
     if (existingItem) {
