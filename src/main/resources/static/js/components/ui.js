@@ -531,9 +531,11 @@ export async function updateOrdersPage() {
     // Clear search products button
     const clearSearchButton = document.getElementById('clear-search-product-update-order');
     const display = document.querySelector('.product-found');
+    const input = document.getElementById('find-product-update-order');
     clearSearchButton.addEventListener('click', (e) => {
         e.preventDefault();
         display.innerHTML = "";
+        input.value = "";
     });
 
     // Validate the form
