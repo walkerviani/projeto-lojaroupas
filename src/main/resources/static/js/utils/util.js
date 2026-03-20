@@ -258,47 +258,6 @@ export async function showUserPurchases() {
     });
 }
 
-export function bindProfileEvents(userId) {
-    const updateButton = document.getElementById('update-profile');
-    const cancelButton = document.getElementById('cancel-update-profile');
-    const saveButton = document.getElementById('update-profile-button');
-
-    const form = document.getElementById('form-update-profile');
-    const inputs = form.querySelectorAll('.profile-box-input');
-
-    updateButton.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        // Hide update button and show cancel and save button
-        cancelButton.style.display = "block";
-        saveButton.style.display = "block";
-        updateButton.style.display = "none";
-
-        // Allow to insert data
-        inputs.forEach(input => input.disabled = false);
-    });
-
-    cancelButton.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        form.reset();
-
-        updateAlert("", "red");
-        cancelButton.style.display = "none";
-        saveButton.style.display = "none";
-        updateButton.style.display = "block";
-
-        // Block input insert
-        inputs.forEach(input => input.disabled = true);
-
-    });
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await validateProfileData(userId);
-    });
-}
-
 // Render product search in '/admin' create order
 export async function renderProductSearch() {
     const input = document.querySelector(".renderProductSearch-input");
