@@ -7,6 +7,7 @@ import * as AUTH from "../services/auth.js";
 
 export function showProductsCard(products) {
     const container = document.getElementById('container');
+    container.className = 'container product';
     container.innerHTML = "";
 
     if (!products || products.length === 0) {
@@ -629,7 +630,7 @@ async function loadAccountSettings() {
     `;
     element.appendChild(accountElement);
 
-    UTIL.bindProfileEvents(user.id);
+    setupProfileFormEvents(user.id);
 }
 
 // User profile change password setting
@@ -738,6 +739,47 @@ export async function updateAuthUI() {
     } else {
         loginButton.textContent = "Profile";
     }
+}
+
+
+function setupProfileFormEvents(userId) {
+    const updateButton = document.getElementById('update-profile');
+    const cancelButton = document.getElementById('cancel-update-profile');
+    const saveButton = document.getElementById('update-profile-button');
+
+    const form = document.getElementById('form-update-profile');
+    const inputs = form.querySelectorAll('.profile-box-input');
+
+    updateButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        cancelButton.style.display = "block";
+        saveButton.style.display = "block";
+        updateButton.style.display = "none";
+
+        // Allow to insert data
+        inputs.forEach(input => input.disabled = false);
+    });
+
+    cancelButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        form.reset();
+
+        UTIL.updateAlert("", "red");
+        cancelButton.style.display = "none";
+        saveButton.style.display = "none";
+        updateButton.style.display = "block";
+
+        // Block input insert
+        inputs.forEach(input => input.disabled = true);
+
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await VALIDATION.validateProfileData(userId);
+    });
 }
 
 // Load page container using template ID and CSS class
