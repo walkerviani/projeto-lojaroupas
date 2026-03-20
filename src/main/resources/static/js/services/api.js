@@ -12,10 +12,9 @@ export async function fetchData(url) {
     }
 }
 
-export async function sendOrderData(orderObj, orderId) {
+export async function sendOrderData(orderObj, url, orderId) {
     const isUpdateMode = orderId != null;
     const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/api/admin/orders/${orderId}` : `${BASE_URL}/api/admin/orders`;
 
     try {
         const response = await fetch(url, {
@@ -192,10 +191,9 @@ export async function sendCategoryData(categoryObj, categoryId) {
     }
 }
 
-export async function sendUserData(userObj, password, userId) {
+export async function sendUserData(userObj, url, password, userId) {
     const isUpdateMode = userId != null;
     const method = isUpdateMode ? 'PUT' : 'POST';
-    const url = isUpdateMode ? `${BASE_URL}/api/admin/users/${userId}` : `${BASE_URL}/api/admin/users`;
 
     try {
         // Update password
