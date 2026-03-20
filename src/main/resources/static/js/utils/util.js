@@ -1,6 +1,6 @@
 import { checkAuth } from "../services/auth.js";
 import { fetchData, findProductByName } from "../services/api.js";
-import { validateProfileData } from "../modules/validations.js";
+
 
 export const BASE_URL = "http://localhost:8080";
 
