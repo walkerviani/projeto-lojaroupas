@@ -74,7 +74,9 @@ async function setupNavigation() {
     });
 
     //Orders
-    document.getElementById('orders-button').addEventListener('click', async (e) => {
+    const orderButton = document.getElementById('orders-button');
+    orderButton.style.display = "none";
+    orderButton.addEventListener('click', async (e) => {
         e.preventDefault();
         const user = await checkAuth();
         if (!user) {

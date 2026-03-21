@@ -266,7 +266,7 @@ export async function deleteProductPage() {
     loadContainer('template-delete-product', 'container form');
 
     const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/${param}`));
-    
+
     // 'Do you really want to delete the product below?' message
     const currentTitle = document.getElementById('current-product-title');
     // Selected product name
@@ -461,7 +461,7 @@ export function createOrdersPage() {
     loadContainer('template-create-order', 'container form');
 
     // Reset session storage when loading the page
-    sessionStorage.removeItem('orderItems'); 
+    sessionStorage.removeItem('orderItems');
 
     const form = document.getElementById('form-create-order');
 
@@ -731,15 +731,21 @@ export async function loadOrderDetail() {
 
 // Update navigation bar login button based on the authentication status
 export async function updateAuthUI() {
+    const user = await AUTH.checkAuth();
     const loginButton = document.getElementById('nav-login-button');
     if (!loginButton) return;
-
-    const user = await AUTH.checkAuth();
 
     if (!user) {
         loginButton.textContent = "Login";
     } else {
         loginButton.textContent = "Profile";
+    }
+
+    const orderButton = document.getElementById('orders-button')
+    if (!user) {
+        orderButton.style.display = "none";
+    } else {
+        orderButton.style.display = "inline-flex";
     }
 }
 
