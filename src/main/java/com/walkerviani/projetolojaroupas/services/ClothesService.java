@@ -92,17 +92,15 @@ public class ClothesService {
         entity.setSize(obj.getSize());
         entity.setCategory(obj.getCategory());
 
-        if (obj.getImageData() == null) {
-            throw new ValidationException("You must select an image");
-        }
-        if (obj.getImageData().getName() == null) {
-            throw new ImageNotFoundException("Image not found!");
-        }
+        if (obj.getImageData() != null) {
+            if (obj.getImageData().getName() == null) {
+                throw new ImageNotFoundException("Image not found!");
+            }
 
-        ImageData newImage = storageRepository.findByName(obj.getImageData().getName())
-                .orElseThrow(() -> new ImageNotFoundException("Image not found!"));
-
-        entity.setImageData(newImage);
+            ImageData newImage = storageRepository.findByName(obj.getImageData().getName())
+                    .orElseThrow(() -> new ImageNotFoundException("Image not found!"));
+            entity.setImageData(newImage);
+        }
     }
 
     private void validateClothes(Clothes obj) {
