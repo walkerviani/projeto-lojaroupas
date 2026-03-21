@@ -486,9 +486,11 @@ export function createOrdersPage() {
     // Clear search products button
     const clearSearchButton = document.getElementById('clear-search-product');
     const display = document.querySelector('.product-found');
+    const input = document.getElementById('find-product-create-order');
     clearSearchButton.addEventListener('click', (e) => {
         e.preventDefault();
         display.innerHTML = "";
+        input.value = "";
     });
 
     // Validate the form
