@@ -33,7 +33,4 @@ build/
 .vscode/
 
 # .gitignore
-application.properties
-application-dev.properties
-application-test.properties
 .env
