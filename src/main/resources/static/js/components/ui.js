@@ -1,4 +1,5 @@
 import { navigateTo } from "../modules/router.js";
+import { BASE_URL } from "../../config.js";
 import * as UTIL from "../utils/util.js";
 import * as VALIDATION from "../modules/validations.js";
 import * as CART from "../modules/cart.js";
@@ -16,7 +17,7 @@ export function showProductsCard(products) {
     }
     products.forEach(product => {
         const imageUrl = product.imageData
-            ? `${UTIL.BASE_URL}/api/image/${product.imageData.name}`
+            ? `${BASE_URL}/api/image/${product.imageData.name}`
             : 'https://placehold.co/400x400?text=No+Image';
 
         const card = document.createElement('div');
@@ -47,15 +48,15 @@ export async function loadIndex() {
 
     //if param is name (searchbar)
     if (name) {
-        products = await UTIL.getParams('name', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/name?name=${param}`));
+        products = await UTIL.getParams('name', (param) => API.fetchData(`${BASE_URL}/api/clothes/name?name=${param}`));
     }
     //if param is category (category dropdown)
     else if (category) {
-        products = await UTIL.getParams('category', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/category?category=${param}`));
+        products = await UTIL.getParams('category', (param) => API.fetchData(`${BASE_URL}/api/clothes/category?category=${param}`));
     }
     //if does not have a param = show products
     else {
-        products = await API.fetchData(`${UTIL.BASE_URL}/api/clothes`);
+        products = await API.fetchData(`${BASE_URL}/api/clothes`);
     }
     showProductsCard(products);
 }
@@ -63,8 +64,8 @@ export async function loadIndex() {
 export async function showProductDetail() {
     loadContainer('template-detail', 'container detail-mode');
 
-    const product = await UTIL.getParams('id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/${param}`));
-    const imageUrl = product.imageData ? `${UTIL.BASE_URL}/api/image/${product.imageData.name}` : 'https://placehold.co/400x400?text=No+Image';
+    const product = await UTIL.getParams('id', (param) => API.fetchData(`${BASE_URL}/api/clothes/${param}`));
+    const imageUrl = product.imageData ? `${BASE_URL}/api/image/${product.imageData.name}` : 'https://placehold.co/400x400?text=No+Image';
 
     let img = document.getElementById('product-img');
     img.src = imageUrl;
@@ -243,7 +244,7 @@ export async function loadProductsPage() {
             navigateTo(`/admin/products/delete?delete-id=${id}`);
         }
     });
-    UTIL.showProductTable(await API.fetchData(`${UTIL.BASE_URL}/api/clothes`));
+    UTIL.showProductTable(await API.fetchData(`${BASE_URL}/api/clothes`));
 }
 
 export async function createProductPage() {
@@ -256,7 +257,7 @@ export async function createProductPage() {
 export async function updateProductPage() {
     loadContainer('template-update-product', 'container form');
 
-    const product = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/${param}`));
+    const product = await UTIL.getParams('update-id', (param) => API.fetchData(`${BASE_URL}/api/clothes/${param}`));
     // Fetch categories and populate a select element with options
     await UTIL.createSelectCategories();
     await VALIDATION.validateProduct(product.id);
@@ -265,7 +266,7 @@ export async function updateProductPage() {
 export async function deleteProductPage() {
     loadContainer('template-delete-product', 'container form');
 
-    const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/clothes/${param}`));
+    const product = await UTIL.getParams('delete-id', (param) => API.fetchData(`${BASE_URL}/api/clothes/${param}`));
 
     // 'Do you really want to delete the product below?' message
     const currentTitle = document.getElementById('current-product-title');
@@ -276,7 +277,7 @@ export async function deleteProductPage() {
     const button = document.getElementById('delete-product');
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/products/${product.id}`);
+        const response = await API.deleteData(`${BASE_URL}/api/admin/products/${product.id}`);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
         if (response.success === true) {
@@ -309,7 +310,7 @@ export async function loadCategoriesPage() {
         }
     });
 
-    UTIL.showCategoryTable(await API.fetchData(`${UTIL.BASE_URL}/api/category`));
+    UTIL.showCategoryTable(await API.fetchData(`${BASE_URL}/api/category`));
 }
 
 export async function createCategoryPage() {
@@ -320,7 +321,7 @@ export async function createCategoryPage() {
 export async function updateCategoryPage() {
     loadContainer('template-update-category', 'container form');
 
-    const category = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/category/${param}`));
+    const category = await UTIL.getParams('update-id', (param) => API.fetchData(`${BASE_URL}/api/category/${param}`));
 
     const id = category.id;
 
@@ -341,7 +342,7 @@ export async function updateCategoryPage() {
 export async function deleteCategoryPage() {
     loadContainer('template-delete-category', 'container form');
 
-    const category = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/category/${param}`));
+    const category = await UTIL.getParams('delete-id', (param) => API.fetchData(`${BASE_URL}/api/category/${param}`));
 
     // Show current category name
     const currentName = document.getElementById('current-category-name');
@@ -354,7 +355,7 @@ export async function deleteCategoryPage() {
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/categories/${category.id}`);
+        const response = await API.deleteData(`${BASE_URL}/api/admin/categories/${category.id}`);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
         if (response.success === true) {
@@ -387,7 +388,7 @@ export async function loadUserPage() {
         }
     });
 
-    UTIL.showUserTable(await API.fetchData(`${UTIL.BASE_URL}/api/admin/users`));
+    UTIL.showUserTable(await API.fetchData(`${BASE_URL}/api/admin/users`));
 }
 
 export async function createUserPage() {
@@ -398,7 +399,7 @@ export async function createUserPage() {
 export async function updateUserPage() {
     loadContainer('template-update-user', 'container form');
 
-    const user = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/users/${param}`));
+    const user = await UTIL.getParams('update-id', (param) => API.fetchData(`${BASE_URL}/api/admin/users/${param}`));
     const userId = user.id;
 
     await VALIDATION.validateUser(userId);
@@ -407,7 +408,7 @@ export async function updateUserPage() {
 export async function deleteUserPage() {
     loadContainer('template-delete-user', 'container form');
 
-    const user = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/users/${param}`));
+    const user = await UTIL.getParams('delete-id', (param) => API.fetchData(`${BASE_URL}/api/admin/users/${param}`));
     const currentName = document.getElementById('current-user-name');
     const currentTitle = document.getElementById('current-user-title');
     currentName.style.color = "red";
@@ -416,7 +417,7 @@ export async function deleteUserPage() {
     const button = document.getElementById('delete-user');
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/users/${user.id}`);
+        const response = await API.deleteData(`${BASE_URL}/api/admin/users/${user.id}`);
         currentTitle.style.contentVisibility = "hidden";
         currentName.style.contentVisibility = "hidden";
         if (response.success === true) {
@@ -453,7 +454,7 @@ export async function loadOrdersPage() {
         }
     });
 
-    UTIL.showOrdersTable(await API.fetchData(`${UTIL.BASE_URL}/api/admin/orders`));
+    UTIL.showOrdersTable(await API.fetchData(`${BASE_URL}/api/admin/orders`));
 }
 
 // Create an order in '/admin'
@@ -506,7 +507,7 @@ export async function updateOrdersPage() {
     // Reset session storage when loading the page
     sessionStorage.removeItem('orderItems');
 
-    const order = await UTIL.getParams('update-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/orders/${param}`));
+    const order = await UTIL.getParams('update-id', (param) => API.fetchData(`${BASE_URL}/api/admin/orders/${param}`));
     const form = document.getElementById('form-update-order');
     const id = order.Id;
 
@@ -551,13 +552,13 @@ export async function updateOrdersPage() {
 export async function deleteOrdersPage() {
     loadContainer('template-delete-order', 'container form');
 
-    const order = await UTIL.getParams('delete-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/orders/${param}`));
+    const order = await UTIL.getParams('delete-id', (param) => API.fetchData(`${BASE_URL}/api/admin/orders/${param}`));
 
     const button = document.getElementById('delete-order');
 
     button.addEventListener('click', async (e) => {
         e.preventDefault();
-        const response = await API.deleteData(`${UTIL.BASE_URL}/api/admin/orders/${order.Id}`);
+        const response = await API.deleteData(`${BASE_URL}/api/admin/orders/${order.Id}`);
         if (response.success === true) {
             UTIL.updateAlert(response.message, "green");
             setTimeout(() => {
@@ -687,7 +688,7 @@ export async function loadOrderDetail() {
     const templateElement = document.getElementById('order-detail');
     templateElement.innerHTML = '';
 
-    const order = await UTIL.getParams('detail-id', (param) => API.fetchData(`${UTIL.BASE_URL}/api/admin/orders/${param}`));
+    const order = await UTIL.getParams('detail-id', (param) => API.fetchData(`${BASE_URL}/api/admin/orders/${param}`));
 
     const purchaseDate = new Date(order.moment).toLocaleDateString('pt-BR');
 
@@ -711,7 +712,7 @@ export async function loadOrderDetail() {
         const clothes = item.clothes;
         const imageName = clothes.imageData?.name;
         const imageUrl = imageName
-            ? `${UTIL.BASE_URL}/api/image/${imageName}`
+            ? `${BASE_URL}/api/image/${imageName}`
             : 'https://placehold.co/400x400?text=No+Image';
 
         orderInfo += `

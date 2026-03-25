@@ -1,7 +1,8 @@
 import { navigateTo } from "./router.js";
-import { BASE_URL, updateAlert } from "../utils/util.js";
+import { updateAlert } from "../utils/util.js";
 import { authenticateUser, checkAuth } from "../services/auth.js";
 import * as API from "../services/api.js";
+import { BASE_URL } from "../../config.js";
 
 export function validateCreateAccount() {
     const form = document.getElementById('form-create-account');

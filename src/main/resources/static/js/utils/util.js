@@ -1,8 +1,6 @@
 import { checkAuth } from "../services/auth.js";
 import { fetchData, findProductByName } from "../services/api.js";
-
-
-export const BASE_URL = "http://localhost:8080";
+import { BASE_URL } from "../../config.js";
 
 export function capitalizeFirstLetter(text) {
     const string = text.toLowerCase();

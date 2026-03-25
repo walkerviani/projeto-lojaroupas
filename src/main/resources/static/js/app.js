@@ -1,7 +1,8 @@
 import { handleRoute, navigateTo } from './modules/router.js';
-import { BASE_URL, getCategoriesMenu } from './utils/util.js';
+import { getCategoriesMenu } from './utils/util.js';
 import { fetchData } from "./services/api.js";
 import { checkAuth } from "./services/auth.js";
+import { BASE_URL } from '../config.js';
 
 async function setupNavigation() {
 
