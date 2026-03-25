@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.walkerviani.projetolojaroupas.entities.User;
+import com.walkerviani.projetolojaroupas.entities.enums.Role;
 import com.walkerviani.projetolojaroupas.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -40,6 +41,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> insert(@RequestBody User obj) {
+        obj.setRole(Role.USER);
         obj = userService.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
