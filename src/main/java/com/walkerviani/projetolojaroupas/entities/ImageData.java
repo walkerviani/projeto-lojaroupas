@@ -29,7 +29,7 @@ public class ImageData {
     private String name;
     private String type;
     @Lob
-    @Column(name= "imagedata", columnDefinition="MEDIUMBLOB")
+    @Column(name= "imagedata", columnDefinition="bytea")
     @JsonIgnore
     private byte[] imageData;
     
