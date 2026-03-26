@@ -18,6 +18,9 @@ export function currencyFormatterToBRL(number) {
 
 // Render categories list into the navigation dropdown menu
 export function getCategoriesMenu(categories) {
+    if(!Array.isArray(categories) || categories.length === 0) {
+        return [];
+    }
     let list = "";
     for (let category of categories) {
         list += `<li><a href="/" id="${category.name}-menu">${category.name}</a></li>`;
