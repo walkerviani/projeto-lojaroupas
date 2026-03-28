@@ -17,6 +17,40 @@
 
 > Você também pode criar sua própria conta diretamente pela aplicação.
 
+# 🎬 Demonstração
+![Selecionando categorias](https://github.com/walkerviani/assets/blob/main/selecionando_categorias.gif)
+> Navegando pelo catálogo e filtrando produtos por categoria
+
+---
+
+![Criando uma conta](https://github.com/walkerviani/assets/blob/main/criando_conta.gif)
+> Cadastro de um novo usuário na plataforma
+
+---
+
+![Simulando uma compra sem conta](https://github.com/walkerviani/assets/blob/main/compra_sem_conta.gif)
+> Tentativa de finalizar uma compra sem estar autenticado
+
+---
+
+![Simulando uma compra com conta](https://github.com/walkerviani/assets/blob/main/compra_com_conta.gif)
+> Fluxo de compra com usuário autenticado
+
+---
+
+![Histórico de compras](https://github.com/walkerviani/assets/blob/main/compras_usuario.gif)
+> Visualizando o histórico de pedidos realizados
+
+---
+
+![Configurações da conta](https://github.com/walkerviani/assets/blob/main/funcoes_perfil.gif)
+> Gerenciamento de dados e preferências do perfil
+
+---
+
+![Menu do administrador](https://github.com/walkerviani/assets/blob/main/menu_admin.gif)
+> Uma pequena demonstração do menu do administrador
+
 # 🚀 Tecnologias utilizadas
 
 **Backend**
